@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulador de Alocação de Ativos · Doctor Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--linha:#E3DFD4;
+      --texto:#22303F;--suave:#7A8290;--verm:#A8443C;--verde:#4F7A5B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:var(--texto);
+     font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--azul)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 60px}
+
+header{background:var(--azul);color:var(--marfim);padding:34px 0 30px;margin-bottom:26px}
+header .wrap{padding-bottom:0}
+.marca{font-size:11px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{color:var(--marfim);font-size:36px;line-height:1.1;margin:14px 0 8px}
+header p{color:#AFBACB;margin:0;max-width:640px;font-size:14.5px}
+
+.grid{display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+.card{background:#fff;border:1px solid var(--linha);border-radius:3px;padding:20px 22px;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:4px}
+.card .hint{font-size:12.5px;color:var(--suave);margin:0 0 16px}
+
+label{display:block;font-size:12.5px;color:var(--conf);font-weight:500;margin:14px 0 5px}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.row span:last-child{font-weight:700;color:var(--azul);font-size:13.5px;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(--linha);
+  border-radius:2px;outline:none;margin:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;
+  border-radius:50%;background:var(--azul);cursor:pointer;border:2.5px solid #fff;
+  box-shadow:0 0 0 1px var(--azul)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--azul);
+  cursor:pointer;border:2.5px solid #fff}
+select{width:100%;padding:8px 10px;border:1px solid var(--linha);background:#fff;
+  font-family:inherit;font-size:14px;color:var(--azul);border-radius:2px}
+
+.presets{display:flex;gap:6px;margin:4px 0 10px;flex-wrap:wrap}
+.pbtn{flex:1;min-width:78px;padding:8px 4px;border:1px solid var(--linha);background:#fff;
+  font-family:inherit;font-size:12.5px;cursor:pointer;color:var(--conf);border-radius:2px;
+  transition:all .12s}
+.pbtn:hover{border-color:var(--ouro)}
+.pbtn.on{background:var(--azul);color:var(--marfim);border-color:var(--azul)}
+
+.toggle{display:flex;gap:0;margin:6px 0 4px;border:1px solid var(--linha);border-radius:2px;overflow:hidden}
+.toggle button{flex:1;padding:9px 4px;border:0;background:#fff;font-family:inherit;font-size:12.5px;
+  cursor:pointer;color:var(--conf)}
+.toggle button.on{background:var(--conf);color:#fff}
+
+.wsum{font-size:12.5px;padding:9px 11px;margin-top:14px;border-radius:2px;text-align:center;font-weight:500}
+.wsum.ok{background:#F2F5F1;color:var(--verde)}
+.wsum.bad{background:#FBF1F0;color:var(--verm)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);
+  border:1px solid var(--linha);margin-bottom:18px}
+@media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;padding:16px 14px}
+.kpi .v{font-family:"Cormorant Garamond",serif;font-size:27px;font-weight:700;color:var(--azul);
+  line-height:1.05;letter-spacing:-.01em}
+.kpi .t{font-size:11px;color:var(--suave);margin-top:5px;line-height:1.35}
+.kpi.dark{background:var(--azul)}
+.kpi.dark .v{color:var(--ouro)}
+.kpi.dark .t{color:#9AA8BC}
+
+svg{display:block;width:100%;height:auto}
+table{width:100%;border-collapse:collapse;font-size:12.8px}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:8px 7px;text-align:right;font-size:11px;
+   letter-spacing:.04em}
+th:first-child{text-align:left}
+td{padding:7px;text-align:right;border-bottom:1px solid var(--linha);font-variant-numeric:tabular-nums}
+td:first-child{text-align:left}
+.neg{color:var(--verm)}.pos{color:var(--verde)}
+.b{font-weight:700;color:var(--azul)}
+.leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--suave);margin-top:8px}
+.leg i{display:inline-block;width:11px;height:11px;margin-right:5px;vertical-align:-1px;border-radius:1px}
+.nota{font-size:11.8px;color:var(--suave);line-height:1.5;margin-top:10px}
+footer{border-top:1px solid var(--linha);margin-top:32px;padding-top:18px;font-size:11.2px;
+  color:var(--suave);line-height:1.55}
+footer b{color:var(--conf)}
+</style></head><body>
+
+<header><div class="wrap">
+  <div class="marca">DOCTOR INVEST</div>
+  <h1>Simulador de alocação de ativos</h1>
+  <p>Monte uma carteira, escolha a janela e veja o que teria acontecido de verdade entre 2006 e 2025.
+     Todos os retornos são históricos, medidos em reais.</p>
+</div></header>
+
+<div class="wrap">
+  <div class="card" style="margin-top:26px">
+    <h3>O que o estudo achou</h3>
+    <p class="hint">Vinte anos de dados reais, seis classes de ativos, três perfis de carteira.
+       Nada aqui é projeção.</p>
+    <ol style="padding-left:18px;line-height:1.75">
+      <li><b>A classe vencedora não era a óbvia.</b> A bolsa americana, medida em reais, rendeu
+          9,79% ao ano acima da inflação — e boa parte disso não veio das ações, veio do câmbio.</li>
+      <li><b>No Brasil, o risco não foi pago.</b> A bolsa brasileira entregou 2,53% reais ao ano
+          contra 4,46% do CDI, com volatilidade de 28% contra 3%.</li>
+      <li><b>Renda fixa americana, para um brasileiro, não é renda fixa.</b> Oscilou 20% ao ano —
+          mais que os imóveis brasileiros.</li>
+      <li><b>A carteira diversificada não venceu a melhor classe</b> — e esse nunca foi o objetivo.
+          6,12% reais ao ano com 7% de volatilidade, contra 25% da bolsa americana.</li>
+      <li><b>Não rebalancear rendeu mais em vinte anos</b> — porque a carteira deixou de ser a sua
+          carteira. Terminou com 68% em um único índice estrangeiro.</li>
+      <li><b>Na janela de dez anos, o rebalanceamento venceu nos três perfis</b>, com mais retorno
+          e menos risco.</li>
+    </ol>
+    <p style="margin-top:16px">
+      <a href="estudo.pdf" id="dl" style="color:var(--conf);font-weight:700">
+        Baixar o estudo completo (PDF, 18 páginas)</a>
+      — inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis limitações do método.
+    </p>
+  </div>
+</div>
+
+<div class="wrap"><div class="grid">
+
+<!-- PAINEL -->
+<div>
+  <div class="card">
+    <h3>Capital</h3>
+    <p class="hint">O ponto de partida e o quanto entra todo mês.</p>
+    <div class="row"><span>Aporte inicial</span><span id="o_ini">R$ 100.000</span></div>
+    <input type="range" id="ini" min="0" max="1000000" step="10000" value="100000">
+    <div class="row" style="margin-top:14px"><span>Aporte mensal</span><span id="o_ap">R$ 5.000</span></div>
+    <input type="range" id="ap" min="0" max="30000" step="500" value="5000">
+    <label for="jan">Janela</label>
+    <select id="jan">
+      <option value="2006">20 anos — 2006 a 2025</option>
+      <option value="2011">15 anos — 2011 a 2025 (todas as seis classes)</option>
+      <option value="2016" selected>10 anos — 2016 a 2025</option>
+      <option value="2021">5 anos — 2021 a 2025</option>
+    </select>
+    <label>Rebalanceamento anual</label>
+    <div class="toggle" id="tg">
+      <button data-v="1" class="on">Com</button><button data-v="0">Sem</button>
+    </div>
+    <div class="row" style="margin-top:16px"><span>Custo anual da carteira</span><span id="o_tx">0,00%</span></div>
+    <input type="range" id="tx" min="0" max="250" step="5" value="0">
+    <p class="nota">Taxa de administração, custódia e afins. Desconta do retorno de todas as classes.</p>
+  </div>
+
+  <div class="card">
+    <h3>Alocação</h3>
+    <p class="hint">Escolha um perfil pronto ou ajuste classe por classe.</p>
+    <div class="presets" id="pre">
+      <button class="pbtn" data-p="Conservador">Conservador</button>
+      <button class="pbtn on" data-p="Moderado">Moderado</button>
+      <button class="pbtn" data-p="Arrojado">Arrojado</button>
+    </div>
+    <div id="pesos"></div>
+    <div class="wsum ok" id="wsum">Soma: 100%</div>
+  </div>
+</div>
+
+<!-- RESULTADOS -->
+<div>
+  <div class="kpis">
+    <div class="kpi dark"><div class="v" id="k1">—</div><div class="t">Patrimônio final nominal</div></div>
+    <div class="kpi"><div class="v" id="k2">—</div><div class="t">Em poder de compra de hoje</div></div>
+    <div class="kpi"><div class="v" id="k3">—</div><div class="t">Retorno real ao ano (acima do IPCA)</div></div>
+    <div class="kpi"><div class="v" id="k4">—</div><div class="t">Total aportado do seu bolso</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Evolução do patrimônio</h3>
+    <p class="hint">A área cinza é o dinheiro aportado. A dourada, o que os juros produziram.</p>
+    <svg id="c1" viewBox="0 0 760 330" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="card">
+    <h3>Risco — o que você teria atravessado</h3>
+    <svg id="c2" viewBox="0 0 760 250" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="kpis" style="margin:16px 0 0">
+      <div class="kpi"><div class="v" id="k5">—</div><div class="t">Volatilidade anual</div></div>
+      <div class="kpi"><div class="v" id="k6">—</div><div class="t">Pior ano</div></div>
+      <div class="kpi"><div class="v" id="k7">—</div><div class="t">Queda máxima acumulada</div></div>
+      <div class="kpi"><div class="v" id="k8">—</div><div class="t">Anos negativos</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Como cada classe se comportou</h3>
+    <p class="hint">Retorno de cada classe na janela escolhida, e onde a sua carteira terminou.</p>
+    <table><thead><tr><th>Classe</th><th>Real a.a.</th><th>Volatilidade</th><th>Pior ano</th>
+      <th>Peso alvo</th><th>Peso final</th></tr></thead><tbody id="tb"></tbody></table>
+    <p class="nota" id="drift"></p>
+  </div>
+
+  <div class="card">
+    <h3>Ano a ano</h3>
+    <svg id="c3" viewBox="0 0 760 200" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="leg"><span><i style="background:#1B3A5C"></i>Retorno da carteira no ano</span>
+      <span><i style="background:#C9A84C"></i>Inflação (IPCA)</span></div>
+  </div>
+</div>
+</div>
+
+<footer><div>
+<b>Aviso.</b> Ferramenta educacional. Não constitui recomendação de investimento, oferta ou consultoria
+de valores mobiliários individualizada. Rentabilidade passada não é garantia de rentabilidade futura.
+As simulações usam índices de mercado (CDI, Ibovespa, S&amp;P 500, Bloomberg US Aggregate, IFIX,
+FTSE Nareit All Equity REITs, PTAX e IPCA), desconsideram tributação e não refletem o desempenho de
+nenhum produto efetivamente disponível. Imóveis Brasil (IFIX) só existe a partir de 2011: em janelas
+anteriores, seu peso é redistribuído entre as demais classes até essa data.
+<br><br><b>Doctor Invest</b> · Gestão de investimentos e consultoria financeira para médicos ·
+Hélio Cardoso de Barros, CGA
+</div></footer>
+
+<script>
+const D={2006:[15.03,32.93,15.79,4.33,35.06,null,-8.66,3.14],
+2007:[11.82,43.65,5.49,6.97,-15.69,null,-17.15,4.46],
+2008:[12.38,-41.22,-37.00,5.24,-37.73,null,31.94,5.90],
+2009:[9.88,82.66,26.46,5.93,27.99,null,-25.49,4.31],
+2010:[9.75,1.04,15.06,6.54,27.95,null,-4.31,5.91],
+2011:[11.60,-18.11,2.11,7.84,8.28,16.41,12.58,6.50],
+2012:[8.40,7.40,16.00,4.21,19.70,35.77,8.94,5.84],
+2013:[8.06,-15.50,32.39,-2.02,2.86,-12.92,14.64,5.91],
+2014:[10.81,-2.91,13.69,5.97,28.03,-2.16,13.39,6.41],
+2015:[13.24,-13.31,1.38,0.55,2.83,3.84,47.01,10.67],
+2016:[14.00,38.93,11.96,2.65,8.63,33.91,-16.54,6.29],
+2017:[9.93,26.86,21.83,3.54,8.67,19.53,1.50,2.95],
+2018:[6.42,15.03,-4.38,0.01,-4.04,5.80,17.13,3.75],
+2019:[5.96,31.58,31.49,8.72,28.66,36.21,4.02,4.31],
+2020:[2.76,2.92,18.40,7.51,-5.12,-11.09,28.93,4.52],
+2021:[4.42,-11.93,28.71,-1.54,41.30,-2.73,7.39,10.06],
+2022:[12.39,4.69,-18.11,-13.01,-24.95,2.58,-6.50,5.79],
+2023:[13.04,22.28,26.29,5.53,11.36,15.83,-7.21,4.62],
+2024:[10.88,-10.36,25.02,1.25,4.92,-5.94,27.90,4.83],
+2025:[14.32,33.95,17.88,7.30,2.30,21.22,-11.36,4.26]};
+
+const C=[["rfbr","Renda fixa Brasil","#1B3A5C"],["bobr","Bolsa Brasil","#C9A84C"],
+["boeua","Bolsa EUA","#2E6B8A"],["rfeua","Renda fixa EUA","#9AA5B5"],
+["imbr","Imóveis Brasil","#8C6A3F"],["imeua","Imóveis EUA","#6E8B74"]];
+const P={Conservador:[60,5,10,15,7,3],Moderado:[38,8,22,12,12,8],Arrojado:[25,10,35,10,10,10]};
+
+function ret(a){const d=D[a],fx=1+d[6]/100;
+ return{rfbr:d[0]/100,bobr:d[1]/100,boeua:(1+d[2]/100)*fx-1,rfeua:(1+d[3]/100)*fx-1,
+ imeua:(1+d[4]/100)*fx-1,imbr:d[5]===null?null:d[5]/100,ipca:d[7]/100};}
+
+let W=P.Moderado.slice(), REB=1;
+const $=id=>document.getElementById(id);
+const fBRL=v=>{if(Math.abs(v)>=1e6)return"R$ "+(v/1e6).toFixed(2).replace(".",",")+" mi";
+ if(Math.abs(v)>=1e3)return"R$ "+Math.round(v/1e3).toLocaleString("pt-BR")+" mil";
+ return"R$ "+Math.round(v).toLocaleString("pt-BR");};
+const fP=(v,d=1)=>(v*100).toFixed(d).replace(".",",")+"%";
+const fPs=(v,d=1)=>(v>=0?"+":"")+(v*100).toFixed(d).replace(".",",")+"%";
+
+function pesosAno(a){ // redistribui imoveis BR antes de 2011
+ let w={};const s=W.reduce((x,y)=>x+y,0);
+ if(s<=0){C.forEach(c=>w[c[0]]=1/C.length);return w;}
+ C.forEach((c,i)=>w[c[0]]=W[i]/s);
+ if(ret(a).imbr===null){const f=w.imbr;w.imbr=0;
+  const t=Object.values(w).reduce((x,y)=>x+y,0)||1;
+  Object.keys(w).forEach(k=>{if(k!=="imbr")w[k]+=f*w[k]/t;});}
+ return w;}
+
+function sim(){
+ const ini=+$("ini").value, ap=+$("ap").value, y0=+$("jan").value, tx=(+$("tx").value/100)/100;
+ let pos={},w=pesosAno(y0);C.forEach(c=>pos[c[0]]=ini*w[c[0]]);
+ let aportado=ini,H=[{ano:y0-1,v:ini,a:ini}],RS=[],defl=1;
+ for(let a=y0;a<=2025;a++){
+  const r=ret(a);w=pesosAno(a);const v0=sum(pos);
+  let rm={};C.forEach(c=>{const x=r[c[0]];
+   rm[c[0]]=x===null?0:Math.pow(1+x,1/12)*Math.pow(1-tx,1/12)-1;});
+  if(a===2011&&y0<2011&&!REB){const t=sum(pos);C.forEach(c=>pos[c[0]]=t*w[c[0]]);}
+  for(let mth=0;mth<12;mth++){
+   C.forEach(c=>pos[c[0]]*=(1+rm[c[0]]));
+   if(ap){C.forEach(c=>pos[c[0]]+=ap*w[c[0]]);aportado+=ap;}}
+  const t=sum(pos);
+  RS.push((t-v0-ap*12)/(v0+ap*6||1));
+  if(REB)C.forEach(c=>pos[c[0]]=t*w[c[0]]);
+  defl*=(1+r.ipca);
+  H.push({ano:a,v:t,a:aportado,p:Object.assign({},pos)});}
+ const n=2025-y0+1,vf=sum(pos);
+ let cur=1,pk=1,mdd=0;RS.forEach(r=>{cur*=(1+r);pk=Math.max(pk,cur);mdd=Math.min(mdd,cur/pk-1);});
+ const mu=RS.reduce((a,b)=>a+b,0)/n;
+ const vol=Math.sqrt(RS.reduce((a,b)=>a+(b-mu)*(b-mu),0)/(n-1||1));
+ return{H,RS,vf,aportado,n,defl,y0,vol,mdd,pior:Math.min(...RS),
+   neg:RS.filter(r=>r<0).length,fim:pos,tir:tir(ini,ap,n,vf)};}
+
+const sum=o=>Object.values(o).reduce((a,b)=>a+b,0);
+function tir(ini,ap,n,vf){if(ini+ap<=0||vf<=0)return 0;let lo=-0.99,hi=5;
+ const f=i=>{let s=-ini;for(let t=1;t<=n*12;t++)s-=ap/Math.pow(1+i,t/12);
+  return s+vf/Math.pow(1+i,n);};
+ for(let k=0;k<200;k++){const m=(lo+hi)/2;if(f(m)>0)lo=m;else hi=m;}return (lo+hi)/2;}
+
+function statsClasse(key,y0){
+ let rs=[],v=1;for(let a=y0;a<=2025;a++){const x=ret(a)[key];if(x===null)continue;rs.push(x);v*=(1+x);}
+ let d=1,m=0;for(let a=y0;a<=2025;a++){if(ret(a)[key]===null)continue;d*=(1+ret(a).ipca);m++;}
+ const mu=rs.reduce((a,b)=>a+b,0)/rs.length;
+ return{real:Math.pow(v,1/m)/Math.pow(d,1/m)-1,
+  vol:Math.sqrt(rs.reduce((a,b)=>a+(b-mu)*(b-mu),0)/(rs.length-1||1)),pior:Math.min(...rs),n:m};}
+
+/* ---------- desenho ---------- */
+const NS="http://www.w3.org/2000/svg";
+function el(t,at){const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+function txt(p,x,y,s,o={}){const t=el("text",Object.assign({x,y,"font-size":o.fs||11,
+ fill:o.c||"#7A8290","font-family":"DM Sans","text-anchor":o.a||"start"},o.w?{"font-weight":o.w}:{}));
+ t.textContent=s;p.appendChild(t);return t;}
+
+function chart1(S){
+ const s=$("c1");s.innerHTML="";const L=58,R=14,T=14,B=30,Wd=760,Ht=330;
+ const max=Math.max(1,Math.max(...S.H.map(h=>h.v))*1.06);
+ const X=i=>L+(Wd-L-R)*i/(S.H.length-1), Y=v=>Ht-B-(Ht-T-B)*v/max;
+ for(let g=0;g<=4;g++){const v=max*g/4,y=Y(v);
+  s.appendChild(el("line",{x1:L,x2:Wd-R,y1:y,y2:y,stroke:"#E8E4DA","stroke-width":1}));
+  txt(s,L-7,y+4,fBRL(v),{a:"end",fs:10});}
+ let pa="M"+X(0)+","+Y(0), pv="";
+ S.H.forEach((h,i)=>pa+="L"+X(i)+","+Y(h.a));
+ pa+="L"+X(S.H.length-1)+","+Y(0)+"Z";
+ s.appendChild(el("path",{d:pa,fill:"#B9BEC7","fill-opacity":.35}));
+ let pf="M"+X(0)+","+Y(S.H[0].a);
+ S.H.forEach((h,i)=>pf+="L"+X(i)+","+Y(h.v));
+ for(let i=S.H.length-1;i>=0;i--)pf+="L"+X(i)+","+Y(S.H[i].a);
+ s.appendChild(el("path",{d:pf+"Z",fill:"#C9A84C","fill-opacity":.5}));
+ S.H.forEach((h,i)=>pv+=(i?"L":"M")+X(i)+","+Y(h.v));
+ s.appendChild(el("path",{d:pv,fill:"none",stroke:"#0D1B2A","stroke-width":2.4}));
+ S.H.forEach((h,i)=>{if(i%Math.ceil(S.H.length/8)===0||i===S.H.length-1)
+  txt(s,X(i),Ht-10,h.ano,{a:"middle",fs:10});});
+ const last=S.H[S.H.length-1];
+ txt(s,X(S.H.length-1)-4,Y(last.v)-9,fBRL(last.v),{a:"end",fs:12.5,c:"#0D1B2A",w:700});}
+
+function chart2(S){
+ const s=$("c2");s.innerHTML="";const L=48,R=14,T=16,B=28,Wd=760,Ht=250;
+ let cur=1,pk=1,dd=[1];S.RS.forEach(r=>{cur*=(1+r);pk=Math.max(pk,cur);dd.push(cur/pk-1);});
+ dd[0]=0;const mn=Math.min(-0.05,Math.min(...dd)*1.15);
+ const X=i=>L+(Wd-L-R)*i/(dd.length-1), Y=v=>T+(Ht-T-B)*(v/mn);
+ for(let g=0;g<=4;g++){const v=mn*g/4,y=Y(v);
+  s.appendChild(el("line",{x1:L,x2:Wd-R,y1:y,y2:y,stroke:"#E8E4DA","stroke-width":1}));
+  txt(s,L-7,y+4,fP(v,0),{a:"end",fs:10});}
+ let p="M"+X(0)+","+Y(0);dd.forEach((v,i)=>p+="L"+X(i)+","+Y(v));
+ p+="L"+X(dd.length-1)+","+Y(0)+"Z";
+ s.appendChild(el("path",{d:p,fill:"#A8443C","fill-opacity":.22}));
+ let pl="";dd.forEach((v,i)=>pl+=(i?"L":"M")+X(i)+","+Y(v));
+ s.appendChild(el("path",{d:pl,fill:"none",stroke:"#A8443C","stroke-width":2}));
+ dd.forEach((v,i)=>{if(i%Math.ceil(dd.length/8)===0||i===dd.length-1)
+  txt(s,X(i),Ht-9,S.y0-1+i,{a:"middle",fs:10});});
+ txt(s,L,T-3,"Quanto a carteira estava abaixo do seu pico anterior",{fs:11,c:"#8A909B"});}
+
+function chart3(S){
+ const s=$("c3");s.innerHTML="";const L=44,R=14,T=16,B=26,Wd=760,Ht=200;
+ const ip=[];for(let a=S.y0;a<=2025;a++)ip.push(ret(a).ipca);
+ const mx=Math.max(0.02,Math.max(...S.RS.map(Math.abs),...ip)*1.15);
+ const bw=(Wd-L-R)/S.RS.length, Y=v=>T+(Ht-T-B)/2*(1-v/mx);
+ s.appendChild(el("line",{x1:L,x2:Wd-R,y1:Y(0),y2:Y(0),stroke:"#B9BEC7","stroke-width":1}));
+ [mx/2,-mx/2].forEach(v=>{txt(s,L-6,Y(v)+4,fPs(v,0),{a:"end",fs:10});});
+ S.RS.forEach((r,i)=>{const x=L+i*bw+bw*.16,w=bw*.5;
+  s.appendChild(el("rect",{x,y:Math.min(Y(r),Y(0)),width:w,
+   height:Math.abs(Y(r)-Y(0))||1,fill:r<0?"#A8443C":"#1B3A5C"}));
+  s.appendChild(el("rect",{x:x+w+1,y:Y(ip[i]),width:bw*.22,height:Math.abs(Y(ip[i])-Y(0))||1,
+   fill:"#C9A84C"}));
+  if(S.RS.length<=12||i%2===0)txt(s,x+w/2,Ht-8,String(S.y0+i).slice(2),{a:"middle",fs:9.5});});}
+
+function tabela(S){
+ const tb=$("tb");tb.innerHTML="";const tot=sum(S.fim)||1;
+ C.forEach((c,i)=>{const st=statsClasse(c[0],S.y0);
+  const alvo=W[i]/(W.reduce((a,b)=>a+b,0)||1), fim=S.fim[c[0]]/tot;
+  const nota=st.n!==S.n?' <span style="font-size:10px;color:#8A7330">('+st.n+"a)</span>":"";
+  tb.insertAdjacentHTML("beforeend",
+   '<tr><td><i style="display:inline-block;width:9px;height:9px;background:'+c[2]+
+   ';margin-right:7px;border-radius:1px"></i>'+c[1]+nota+
+   '</td><td class="b">'+fP(st.real,2)+'</td><td>'+fP(st.vol)+
+   '</td><td class="neg">'+fPs(st.pior)+'</td><td>'+fP(alvo,0)+
+   '</td><td'+(Math.abs(fim-alvo)>0.06?' class="neg b"':'')+'>'+fP(fim,0)+'</td></tr>');});
+ let mx=0,nm="";C.forEach((c,i)=>{const a=W[i]/(W.reduce((x,y)=>x+y,0)||1),
+  f=S.fim[c[0]]/tot;if(f-a>mx){mx=f-a;nm=c[1];}});
+ $("drift").textContent=REB?"Com rebalanceamento anual, os pesos finais coincidem com os alvos.":
+  (mx>0.03?"Sem rebalanceamento, "+nm+" cresceu "+fP(mx,0)+" acima do alvo. A carteira que você tem no fim não é mais a que você escolheu.":
+   "Sem rebalanceamento, o desvio dos pesos foi pequeno nesta janela.");}
+
+function run(){
+ const S=sim();
+ $("k1").textContent=fBRL(S.vf);
+ $("k2").textContent=fBRL(S.vf/S.defl);
+ $("k3").textContent=fP((1+S.tir)/Math.pow(S.defl,1/S.n)-1,2);
+ $("k4").textContent=fBRL(S.aportado);
+ $("k5").textContent=fP(S.vol);
+ $("k6").textContent=fPs(S.pior);
+ $("k7").textContent=fPs(S.mdd);
+ $("k8").textContent=S.neg+" de "+S.n;
+ chart1(S);chart2(S);chart3(S);tabela(S);}
+
+/* ---------- UI ---------- */
+function sliders(){
+ $("pesos").innerHTML=C.map((c,i)=>
+  '<div class="row" style="margin-top:11px"><span><i style="display:inline-block;width:9px;height:9px;'+
+  'background:'+c[2]+';margin-right:7px;border-radius:1px"></i>'+c[1]+
+  '</span><span id="w'+i+'">'+W[i]+'%</span></div>'+
+  '<input type="range" class="wsl" data-i="'+i+'" min="0" max="100" step="1" value="'+W[i]+'">').join("");
+ document.querySelectorAll(".wsl").forEach(sl=>sl.addEventListener("input",e=>{
+  W[+e.target.dataset.i]=+e.target.value;
+  document.querySelectorAll(".pbtn").forEach(b=>b.classList.remove("on"));
+  upd();}));}
+function upd(){
+ C.forEach((c,i)=>$("w"+i).textContent=W[i]+"%");
+ const t=W.reduce((a,b)=>a+b,0);const e=$("wsum");
+ e.className="wsum "+(t===100?"ok":"bad");
+ e.textContent=t===100?"Soma: 100%":"Soma: "+t+"% — os pesos serão normalizados para 100%";
+ $("o_ini").textContent=fBRL(+$("ini").value);
+ $("o_ap").textContent=fBRL(+$("ap").value);
+ $("o_tx").textContent=((+$("tx").value/100).toFixed(2)).replace(".",",")+"%";
+ run();}
+$("pre").addEventListener("click",e=>{const b=e.target.closest(".pbtn");if(!b)return;
+ document.querySelectorAll(".pbtn").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+ W=P[b.dataset.p].slice();
+ document.querySelectorAll(".wsl").forEach(sl=>sl.value=W[+sl.dataset.i]);upd();});
+$("tg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+ $("tg").querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+ REB=+b.dataset.v;upd();});
+["ini","ap","tx"].forEach(id=>$(id).addEventListener("input",upd));
+$("jan").addEventListener("change",upd);
+sliders();upd();
+</script></body></html>
