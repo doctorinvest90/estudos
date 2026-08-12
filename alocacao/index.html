@@ -82,6 +82,21 @@ td:first-child{text-align:left}
 footer{border-top:1px solid var(--linha);margin-top:32px;padding-top:18px;font-size:11.2px;
   color:var(--suave);line-height:1.55}
 footer b{color:var(--conf)}
+
+/* Impressão: a folha é a simulação da pessoa, não a página. Some o painel de
+   controles (os valores viram texto no resumo), a captura e o link de download,
+   que é morto no papel. As conclusões ficam — é a autoridade viajando com o
+   documento. */
+@media print{
+  header{background:var(--azul) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .grid{display:block}
+  .grid > div:first-child, #captura, #linha-dl{display:none}
+  .card{break-inside:avoid;border:1px solid var(--linha)}
+  #resumo-print{display:block !important;margin:0 0 18px}
+  body{font-size:12px}
+  svg{max-width:100%}
+}
+#resumo-print{display:none}
 </style></head><body>
 
 <header><div class="wrap">
@@ -110,7 +125,7 @@ footer b{color:var(--conf)}
       <li><b>Na janela de dez anos, o rebalanceamento venceu nos três perfis</b>, com mais retorno
           e menos risco.</li>
     </ol>
-    <p style="margin-top:16px">
+    <p style="margin-top:16px" id="linha-dl">
       <a href="estudo.pdf" id="dl" style="color:var(--conf);font-weight:700">
         Baixar o estudo completo (PDF, 18 páginas)</a>
       — inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis limitações do método.
@@ -416,4 +431,31 @@ $("tg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)re
 ["ini","ap","tx"].forEach(id=>$(id).addEventListener("input",upd));
 $("jan").addEventListener("change",upd);
 sliders();upd();
-</script></body></html>
+</script>
+
+<div class="wrap"><div id="resumo-print" class="card">
+  <h3>Sua simulação</h3>
+  <p class="hint" id="resumo-txt"></p>
+</div></div>
+
+<script>
+// Depois do script principal de propósito: lê os globais C (chave/rótulo/cor) e W
+// (pesos correntes) que ele define, em vez de duplicar estado em data-*.
+function resumoSimulacao(){
+  const pesos=C.map((c,i)=>`${c[1]}: ${W[i]}%`).join(" · ");
+  const jan=document.getElementById("jan");
+  return [
+    `Janela: ${jan.options[jan.selectedIndex].text}`,
+    `Aporte inicial: ${document.getElementById("o_ini").textContent}`,
+    `Aporte mensal: ${document.getElementById("o_ap").textContent}`,
+    `Rebalanceamento: ${document.querySelector("#tg .on").textContent}`,
+    `Custo anual: ${document.getElementById("o_tx").textContent}`,
+    pesos,
+  ].join(" — ");
+}
+window.imprimirSimulacao=function(){
+  document.getElementById("resumo-txt").textContent=resumoSimulacao();
+  window.print();
+};
+</script>
+</body></html>
