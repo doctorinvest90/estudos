@@ -225,6 +225,8 @@ footer b{color:var(--conf)}
     style="margin-top:14px;padding:11px 18px;background:var(--azul);color:var(--marfim);
            border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45">
     Gerar o PDF desta simulação</button>
+  <p class="nota" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
+     <b>Cmd+P</b> imprime esta página do mesmo jeito.</p>
 </div></div>
 
 <footer><div>
@@ -523,7 +525,9 @@ new IntersectionObserver(function(es,obs){
 function liberarImpressao(){
   var b=document.getElementById("btn-print");
   if(!b.disabled) return;
-  b.disabled=false; b.style.opacity="1"; ev("lead");
+  b.disabled=false; b.style.opacity="1";
+  document.getElementById("dica-print").style.display="none";
+  ev("lead");
 }
 
 // Buffer de diagnóstico: o embed do Fillout usa `type` em snake_case
