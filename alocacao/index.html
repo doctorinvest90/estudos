@@ -216,6 +216,17 @@ footer b{color:var(--conf)}
 </div>
 </div>
 
+<div class="wrap"><div class="card" id="captura">
+  <h3>Leve esta simulação com você</h3>
+  <p class="hint">Gera um PDF de uma página com a carteira que você montou, os gráficos e os números
+     de risco. O estudo completo continua livre acima — isto é só a sua simulação.</p>
+  <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber a simulação"></iframe>
+  <button id="btn-print" disabled
+    style="margin-top:14px;padding:11px 18px;background:var(--azul);color:var(--marfim);
+           border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45">
+    Gerar o PDF desta simulação</button>
+</div></div>
+
 <footer><div>
 <b>Aviso.</b> Ferramenta educacional. Não constitui recomendação de investimento, oferta ou consultoria
 de valores mobiliários individualizada. Rentabilidade passada não é garantia de rentabilidade futura.
@@ -457,5 +468,78 @@ window.imprimirSimulacao=function(){
   document.getElementById("resumo-txt").textContent=resumoSimulacao();
   window.print();
 };
+</script>
+
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+function ev(nome){
+  var payload=JSON.stringify({
+    event:nome, page:"alocacao",
+    utm_source:qs.get("utm_source")||"", utm_medium:qs.get("utm_medium")||"",
+    utm_campaign:qs.get("utm_campaign")||"", lp:qs.get("lp")||"",
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+</script>
+
+<script>
+var FF_ORIGIN="https://forms.fillout.com";
+var FF_FORM="jMJQg14vTUus";
+var ffEmbedId=String(Math.floor(Date.now()%1e9));
+
+function paramsSimulacao(){
+  // C e W são globais do simulador — mesmas chaves que compute.ts espera.
+  var pesos=C.map(function(c,i){return c[0]+":"+W[i];}).join("|");
+  var p=new URLSearchParams({
+    alocacao:pesos,
+    patrimonio:document.getElementById("ini").value,
+    aporte:document.getElementById("ap").value,
+    janela:document.getElementById("jan").value,
+    rebal:document.querySelector("#tg .on").dataset.v
+  });
+  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
+    .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+  // Sem estes três, o iframe carrega como página solta e não posta mensagem nenhuma
+  // (server.fillout.com/embed/v1: o handler do filho é montado por embed-type/dynamic-resize).
+  p.set("fillout-embed-id",ffEmbedId);
+  p.set("fillout-embed-type","standard");
+  p.set("fillout-embed-dynamic-resize","true");
+  return p;
+}
+
+// O src só é montado quando a captura entra em tela: assim o iframe carrega a
+// carteira que a pessoa realmente montou, não os pesos iniciais da página.
+new IntersectionObserver(function(es,obs){
+  if(!es.some(function(e){return e.isIntersecting;})) return;
+  document.getElementById("ff").src=FF_ORIGIN+"/t/"+FF_FORM+"?"+paramsSimulacao().toString();
+  obs.disconnect();
+},{threshold:.25}).observe(document.getElementById("captura"));
+
+function liberarImpressao(){
+  var b=document.getElementById("btn-print");
+  if(!b.disabled) return;
+  b.disabled=false; b.style.opacity="1"; ev("lead");
+}
+
+// Buffer de diagnóstico: o embed do Fillout usa `type` em snake_case
+// (form_resized, check_scroll_up). O nome do evento de submissão fica gravado
+// aqui para conferência ao vivo, em vez de ser adivinhado.
+window.__ffMsgs=[];
+addEventListener("message",function(e){
+  if(e.origin!==FF_ORIGIN) return;
+  var d=e.data||{};
+  window.__ffMsgs.push(typeof d==="object"?d.type:String(d));
+  if(d.embedId && d.embedId!==ffEmbedId) return;
+  if(typeof d.type==="string" && /submi|complet|thank/i.test(d.type)) liberarImpressao();
+  // O iframe também cresce conforme a pessoa avança; acompanhar evita corte.
+  if(d.type==="form_resized" && d.size) document.getElementById("ff").style.height=d.size+"px";
+});
+
+document.getElementById("btn-print").onclick=function(){ev("download");window.imprimirSimulacao();};
 </script>
 </body></html>
