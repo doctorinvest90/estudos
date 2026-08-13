@@ -522,14 +522,19 @@ if(!FF_FORM){
   btn.disabled=false;
 }else{
   var ffEmbedId=String(Math.floor(Date.now()%1e9));
+  /* O diagnóstico vai num campo só, no formato "chave:valor|chave:valor" que o
+     `estudo-intake` já lê (mesmo parser da alocação). O formulário do Fillout é
+     compartilhado entre os estudos, então mandar 16 parâmetros soltos exigiria
+     16 campos ocultos novos lá dentro; assim são dois, `estudo` e `dados`. */
   function paramsCota(){
     var d=diagnostico();
-    var p=new URLSearchParams({
-      carta:D.carta, prazo:D.prazo, assembleia:D.assembleia, pagoFundo:D.pagoFundo,
-      adm:D.adm, fr:D.fr, lance:D.lancePct, multa:D.multa, ofertantes:D.ofertantes,
-      ret:D.ret, venda:D.venda,
-      melhor:d.melhor, vpl:d.vpl, minvenda:d.minvenda, parcela:d.parcela, faltam:d.faltam
-    });
+    var dados=[
+      ["melhor",d.melhor],["carta",D.carta],["assembleia",D.assembleia],["prazo",D.prazo],
+      ["pagoFundo",D.pagoFundo],["adm",D.adm],["fr",D.fr],["lance",D.lancePct],
+      ["multa",D.multa],["ofertantes",D.ofertantes],["ret",D.ret],["venda",D.venda],
+      ["parcela",d.parcela],["faltam",d.faltam],["minvenda",d.minvenda],["vpl",d.vpl]
+    ].map(function(par){return par[0]+":"+par[1];}).join("|");
+    var p=new URLSearchParams({estudo:"consorcio", dados:dados});
     ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
       .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
     // Sem estes três, o iframe carrega como página solta e não posta mensagem nenhuma
