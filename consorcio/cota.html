@@ -508,7 +508,11 @@ window.imprimirDiagnostico=function(){
 };
 
 var FF_ORIGIN="https://forms.fillout.com";
-var FF_FORM="";   // id do formulário de captura; vazio = página sem captura
+// Formulário COMPARTILHADO com o estudo de alocação. O que separa os dois é o
+// parâmetro `estudo`, montado em paramsCota() — e o `estudo-intake` roteia o
+// texto de boas-vindas e a Note por ele. Trocar este id sem ter os parâmetros
+// `estudo`/`dados` registrados no formulário faz a captura virar linha muda.
+var FF_FORM="jMJQg14vTUus";
 
 var btn=document.getElementById("btn-print");
 if(!FF_FORM){
