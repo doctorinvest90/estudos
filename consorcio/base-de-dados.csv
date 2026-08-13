@@ -1,0 +1,144 @@
+﻿BASE DE DADOS - O consorcio que ninguem calcula
+Doctor Invest - agosto de 2026
+
+SERIES ANUAIS (%)
+Ano;FipeZAP Venda;FipeZAP Locacao;IPCA;FipeZAP Venda real
+2009;21,13;9,46;4,31;16,13
+2010;26,86;18,56;5,91;19,78
+2011;26,32;17,30;6,50;18,61
+2012;13,03;10,58;5,84;6,79
+2013;13,74;7,86;5,91;7,39
+2014;6,70;2,83;6,41;0,27
+2015;1,32;-3,34;10,67;-8,45
+2016;0,57;-3,23;6,29;-5,38
+2017;-0,53;-0,69;2,95;-3,38
+2018;-0,21;2,33;3,75;-3,82
+2019;0,00;4,93;4,31;-4,13
+2020;3,67;2,48;4,52;-0,81
+2021;5,29;3,87;10,06;-4,33
+2022;6,16;16,55;5,79;0,35
+2023;5,13;16,16;4,62;0,49
+2024;7,73;13,50;4,83;2,77
+2025;6,52;9,44;4,26;2,17
+2026;5,46;9,00;4,43;0,99
+
+SERIE DE LANCES LIVRES VENCEDORES - GRUPO OBSERVADO (dado primario)
+Assembleia;Data;Lance vencedor (%);Lance (R$);Cotas pagas;Credito liquido (R$);Taxa adm / credito (%);Observacao
+9;mai/2023;68,5000;479500;1;235838;48;
+11;jul/2023;70,2222;491555;1;217782;52;
+23;jul/2024;68,5167;501727;3;206056;54;
+25;set/2024;70,7072;539721;1;184242;61;
+27;nov/2024;74,5000;568672;3;149570;75;
+29;jan/2025;75,2385;574309;0;139409;81;"sem cota Paga; topo das reservas"
+31;mar/2025;75,0000;572489;0;137087;82;"sem cota Paga; topo das reservas"
+33;mai/2025;77,1588;588967;2;115528;97;
+36;ago/2025;80,9161;617647;2;79023;142;
+45;mai/2026;82,1376;659135;2;50161;224;
+46;jun/2026;81,7408;655951;1;51228;219;
+47;jul/2026;81,3440;652766;2;52294;215;
+
+Fonte: Fipe/Grupo OLX (informes de junho e julho de 2026) e IBGE.
+2026 = variacao acumulada em 12 meses ate julho.
+
+SISTEMA DE CONSORCIOS - SEGMENTO DE IMOVEIS
+Indicador;Valor;Fonte
+Taxa media de administracao, grupos novos de 2024;20,84%;BCB Panorama dez/2024
+Prazo medio dos grupos de imoveis de 2024;216,8 meses;BCB Panorama dez/2024
+Valor medio das cartas de imovel, grupos de 2024;R$ 222,3 mil;BCB Panorama dez/2024
+Cotas ativas de imoveis em dez/2024;2,16 milhoes;BCB Panorama dez/2024
+Cotas de imovel contempladas em 2024;121,9 mil;BCB Panorama dez/2024
+Contemplacoes por lance, imoveis, 2024;78,3%;BCB Panorama dez/2024
+Indice de exclusao, imoveis;56,9%;BCB Panorama dez/2024
+Indice de exclusao, sistema;48,6%;BCB Panorama dez/2024
+Excluidos que chegaram a ser contemplados;14,6%;BCB Panorama dez/2024
+Chance anual de contemplacao, qualquer via;5,64%;calculo sobre BCB
+Chance anual de contemplacao so por sorteio;1,22%;calculo sobre BCB
+
+"CONTRATO OBSERVADO (dado primario; administradora omitida)"
+Carta na adesao (2022);R$ 700.000,00
+Carta corrigida (set/2025);R$ 802.476,50
+Prazo do grupo;216 meses
+Taxa de administracao;13,99%
+Fundo de reserva;0,00%
+Parcelas pagas ate ago/2026;48
+% do bem amortizado nas 48 parcelas;11,112%
+% do bem por parcela ate agora;0,2315%
+% do bem por parcela daqui em diante;0,5291%
+Parcela atual;R$ 2.117,73
+Parcela media que falta;R$ 4.839,86
+Reajuste da carta, media anual;4,66%
+IPCA no mesmo periodo, media anual;4,57%
+Spread do reajuste sobre o IPCA;+0,09 p.p. ao ano
+Total do contrato;R$ 908.064,02
+
+ESTATISTICA DO GRUPO OBSERVADO (extrato de julho de 2026)
+Total de cotas do grupo;971
+Consorciados ativos;900
+Ativos ja contemplados;178
+Consorciados a contemplar;750
+Consorciados quitados;29
+Consorciados excluidos;782
+Excluidos ja restituidos;46
+Excluidos na fila de restituicao;736
+Cotas vagas;71
+Indice de exclusao do grupo;46,5%
+Assembleias realizadas;47
+Contemplacoes de ativos por assembleia;3,79
+Restituicoes de excluidos por assembleia;0,98
+
+POSICOES OBTIDAS AO OFERTAR O LANCE FIXO DE 20%
+Ordem;Posicao na assembleia
+1;16
+2;46
+3;48
+4;107
+5;134
+6;229
+7;232
+8;233
+9;237
+Maior posicao observada (piso de concorrentes);237
+Estimativa de concorrentes;262
+Limite superior a 95%;331
+Vagas de lance fixo por assembleia;2
+Chance por assembleia;0,76%
+
+PREMISSAS DO MODELO
+Preco do imovel;R$ 802.476,50
+Capital inicial disponivel;R$ 160.495,30
+Horizonte;216 meses
+Taxa de administracao;13,99%
+Fundo de reserva;0,00%
+Seguro;0,00%
+IPCA 12 meses ate jul/2026;4,44%
+INCC-M 12 meses ate jul/2026;6,40%
+Spread do reajuste sobre IPCA adotado;0,09 p.p. ao ano (medido no contrato)
+Selic;14,00% ao ano
+Juros do financiamento;11,50% ao ano nominal
+Entrada do financiamento;20%
+Retorno real de referencia;IPCA + 6,00% ao ano
+Rental yield;6,13% ao ano (FipeZAP jun/2026)
+Valorizacao real do imovel, caso-base;0,00% ao ano
+Orcamento mensal comum;R$ 8.334
+
+RESULTADO POR MES DE CONTEMPLACAO
+Mes;Anos;Patrimonio liquido real em 217 meses (R$);VPL do contrato a IPCA+6% (R$);Custo real do credito (% a.a.)
+1;0,1;2811324;229597;1,60
+6;0,5;2753665;210733;1,68
+12;1,0;2686296;188683;1,78
+24;2,0;2557306;146436;2,04
+36;3,0;2435618;106544;2,40
+48;4,0;2320818;68876;nao e credito
+60;5,0;2212515;33309;nao e credito
+73;6,1;2102095;-2988;nao e credito
+84;7,0;2013955;-31988;nao e credito
+108;9,0;1837237;-90206;nao e credito
+132;11,0;1679958;-142113;nao e credito
+168;14,0;1475877;-209617;nao e credito
+200;16,7;1322120;-260606;nao e credito
+216;18,0;1253750;-283320;nao e credito
+
+Financiamento (imovel no mes 0);2058986
+Juntar e comprar a vista (mes 100);2101467
+Break-even contra juntar e comprar a vista;mes 73
+Break-even contra o financiamento;mes 78

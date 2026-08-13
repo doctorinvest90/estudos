@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de consórcio · Doctor Invest</title>
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;
+--cinza:#8A94A6;--cinza2:#5A6478;--verm:#A8443C;--verde:#4F7A5B;--linha:#E8E4DA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:#22303F;
+font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+font-size:15px;line-height:1.55}
+header{background:var(--azul);color:var(--marfim);padding:26px 24px 22px}
+header .marca{font-size:11px;letter-spacing:.34em;color:var(--ouro);font-weight:700}
+header h1{font-family:Georgia,'Times New Roman',serif;font-weight:600;
+font-size:27px;margin:12px 0 6px;line-height:1.15}
+header p{margin:0;color:#AFBACB;font-size:14px;max-width:640px}
+.wrap{display:flex;gap:22px;padding:22px;align-items:flex-start;max-width:1240px;margin:0 auto}
+.painel{flex:0 0 322px;background:#fff;border:1px solid var(--linha);padding:18px 18px 20px}
+.res{flex:1;min-width:0}
+@media(max-width:900px){.wrap{flex-direction:column;padding:14px}.painel{flex:none;width:100%}}
+h2{font-family:Georgia,serif;font-size:19px;color:var(--azul);margin:0 0 4px;font-weight:600}
+.sub{font-size:12px;color:var(--cinza);margin:0 0 14px}
+.ctrl{margin-bottom:15px}
+.ctrl label{display:flex;justify-content:space-between;align-items:baseline;
+font-size:12.5px;color:var(--cinza2);margin-bottom:5px}
+.ctrl .v{font-weight:700;color:var(--azul);font-size:13.5px}
+input[type=range]{width:100%;accent-color:var(--conf);margin:0}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.presets button{flex:1 1 46%;background:#fff;border:1px solid var(--linha);
+color:var(--conf);font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit;
+line-height:1.25}
+.presets button:hover{border-color:var(--ouro)}
+.presets button.on{background:var(--azul);color:var(--marfim);border-color:var(--azul)}
+.cards{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.card{flex:1 1 150px;background:#fff;border-top:2.5px solid var(--ouro);
+padding:12px 14px 14px;border-bottom:1px solid var(--linha);
+border-left:1px solid var(--linha);border-right:1px solid var(--linha)}
+.card .n{font-family:Georgia,serif;font-size:26px;font-weight:700;color:var(--azul);
+line-height:1.05}
+.card .t{font-size:11.5px;color:var(--cinza2);margin-top:4px;line-height:1.3}
+.veredito{background:var(--azul);color:#E4E0D6;padding:15px 18px;margin-bottom:16px}
+.veredito .rot{font-size:10.5px;letter-spacing:.2em;color:var(--ouro);font-weight:700;
+margin-bottom:6px}
+.veredito p{margin:0;font-size:14px}
+.bloco{background:#fff;border:1px solid var(--linha);padding:16px 18px;margin-bottom:16px}
+canvas{display:block;max-width:100%}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--azul);color:var(--marfim);font-weight:500;font-size:11px;
+padding:8px 7px;text-align:right;letter-spacing:.04em}
+th:first-child{text-align:left}
+td{padding:8px 7px;text-align:right;border-bottom:1px solid var(--linha)}
+td:first-child{text-align:left}
+tr.win td{background:#FAF8F3;font-weight:700}
+.neg{color:var(--verm)}.pos{color:var(--verde)}
+.nota{font-size:11.5px;color:var(--cinza);margin:8px 0 0}
+footer{background:#F2F0EA;color:#5A616B;font-size:11px;line-height:1.5;
+padding:18px 24px;margin-top:8px}
+footer b{color:var(--azul)}
+nav.volta{background:#fff;border-bottom:1px solid var(--linha)}
+nav.volta .in{max-width:1240px;margin:0 auto;padding:11px 24px;display:flex;
+justify-content:space-between;flex-wrap:wrap;gap:10px}
+nav.volta a{color:var(--conf);text-decoration:none;font-size:13px;font-weight:500}
+nav.volta a:hover{color:var(--ouro)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="marca">DOCTOR INVEST</div>
+  <h1>Consórcio, financiamento ou juntar e comprar à vista</h1>
+  <p>Os controles vêm preenchidos com um contrato real de consórcio de imóveis, acompanhado
+  por três anos. Troque pelos seus números e veja em que mês de contemplação a conta vira.</p>
+</header>
+
+<nav class="volta"><div class="in">
+  <a href="./" id="n-estudo">← O estudo completo</a>
+  <a href="cota.html" id="n-cota">Já tenho uma cota de consórcio →</a>
+</div></nav>
+
+<div class="wrap">
+  <div class="painel">
+    <h2>Seus números</h2>
+    <p class="sub">Comece por um cenário e ajuste o que for seu caso.</p>
+    <div class="presets" id="presets"></div>
+    <div id="controles"></div>
+  </div>
+
+  <div class="res">
+    <div class="cards" id="cards"></div>
+    <div class="veredito"><div class="rot">O QUE ISSO SIGNIFICA</div><p id="veredito"></p></div>
+    <div class="bloco">
+      <h2>Patrimônio ao fim do prazo, por mês de contemplação</h2>
+      <p class="sub">A linha azul é o consórcio. As horizontais são as alternativas.</p>
+      <canvas id="g" width="900" height="380"></canvas>
+    </div>
+    <div class="bloco">
+      <h2>As três contas lado a lado</h2>
+      <table id="tab"></table>
+      <p class="nota">Patrimônio líquido em termos reais, em reais de hoje, ao fim do prazo
+      do grupo. Quem ainda não tem o imóvel paga aluguel; o que sobra do orçamento é investido
+      em todas as opções.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+<b>Aviso.</b> Ferramenta de caráter exclusivamente informativo e educacional. Não constitui
+recomendação de investimento, de contratação de crédito ou de adesão a grupo de consórcio, nem
+consultoria de valores mobiliários individualizada, nos termos da regulamentação da CVM. Os
+resultados decorrem de simulação com premissas declaradas que podem não se confirmar e
+desconsideram custos e tributos não mencionados. Rentabilidade passada não garante
+rentabilidade futura. Antes de decidir, avalie seus objetivos e sua situação financeira,
+preferencialmente com apoio de profissional habilitado.<br><br>
+<b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · agosto de 2026. Dados: extrato de cota
+e doze assembleias de um grupo de imóveis (administradora omitida), Banco Central (Panorama do
+Sistema de Consórcios, dez/2024), FipeZAP, IBGE e FGV.
+</footer>
+
+<script>
+"use strict";
+const P = {
+  preco:802476, capital:160495, prazo:216, adm:13.99, fr:0.0, seguro:0.0,
+  incc:0.09, ret:6.0, fin:11.5, ipca:4.44, entrada:20, yield_:6.13, valor:0.0,
+  mc:73, lance:0
+};
+
+const CTRL = [
+  {k:"preco", l:"Valor do imóvel", min:200000, max:3000000, step:10000, f:v=>brl(v)},
+  {k:"capital", l:"Capital que você já tem", min:0, max:1000000, step:10000, f:v=>brl(v)},
+  {k:"mc", l:"Mês da contemplação", min:1, max:216, step:1,
+   f:v=>v+" (" + (v/12).toFixed(1).replace(".",",") + " anos)"},
+  {k:"lance", l:"Lance com capital próprio", min:0, max:90, step:1, f:v=>pct(v,0)},
+  {k:"prazo", l:"Prazo do grupo", min:60, max:240, step:1, f:v=>v+" meses"},
+  {k:"adm", l:"Taxa de administração", min:8, max:30, step:0.01, f:v=>pct(v,2)},
+  {k:"fr", l:"Fundo de reserva", min:0, max:5, step:0.1, f:v=>pct(v,1)},
+  {k:"incc", l:"Correção da carta acima do IPCA", min:0, max:3, step:0.01, f:v=>pct(v,2)+" a.a."},
+  {k:"ret", l:"Retorno real dos investimentos", min:2, max:10, step:0.1, f:v=>"IPCA + "+pct(v,1)},
+  {k:"fin", l:"Juros do financiamento", min:8, max:16, step:0.1, f:v=>pct(v,2)+" a.a."},
+  {k:"valor", l:"Valorização real do imóvel", min:-3, max:4, step:0.1, f:v=>pct(v,2)+" a.a."},
+  {k:"yield_", l:"Aluguel sobre o valor do imóvel", min:3, max:10, step:0.1, f:v=>pct(v,2)+" a.a."}
+];
+
+const PRESETS = {
+  "Contrato observado": {adm:13.99, fr:0.0, prazo:216, incc:0.09, ret:6.0, valor:0.0, mc:73, lance:0},
+  "Lance vencedor real (81%)": {adm:13.99, fr:0.0, prazo:216, incc:0.09, ret:6.0, valor:0.0, mc:47, lance:81},
+  "Média nacional do BCB": {adm:20.84, fr:2.0, prazo:216, incc:1.5, ret:6.0, valor:0.0, mc:36, lance:0},
+  "Imóvel parado (2015–2026)": {adm:13.99, fr:0.0, prazo:216, incc:0.09, ret:6.0, valor:-2.02, mc:73, lance:0}
+};
+
+function brl(v){
+  if(Math.abs(v)>=1e6) return "R$ "+(v/1e6).toFixed(2).replace(".",",")+" mi";
+  if(Math.abs(v)>=1000) return "R$ "+Math.round(v).toLocaleString("pt-BR");
+  return "R$ "+Math.round(v);
+}
+function brlFull(v){return "R$ "+Math.round(v).toLocaleString("pt-BR");}
+function pct(v,c){return v.toFixed(c).replace(".",",")+"%";}
+function tm(a){return Math.pow(1+a,1/12)-1;}
+
+// ---- fluxo do consorciado (espelha fluxo_consorcio do motor Python) ----
+function fluxoConsorcio(mc, lancePct, mesLance){
+  const n=P.prazo, T=P.prazo;
+  const devido = 1 + P.adm/100 + P.fr/100;
+  const frac = devido/n;
+  const gr = tm(P.incc/100);
+  const saidas = new Float64Array(T+1), entradas = new Float64Array(T+1);
+  let pago=0, total=0;
+  for(let m=1;m<=T;m++){
+    const carta = P.preco*Math.pow(1+gr,m);
+    if(pago >= devido-1e-9) break;
+    const parcela = Math.min(frac, devido-pago);
+    const saldo = devido-pago;
+    saidas[m] = parcela*carta + saldo*carta*(P.seguro/100);
+    pago += parcela;
+    if(mesLance!==null && m===mesLance && lancePct>0){
+      const usado = Math.min(lancePct, devido-pago);
+      saidas[m] += usado*carta;
+      pago += usado;
+    }
+    if(m===mc){ entradas[m]=carta; }
+    total += saidas[m];
+  }
+  return {saidas, entradas, total};
+}
+
+function orcamentoBase(){
+  const devido = P.preco*(1+P.adm/100+P.fr/100);
+  return devido/P.prazo + devido*(P.seguro/100) + P.preco*(P.yield_/100)/12;
+}
+
+// ---- simulação de uma estratégia (espelha simular do motor Python) ----
+function simular(estrategia, mc, B){
+  const T=P.prazo, g=tm(P.valor/100), r=tm(P.ret/100), aluguelM=(P.yield_/100)/12;
+  let invest=P.capital, tem=false, divida=0, mesAq=null, juros_m=0, amort=0, fc=null;
+
+  if(estrategia.indexOf("consorcio")===0){
+    const lp = estrategia==="consorcio_lance" ? P.lance/100 : 0;
+    fc = fluxoConsorcio(mc, lp, estrategia==="consorcio_lance" ? mc : null);
+  }
+  if(estrategia==="financiamento"){
+    const entrada=P.preco*(P.entrada/100);
+    invest-=entrada; divida=P.preco-entrada; tem=true; mesAq=0;
+    juros_m = tm((1+P.fin/100)/(1+P.ipca/100)-1);
+    amort = divida/P.prazo;
+  }
+  for(let m=1;m<=T;m++){
+    const vi=P.preco*Math.pow(1+g,m);
+    let saida=0;
+    if(estrategia==="financiamento"){
+      if(divida>0.5){ saida += amort + divida*juros_m; divida=Math.max(divida-amort,0); }
+    } else if(fc){
+      saida += fc.saidas[m];
+      if(fc.entradas[m]>0){ tem=true; if(mesAq===null) mesAq=m; }
+    }
+    if(!tem) saida += vi*aluguelM;
+    invest = invest*(1+r) + (B - saida);
+    if(estrategia==="juntar" && !tem && invest>=vi){ invest-=vi; tem=true; mesAq=m; }
+  }
+  const vf=P.preco*Math.pow(1+g,T);
+  return {patrimonio: invest + (tem?vf:0) - divida, mesAq};
+}
+
+function calcular(){
+  const B=orcamentoBase();
+  const fin=simular("financiamento",null,B);
+  const jun=simular("juntar",null,B);
+  const est = P.lance>0 ? "consorcio_lance" : "consorcio";
+  const curva=[];
+  for(let m=1;m<=P.prazo;m++) curva.push(simular(est,m,B).patrimonio);
+  let beJ=null, beF=null;
+  for(let m=P.prazo;m>=1;m--){
+    if(beJ===null && curva[m-1]>=jun.patrimonio) beJ=m;
+    if(beF===null && curva[m-1]>=fin.patrimonio) beF=m;
+  }
+  const mcUse=Math.min(P.mc,P.prazo);
+  const cons = simular(est,mcUse,B);
+  return {B,fin,jun,curva,beJ,beF,cons,mcUse};
+}
+
+// ---- probabilidade de contemplação, taxas do Banco Central ----
+// Grupo observado (extrato de jul/2026): 971 cotas, uma vaga de sorteio por
+// assembleia, disputada entre as cotas ainda não contempladas.
+function probSorteio(m){
+  let pNunca = 1;
+  for(let t=0;t<m;t++){
+    const pool = 971 - 4.7*t;
+    if(pool <= 1) return 1;
+    pNunca *= 1 - 1/pool;
+  }
+  return 1 - pNunca;
+}
+
+function render(){
+  const R=calcular();
+  const venceJ = R.cons.patrimonio >= R.jun.patrimonio;
+  const venceF = R.cons.patrimonio >= R.fin.patrimonio;
+
+  const dif = R.cons.patrimonio - R.jun.patrimonio;
+  const card2 = P.lance>0
+    ? card((dif>=0?"+ ":"− ")+brl(Math.abs(dif)),
+        "quanto o consórcio com lance rende a "+(dif>=0?"mais":"menos")+" que juntar e comprar à vista")
+    : card(R.beJ===null?"—":pct(probSorteio(R.beJ)*100,1),
+        "chance de ser sorteado dentro dessa janela, no grupo observado");
+  document.getElementById("cards").innerHTML =
+    card(R.beJ===null?"nunca vence":R.beJ+" meses",
+      P.lance>0 ? "o prazo máximo de contemplação em que o consórcio com esse lance ainda vence"
+                : "o prazo máximo de contemplação em que o consórcio ainda vence")+
+    card2+
+    card(brl(R.cons.patrimonio),"seu patrimônio ao fim de "+P.prazo+" meses, no mês de contemplação escolhido");
+
+  let v;
+  if(venceJ && venceF){
+    v="Contemplado no mês "+R.mcUse+", o consórcio entrega "+
+      brlFull(R.cons.patrimonio-R.jun.patrimonio)+" a mais que juntar e comprar à vista. "+
+      (P.lance>0
+        ? "Com esse lance, a janela vai até o mês "+R.beJ+"."
+        : "A janela vai até o mês "+R.beJ+" — e a chance de ser sorteado até lá é de "+
+          pct(probSorteio(R.beJ)*100,1)+".");
+  } else if(venceF){
+    v="Contemplado no mês "+R.mcUse+", o consórcio ainda ganha do financiamento, mas já perde "+
+      brlFull(R.jun.patrimonio-R.cons.patrimonio)+" para quem investiu e comprou à vista.";
+  } else if(R.beJ===null && P.lance>0){
+    v="Com lance de "+P.lance+"%, o consórcio não vence em nenhum mês de contemplação. "+
+      "O capital imobilizado no lance custa mais do que a antecipação da carta vale: "+
+      brlFull(R.jun.patrimonio-R.cons.patrimonio)+" a menos que juntar e comprar à vista.";
+  } else {
+    v="Contemplado no mês "+R.mcUse+", o consórcio perde para as duas alternativas: "+
+      brlFull(R.jun.patrimonio-R.cons.patrimonio)+" a menos que juntar e comprar à vista, e "+
+      brlFull(R.fin.patrimonio-R.cons.patrimonio)+" a menos que financiar.";
+  }
+  document.getElementById("veredito").textContent=v;
+
+  const linhas=[
+    ["Consórcio, contemplação no mês "+R.mcUse+(P.lance>0?" (com lance)":""), R.cons.patrimonio, R.mcUse],
+    ["Juntar, investir e comprar à vista", R.jun.patrimonio, R.jun.mesAq],
+    ["Financiamento, entrada de "+P.entrada+"%", R.fin.patrimonio, 0]
+  ];
+  const best=Math.max(...linhas.map(l=>l[1]));
+  document.getElementById("tab").innerHTML =
+    "<tr><th>Estratégia</th><th>Imóvel na mão</th><th>Patrimônio real ao fim</th></tr>"+
+    linhas.map(l=>"<tr class='"+(l[1]===best?"win":"")+"'><td>"+l[0]+"</td><td>"+
+      (l[2]===0?"mês 0":(l[2]===null?"não comprou":"mês "+l[2]))+"</td><td>"+
+      brlFull(l[1])+"</td></tr>").join("");
+
+  desenhar(R);
+}
+
+function card(n,t){return "<div class='card'><div class='n'>"+n+"</div><div class='t'>"+t+"</div></div>";}
+
+function desenhar(R){
+  const c=document.getElementById("g"), x=c.getContext("2d");
+  const dpr=window.devicePixelRatio||1;
+  const cw=Math.max(260, c.parentElement.clientWidth-2);
+  const estreito = cw<520;
+  const ch = estreito ? 300 : 380;
+  c.style.width=cw+"px"; c.style.height=ch+"px";
+  c.width=Math.round(cw*dpr); c.height=Math.round(ch*dpr);
+  x.setTransform(dpr,0,0,dpr,0,0);
+  const W=cw,H=ch,ml=estreito?58:78,mr=14,mt=14,mb=54;
+  x.clearRect(0,0,W,H);
+  const todos=R.curva.concat([R.jun.patrimonio,R.fin.patrimonio]);
+  let lo=Math.min(...todos), hi=Math.max(...todos);
+  const pad=(hi-lo)*0.08||1; lo-=pad; hi+=pad;
+  const px=m=>ml+(m-1)/Math.max(P.prazo-1,1)*(W-ml-mr);
+  const py=v=>mt+(hi-v)/(hi-lo)*(H-mt-mb);
+
+  if(R.beJ){ x.fillStyle="rgba(201,168,76,.13)"; x.fillRect(px(1),mt,px(R.beJ)-px(1),H-mt-mb); }
+
+  x.strokeStyle="#E8E4DA"; x.lineWidth=1;
+  x.font=(estreito?9.5:11)+"px sans-serif"; x.fillStyle="#5A6478";
+  for(let i=0;i<=4;i++){
+    const v=lo+(hi-lo)*i/4, y=py(v);
+    x.beginPath(); x.moveTo(ml,y); x.lineTo(W-mr,y); x.stroke();
+    x.textAlign="right"; x.fillText(brl(v),ml-7,y+4);
+  }
+  x.textAlign="center";
+  const passo=Math.max(12, Math.ceil(P.prazo/(estreito?4:8)/12)*12);
+  for(let m=1;m<=P.prazo;m+=passo) x.fillText(m,px(m),H-mb+17);
+  x.fillText("mês da contemplação",(ml+W-mr)/2,H-mb+33);
+
+  const hline=(v,cor,dash)=>{x.save();x.setLineDash(dash);x.strokeStyle=cor;x.lineWidth=2;
+    x.beginPath();x.moveTo(ml,py(v));x.lineTo(W-mr,py(v));x.stroke();x.restore();};
+  hline(R.jun.patrimonio,"#C9A84C",[7,5]);
+  hline(R.fin.patrimonio,"#8A94A6",[2,4]);
+
+  x.strokeStyle="#1B3A5C"; x.lineWidth=2.6; x.beginPath();
+  R.curva.forEach((v,i)=>{const X=px(i+1),Y=py(v); i?x.lineTo(X,Y):x.moveTo(X,Y);});
+  x.stroke();
+
+  if(R.beJ){
+    x.strokeStyle="#0D1B2A"; x.lineWidth=1.3; x.setLineDash([]);
+    x.beginPath(); x.moveTo(px(R.beJ),mt); x.lineTo(px(R.beJ),H-mb); x.stroke();
+    x.fillStyle="#0D1B2A"; x.font="bold "+(estreito?10:12)+"px sans-serif";
+    const rot="break-even: mês "+R.beJ, larg=x.measureText(rot).width;
+    x.textAlign="left";
+    x.fillText(rot, Math.min(px(R.beJ)+7, W-mr-larg), mt+15);
+  }
+
+  const my=py(R.cons.patrimonio);
+  x.fillStyle="#A8443C"; x.beginPath(); x.arc(px(R.mcUse),my,5,0,7); x.fill();
+
+  x.font=(estreito?10:11.5)+"px sans-serif"; x.textAlign="left";
+  const leg=[["#1B3A5C","Consórcio"],["#C9A84C","Juntar e à vista"],["#8A94A6","Financiamento"]];
+  const larguras=leg.map(([,t])=>x.measureText(t).width+38);
+  let lx=ml, ly=H-9;
+  if(larguras.reduce((a,b)=>a+b,0) > W-ml-mr){ lx=6; }
+  leg.forEach(([cor,txt],i)=>{
+    x.fillStyle=cor; x.fillRect(lx,ly-4,13,3);
+    x.fillStyle="#5A6478"; x.fillText(txt,lx+18,ly);
+    lx+=larguras[i];
+  });
+}
+
+let _rt; window.addEventListener("resize",()=>{clearTimeout(_rt);_rt=setTimeout(render,120);});
+
+// ---- montagem dos controles ----
+const cont=document.getElementById("controles");
+CTRL.forEach(c=>{
+  const d=document.createElement("div"); d.className="ctrl";
+  d.innerHTML="<label><span>"+c.l+"</span><span class='v' id='v_"+c.k+"'></span></label>"+
+    "<input type=range id='i_"+c.k+"' min="+c.min+" max="+c.max+" step="+c.step+">";
+  cont.appendChild(d);
+  const inp=d.querySelector("input");
+  inp.value=P[c.k];
+  const upd=()=>{
+    P[c.k]=parseFloat(inp.value);
+    if(c.k==="prazo" && P.mc>P.prazo){ P.mc=P.prazo;
+      document.getElementById("i_mc").value=P.mc; }
+    atualizarRotulos(); render();
+  };
+  inp.addEventListener("input",upd);
+});
+function atualizarRotulos(){
+  CTRL.forEach(c=>{
+    document.getElementById("v_"+c.k).textContent=c.f(P[c.k]);
+    document.getElementById("i_"+c.k).value=P[c.k];
+  });
+}
+
+const pdiv=document.getElementById("presets");
+Object.keys(PRESETS).forEach((nome,i)=>{
+  const b=document.createElement("button");
+  b.textContent=nome; if(i===0) b.className="on";
+  b.onclick=()=>{
+    Object.assign(P,PRESETS[nome]);
+    [...pdiv.children].forEach(x=>x.className="");
+    b.className="on";
+    atualizarRotulos(); render();
+  };
+  pdiv.appendChild(b);
+});
+
+atualizarRotulos();
+render();
+</script>
+
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+function ev(nome){
+  var payload=JSON.stringify({
+    event:nome, page:"consorcio-simulador",
+    utm_source:qs.get("utm_source")||"", utm_medium:qs.get("utm_medium")||"",
+    utm_campaign:qs.get("utm_campaign")||"", lp:qs.get("lp")||"",
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+// "simulou" dispara uma vez, na primeira mexida em qualquer controle: separa quem
+// só abriu de quem de fato usou a ferramenta.
+var jaSimulou=false;
+document.addEventListener("input",function(e){
+  if(jaSimulou) return;
+  if(!e.target.closest("input[type=range],select,#presets")) return;
+  jaSimulou=true; ev("simulou");
+},{passive:true});
+document.addEventListener("click",function(e){
+  if(jaSimulou) return;
+  if(!e.target.closest("#presets")) return;
+  jaSimulou=true; ev("simulou");
+},{passive:true});
+
+// A navegação propaga os UTM: sem isso quem chega do Instagram e clica para a
+// calculadora vira tráfego direto, e o lead da captura perde a origem.
+["n-estudo","n-cota"].forEach(function(id){
+  var a=document.getElementById(id);
+  var p=new URLSearchParams();
+  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
+    .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+  var s=p.toString();
+  if(s) a.href=a.getAttribute("href")+"?"+s;
+});
+</script>
+</body>
+</html>

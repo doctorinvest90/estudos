@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cota de consórcio em andamento · o que fazer · Doctor Invest</title>
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;
+--cinza:#8A94A6;--cinza2:#5A6478;--verm:#A8443C;--verde:#4F7A5B;--linha:#E8E4DA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:#22303F;
+font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+font-size:15px;line-height:1.55}
+header{background:var(--azul);color:var(--marfim);padding:26px 24px 22px}
+header .marca{font-size:11px;letter-spacing:.34em;color:var(--ouro);font-weight:700}
+header h1{font-family:Georgia,'Times New Roman',serif;font-weight:600;
+font-size:27px;margin:12px 0 6px;line-height:1.15}
+header p{margin:0;color:#AFBACB;font-size:14px;max-width:680px}
+.wrap{display:flex;gap:22px;padding:22px;align-items:flex-start;max-width:1260px;margin:0 auto}
+.painel{flex:0 0 330px;background:#fff;border:1px solid var(--linha);padding:18px}
+.res{flex:1;min-width:0}
+@media(max-width:920px){.wrap{flex-direction:column;padding:14px}.painel{flex:none;width:100%}}
+h2{font-family:Georgia,serif;font-size:19px;color:var(--azul);margin:0 0 4px;font-weight:600}
+h3{font-family:Georgia,serif;font-size:15px;color:var(--conf);margin:18px 0 8px;font-weight:600;
+border-top:1px solid var(--linha);padding-top:12px}
+h3:first-of-type{border:none;margin-top:6px;padding-top:0}
+.sub{font-size:12px;color:var(--cinza);margin:0 0 14px}
+.ctrl{margin-bottom:14px}
+.ctrl label{display:flex;justify-content:space-between;align-items:baseline;
+font-size:12.5px;color:var(--cinza2);margin-bottom:5px;gap:8px}
+.ctrl .v{font-weight:700;color:var(--azul);font-size:13.5px;white-space:nowrap}
+input[type=range]{width:100%;accent-color:var(--conf);margin:0}
+.hint{font-size:11px;color:var(--cinza);margin-top:3px;line-height:1.35}
+.opcoes{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.op{background:#fff;border:1px solid var(--linha);border-left:4px solid var(--cinza);
+padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.op.melhor{border-left-color:var(--ouro);background:#FAF8F3}
+.op.pior{border-left-color:var(--verm)}
+.op .nome{font-weight:700;color:var(--azul);font-size:15px}
+.op .det{font-size:12px;color:var(--cinza2);margin-top:2px;line-height:1.35}
+.op .val{font-family:Georgia,serif;font-size:22px;font-weight:700;white-space:nowrap}
+.op .val.pos{color:var(--verde)}.op .val.neg{color:var(--verm)}
+.selo{display:inline-block;background:var(--ouro);color:var(--azul);font-size:9.5px;
+font-weight:700;letter-spacing:.1em;padding:2px 6px;margin-left:8px;vertical-align:2px}
+.veredito{background:var(--azul);color:#E4E0D6;padding:16px 18px;margin-bottom:16px}
+.veredito .rot{font-size:10.5px;letter-spacing:.2em;color:var(--ouro);font-weight:700;margin-bottom:6px}
+.veredito p{margin:0 0 8px;font-size:14px}
+.veredito p:last-child{margin:0}
+.bloco{background:#fff;border:1px solid var(--linha);padding:16px 18px;margin-bottom:16px}
+canvas{display:block;max-width:100%}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--azul);color:var(--marfim);font-weight:500;font-size:11px;
+padding:8px 7px;text-align:right;letter-spacing:.04em}
+th:first-child{text-align:left}
+td{padding:8px 7px;text-align:right;border-bottom:1px solid var(--linha)}
+td:first-child{text-align:left}
+.neg{color:var(--verm)}.pos{color:var(--verde)}
+.nota{font-size:11.5px;color:var(--cinza);margin:10px 0 0;line-height:1.45}
+footer{background:#F2F0EA;color:#5A616B;font-size:11px;line-height:1.5;padding:18px 24px}
+footer b{color:var(--azul)}
+nav.volta{background:#fff;border-bottom:1px solid var(--linha)}
+nav.volta .in{max-width:1260px;margin:0 auto;padding:11px 24px;display:flex;
+justify-content:space-between;flex-wrap:wrap;gap:10px}
+nav.volta a{color:var(--conf);text-decoration:none;font-size:13px;font-weight:500}
+nav.volta a:hover{color:var(--ouro)}
+#captura{max-width:1260px;margin:0 auto 22px;padding:0 22px}
+#captura .cx{background:#fff;border:1px solid var(--linha);border-top:3px solid var(--ouro);
+padding:20px 22px}
+#captura h2{margin-bottom:4px}
+#btn-print{margin-top:14px;padding:11px 18px;background:var(--azul);color:var(--marfim);
+border:0;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45}
+#btn-print:not(:disabled){opacity:1}
+#resumo-print{display:none}
+
+/* Impressão: a folha é o diagnóstico da cota da pessoa, não a página. Some o
+   painel de controles (os valores viram texto no resumo), a navegação e a
+   captura. O veredito e a tabela ficam — é o que ela veio buscar. */
+@media print{
+  header{background:var(--azul) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .veredito{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{display:block;padding:14px}
+  .painel, #captura, nav.volta{display:none}
+  .bloco,.op{break-inside:avoid}
+  #resumo-print{display:block !important;background:#fff;border:1px solid var(--linha);
+    padding:14px 16px;margin:0 0 16px;font-size:11.5px;line-height:1.6}
+  body{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="marca">DOCTOR INVEST</div>
+  <h1>Já tenho uma cota de consórcio. E agora?</h1>
+  <p>Quatro caminhos para uma cota em andamento: continuar esperando o sorteio, dar lance,
+  parar de pagar e entrar na fila de restituição, ou vender a cota. Preencha com os dados do
+  seu extrato e do regulamento do grupo.</p>
+</header>
+
+<nav class="volta"><div class="in">
+  <a href="./" id="n-estudo">← O estudo completo</a>
+  <a href="simulador.html" id="n-sim">Ainda vou decidir: comparar as três contas →</a>
+</div></nav>
+
+<div class="wrap">
+  <div class="painel">
+    <h2>Sua cota</h2>
+    <p class="sub">Preenchida com um contrato real. Os primeiros campos saem do extrato da cota; os pools, do extrato do grupo; e o número de concorrentes ao lance, do seu histórico de posições.</p>
+    <div id="controles"></div>
+  </div>
+
+  <div class="res">
+    <div id="resumo-print"><b>Os dados que você informou.</b> <span id="resumo-txt"></span></div>
+    <div class="opcoes" id="opcoes"></div>
+    <div class="veredito"><div class="rot">O QUE OS NÚMEROS DIZEM</div><div id="veredito"></div></div>
+
+    <div class="bloco">
+      <h2>Continuar vale a pena até quando?</h2>
+      <p class="sub">Valor presente de seguir pagando, conforme o mês em que a carta chegar.</p>
+      <canvas id="g" width="900" height="330"></canvas>
+    </div>
+
+    <div class="bloco">
+      <h2>O detalhe de cada caminho</h2>
+      <table id="tab"></table>
+      <p class="nota">Valores em reais de hoje, descontados ao retorno real de referência. O que
+      já foi pago é custo afundado e não entra na comparação — a pergunta é só o que fazer daqui
+      para a frente.</p>
+    </div>
+  </div>
+</div>
+
+<div id="captura"><div class="cx">
+  <h2>Leve este diagnóstico com você</h2>
+  <p class="sub">Gera um PDF de uma página com os quatro caminhos, o veredito e a tabela — com os
+  números da sua cota, não os do contrato de exemplo. O estudo completo e as duas ferramentas
+  continuam livres, sem cadastro.</p>
+  <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber o diagnóstico"></iframe>
+  <button id="btn-print" disabled>Gerar o PDF deste diagnóstico</button>
+  <p class="nota" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
+  <b>Cmd+P</b> imprime esta página do mesmo jeito.</p>
+</div></div>
+
+<footer>
+<b>Aviso.</b> Ferramenta de caráter exclusivamente informativo e educacional. Não constitui
+recomendação de investimento, de crédito, de adesão, de manutenção ou de rescisão de contrato de
+consórcio, nem consultoria de valores mobiliários individualizada, nos termos da regulamentação
+da CVM. Regras de contemplação, restituição e penalidades variam entre administradoras e grupos:
+confira sempre o seu contrato e o regulamento antes de decidir. Os resultados decorrem de
+simulação com premissas declaradas que podem não se confirmar. Antes de decidir, avalie seus
+objetivos e sua situação financeira, preferencialmente com apoio de profissional habilitado.<br><br>
+<b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · agosto de 2026.
+</footer>
+
+<script>
+"use strict";
+
+const D = {
+  carta:802476, prazo:216, assembleia:48, adm:13.99, fr:0.0, pagoFundo:11.112,
+  multa:15, lancePct:20, ofertantes:262, vagas:2, poolAtivos:750, poolExcl:736,
+  sorteios:1, contempl:5, ret:6.0, venda:0
+};
+
+const CTRL = [
+  {g:"Do seu extrato"},
+  {k:"carta", l:"Valor atual da carta", min:100000, max:3000000, step:10000, f:v=>brl(v)},
+  {k:"prazo", l:"Prazo total do grupo", min:36, max:240, step:1, f:v=>v+" meses"},
+  {k:"assembleia", l:"Assembleias já pagas", min:1, max:239, step:1, f:v=>v+" de "+D.prazo},
+  {k:"pagoFundo", l:"% do bem já amortizado", min:0.5, max:99, step:0.001, f:v=>pct(v,3),
+   h:"No extrato aparece como “% do bem objeto” já pago, ou como fundo comum acumulado."},
+  {k:"adm", l:"Taxa de administração", min:5, max:30, step:0.01, f:v=>pct(v,2)},
+  {k:"fr", l:"Fundo de reserva", min:0, max:5, step:0.1, f:v=>pct(v,1)},
+
+  {g:"Do regulamento do grupo"},
+  {k:"lancePct", l:"Lance fixo do grupo", min:5, max:90, step:1, f:v=>pct(v,0),
+   h:"Se o grupo não tiver lance fixo, use aqui o percentual do lance livre vencedor."},
+  {k:"multa", l:"Multa em caso de exclusão", min:0, max:40, step:1, f:v=>pct(v,0),
+   h:"Some as penalidades devidas ao grupo e à administradora."},
+  {k:"contempl", l:"Contemplações por assembleia", min:1, max:12, step:1, f:v=>v},
+  {k:"sorteios", l:"Vagas de sorteio por assembleia", min:1, max:6, step:1, f:v=>v},
+  {k:"vagas", l:"Vagas de lance fixo por assembleia", min:1, max:6, step:1, f:v=>v},
+
+  {g:"O que você precisa descobrir"},
+  {k:"ofertantes", l:"Cotas que disputam o lance fixo", min:2, max:400, step:1, f:v=>v+" cotas",
+   h:"O app da administradora mostra a sua <b>posição</b> a cada lance ofertado. A maior posição que você já viu é o piso do número de concorrentes. Com várias observações, multiplique a maior por (n+1)/n. É a variável que mais move o resultado."},
+  {k:"poolAtivos", l:"Cotas ativas não contempladas", min:20, max:2000, step:10, f:v=>v+" cotas"},
+  {k:"poolExcl", l:"Cotas excluídas na fila de restituição", min:10, max:3000, step:10, f:v=>v+" cotas",
+   h:"O extrato do grupo traz “consorciados excluídos” e “contemplados (excluídos)”. A fila é a diferença entre os dois."},
+
+  {g:"Suas premissas"},
+  {k:"ret", l:"Retorno real dos investimentos", min:2, max:10, step:0.1, f:v=>"IPCA + "+pct(v,1)},
+  {k:"venda", l:"Proposta recebida pela cota", min:0, max:600000, step:1000,
+   f:v=>v>0?brl(v):"nenhuma", h:"Se alguém ofereceu comprar sua cota, coloque o valor aqui."}
+];
+
+function brl(v){
+  if(Math.abs(v)>=1e6) return "R$ "+(v/1e6).toFixed(2).replace(".",",")+" mi";
+  return "R$ "+Math.round(v).toLocaleString("pt-BR");
+}
+function brlF(v){return (v<0?"− ":"")+"R$ "+Math.abs(Math.round(v)).toLocaleString("pt-BR");}
+function pct(v,c){return v.toFixed(c).replace(".",",")+"%";}
+function brlEixo(v){
+  const s=v<0?"−":"", a=Math.abs(v);
+  if(a>=1e6) return s+"R$ "+(a/1e6).toFixed(1).replace(".",",")+" mi";
+  if(a>=1000) return s+"R$ "+Math.round(a/1000)+"k";
+  return s+"R$ "+Math.round(a);
+}
+function passoBonito(faixa,alvo){
+  const bruto=faixa/alvo, exp=Math.pow(10,Math.floor(Math.log10(bruto)));
+  const n=bruto/exp;
+  return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*exp;
+}
+function tm(a){return Math.pow(1+a,1/12)-1;}
+
+// ---------- motor ----------
+function estado(){
+  const tot = 1 + D.adm/100 + D.fr/100;
+  const pagoPct = (D.pagoFundo/100)*tot;
+  const saldoPct = tot - pagoPct;
+  const faltam = Math.max(D.prazo - D.assembleia, 1);
+  return {tot, pagoPct, saldoPct, faltam,
+    fundoComum:(D.pagoFundo/100)*D.carta,
+    saldo:saldoPct*D.carta,
+    parcela:saldoPct*D.carta/faltam};
+}
+
+function continuar(){
+  const e=estado(), r=tm(D.ret/100), F=e.faltam;
+  let vpParc=0;
+  for(let t=1;t<=F;t++) vpParc += e.parcela/Math.pow(1+r,t);
+  let esp=0, viva=1; const acum=[];
+  for(let t=1;t<=F;t++){
+    const pool=Math.max(D.poolAtivos - D.contempl*(t-1), 2);
+    const p=Math.min(D.sorteios/pool,1);
+    esp += viva*p*(D.carta/Math.pow(1+r,t));
+    viva *= 1-p; acum.push(1-viva);
+  }
+  esp += viva*(D.carta/Math.pow(1+r,F));
+  const mediana=acum.findIndex(v=>v>=0.5);
+  return {vpl:esp-vpParc, vpParc, acum, mediana:mediana<0?null:mediana+1,
+          vplSe:M=>D.carta/Math.pow(1+r,M)-vpParc};
+}
+
+function darLance(){
+  const e=estado(), r=tm(D.ret/100), F=e.faltam;
+  const p=Math.min(D.vagas/Math.max(D.ofertantes,1),1);
+  const lance=(D.lancePct/100)*D.carta;
+  const vplEm=M=>{
+    let v=0;
+    for(let t=1;t<=M;t++) v -= e.parcela/Math.pow(1+r,t);
+    v += (D.carta-lance)/Math.pow(1+r,M);
+    const saldoRest = e.saldoPct - M*(e.saldoPct/F) - D.lancePct/100;
+    const rest = F-M;
+    if(rest>0 && saldoRest>0){
+      const nova = saldoRest*D.carta/rest;
+      for(let t=M+1;t<=F;t++) v -= nova/Math.pow(1+r,t);
+    }
+    return v;
+  };
+  let esp=0, viva=1; const acum=[];
+  for(let t=1;t<=F;t++){ esp += viva*p*vplEm(t); viva *= 1-p; acum.push(1-viva); }
+  esp += viva*continuar().vpl;
+  const mediana=acum.findIndex(v=>v>=0.5);
+  return {vpl:esp, pMes:p, acum, mediana:mediana<0?null:mediana+1, lance, vplEm};
+}
+
+function parar(){
+  const e=estado(), r=tm(D.ret/100), F=e.faltam;
+  const liq=e.fundoComum*(1-D.multa/100);
+  const p=Math.min(D.sorteios/Math.max(D.poolExcl,1),1);
+  let esp=0, viva=1;
+  for(let t=4;t<=F;t++){ esp += viva*p*(liq/Math.pow(1+r,t)); viva *= 1-p; }
+  esp += viva*(liq/Math.pow(1+r,F));
+  return {vpl:esp, liquido:liq, multa:e.fundoComum*(D.multa/100), pAntes:1-viva};
+}
+
+// ---------- render ----------
+function render(){
+  const e=estado(), c=continuar(), l=darLance(), p=parar();
+  const ops=[
+    {n:"Dar lance de "+pct(D.lancePct,0), v:l.vpl,
+     d:"chance de "+pct(l.pMes*100,1)+" por assembleia · "+
+       (l.mediana?("mediana de "+l.mediana+" meses"):"mediana acima do prazo do grupo")+
+       " · desembolso de "+brl(l.lance)+" só se vencer"},
+    {n:"Continuar só no sorteio", v:c.vpl,
+     d:(c.mediana?("mediana de "+c.mediana+" meses"):"mediana acima do prazo restante")+
+       " · "+pct(c.acum[11]*100,1)+" de chance no primeiro ano"},
+    {n:"Parar e ser excluído", v:p.vpl,
+     d:"recebe "+brl(p.liquido)+" líquidos de multa · "+pct(p.pAntes*100,0)+
+       " de chance de sair antes do encerramento"},
+    {n:"Vender a cota", v:D.venda,
+     d: D.venda>0 ? "proposta em mãos, recebida hoje"
+                  : "sem proposta lançada — informe um valor no painel"}
+  ];
+  const max=Math.max(...ops.map(o=>o.v)), min=Math.min(...ops.map(o=>o.v));
+  document.getElementById("opcoes").innerHTML = ops.map(o=>
+    "<div class='op "+(o.v===max?"melhor":(o.v===min?"pior":""))+"'>"+
+    "<div><div class='nome'>"+o.n+(o.v===max?"<span class='selo'>MELHOR</span>":"")+"</div>"+
+    "<div class='det'>"+o.d+"</div></div>"+
+    "<div class='val "+(o.v>=0?"pos":"neg")+"'>"+brlF(o.v)+"</div></div>").join("");
+
+  const alt=Math.max(c.vpl,l.vpl,p.vpl);
+  const best=ops.find(o=>o.v===max);
+  let v="<p><b>"+best.n+"</b> é o caminho de maior valor presente hoje: "+brlF(max)+".</p>";
+  if(c.vpl<0){
+    const be=(()=>{for(let M=1;M<=e.faltam;M++) if(c.vplSe(M)<0) return M; return null;})();
+    v+="<p>Seguir pagando e depender só do sorteio tem valor presente <b>negativo</b>: as "+
+       e.faltam+" parcelas de "+brl(e.parcela)+" que faltam valem hoje "+brl(c.vpParc)+
+       ", mais do que a carta vale se demorar. A conta só fecha se a contemplação vier até o "+
+       (be?("<b>mês "+be+"</b>"):"início do prazo")+".</p>";
+  }
+  v+="<p>Só vale vender a cota por mais de <b>"+brl(alt)+"</b> — abaixo disso, "+
+     "a melhor alternativa que você já tem em mãos vale mais.</p>";
+  if(l.vpl>p.vpl && l.vpl>c.vpl){
+    v+="<p>O lance costuma ser opção gratuita: em geral só se paga se vencer. Verifique essa "+
+       "cláusula no seu contrato — se for o caso, ofertar todo mês não tem custo.</p>";
+  }
+  document.getElementById("veredito").innerHTML=v;
+
+  document.getElementById("tab").innerHTML =
+    "<tr><th>Item</th><th>Valor</th></tr>"+
+    [["Fundo comum já acumulado", brlF(e.fundoComum)],
+     ["Saldo a pagar", brlF(e.saldo)],
+     ["Parcela média restante", brlF(e.parcela)],
+     ["Assembleias restantes", e.faltam],
+     ["Valor presente das parcelas que faltam", brlF(c.vpParc)],
+     ["Lance necessário", brlF(l.lance)],
+     ["Restituição líquida se for excluído", brlF(p.liquido)],
+     ["Multa em caso de exclusão", brlF(p.multa)],
+     ["Preço mínimo para valer a pena vender", brlF(alt)]
+    ].map(([a,b])=>"<tr><td>"+a+"</td><td>"+b+"</td></tr>").join("");
+
+  desenhar(c,l,p,alt);
+}
+
+function desenhar(c,l,p,alt){
+  const cv=document.getElementById("g"), x=cv.getContext("2d");
+  const dpr=window.devicePixelRatio||1;
+  const cw=Math.max(260, cv.parentElement.clientWidth-2);
+  const estreito=cw<520, ch=estreito?270:330;
+  cv.style.width=cw+"px"; cv.style.height=ch+"px";
+  cv.width=Math.round(cw*dpr); cv.height=Math.round(ch*dpr);
+  x.setTransform(dpr,0,0,dpr,0,0);
+  const W=cw,H=ch,ml=estreito?60:80,mr=14,mt=14,mb=52;
+  x.clearRect(0,0,W,H);
+  const e=estado(), F=e.faltam;
+  const ys=[]; for(let M=1;M<=F;M++) ys.push(c.vplSe(M));
+  const todos=ys.concat([l.vpl,p.vpl,alt,0]);
+  let lo=Math.min(...todos), hi=Math.max(...todos);
+  const pad=(hi-lo)*0.1||1; lo-=pad; hi+=pad;
+  const passoY=passoBonito(hi-lo, estreito?4:5);
+  lo=Math.floor(lo/passoY)*passoY; hi=Math.ceil(hi/passoY)*passoY;
+  const px=m=>ml+(m-1)/Math.max(F-1,1)*(W-ml-mr);
+  const py=v=>mt+(hi-v)/(hi-lo)*(H-mt-mb);
+
+  const zero=py(0);
+  x.fillStyle="rgba(168,68,60,.06)"; x.fillRect(ml,zero,W-ml-mr,H-mb-zero);
+  x.strokeStyle="#E8E4DA"; x.lineWidth=1;
+  x.font=(estreito?9.5:11)+"px sans-serif"; x.fillStyle="#5A6478"; x.textAlign="right";
+  for(let val=lo; val<=hi+1e-9; val+=passoY){
+    const y=py(val);
+    x.beginPath(); x.moveTo(ml,y); x.lineTo(W-mr,y); x.stroke();
+    x.fillText(brlEixo(val),ml-7,y+4);
+  }
+  x.save(); x.setLineDash([4,4]); x.strokeStyle="#8A94A6"; x.lineWidth=1.4;
+  x.beginPath(); x.moveTo(ml,zero); x.lineTo(W-mr,zero); x.stroke(); x.restore();
+
+  x.textAlign="center";
+  const passo=Math.max(12, Math.ceil(F/(estreito?4:8)/12)*12);
+  for(let m=1;m<=F;m+=passo) x.fillText(m,px(m),H-mb+17);
+  x.fillText("mês em que a carta chega",(ml+W-mr)/2,H-mb+33);
+
+  x.strokeStyle="#1B3A5C"; x.lineWidth=2.6; x.beginPath();
+  ys.forEach((v,i)=>{const X=px(i+1),Y=py(v); i?x.lineTo(X,Y):x.moveTo(X,Y);});
+  x.stroke();
+
+  const be=ys.findIndex(v=>v<0);
+  if(be>0){
+    x.strokeStyle="#0D1B2A"; x.lineWidth=1.3; x.setLineDash([]);
+    x.beginPath(); x.moveTo(px(be+1),mt); x.lineTo(px(be+1),H-mb); x.stroke();
+    x.fillStyle="#0D1B2A"; x.font="bold "+(estreito?10:12)+"px sans-serif"; x.textAlign="left";
+    const rot="continuar deixa de valer: mês "+(be+1);
+    const larg=x.measureText(rot).width;
+    x.fillText(rot, Math.min(px(be+1)+7, W-mr-larg), mt+15);
+  }
+  x.font=(estreito?10:11.5)+"px sans-serif"; x.textAlign="left";
+  x.fillStyle="#1B3A5C"; x.fillRect(ml,H-11,13,3);
+  x.fillStyle="#5A6478"; x.fillText("valor presente de continuar pagando",ml+18,H-7);
+}
+
+// ---------- controles ----------
+const cont=document.getElementById("controles");
+CTRL.forEach(c=>{
+  if(c.g){ const h=document.createElement("h3"); h.textContent=c.g; cont.appendChild(h); return; }
+  const d=document.createElement("div"); d.className="ctrl";
+  d.innerHTML="<label><span>"+c.l+"</span><span class='v' id='v_"+c.k+"'></span></label>"+
+    "<input type=range id='i_"+c.k+"' min="+c.min+" max="+c.max+" step="+c.step+">"+
+    (c.h?"<div class='hint'>"+c.h+"</div>":"");
+  cont.appendChild(d);
+  const inp=d.querySelector("input");
+  inp.value=D[c.k];
+  inp.addEventListener("input",()=>{
+    D[c.k]=parseFloat(inp.value);
+    if(c.k==="prazo" && D.assembleia>=D.prazo){ D.assembleia=D.prazo-1;
+      document.getElementById("i_assembleia").value=D.assembleia; }
+    if(c.k==="assembleia" && D.assembleia>=D.prazo){ D.assembleia=D.prazo-1; inp.value=D.assembleia; }
+    rotulos(); render();
+  });
+});
+function rotulos(){
+  CTRL.filter(c=>!c.g).forEach(c=>{
+    document.getElementById("v_"+c.k).textContent=c.f(D[c.k]);
+    document.getElementById("i_"+c.k).value=D[c.k];
+  });
+}
+let _rt; window.addEventListener("resize",()=>{clearTimeout(_rt);_rt=setTimeout(render,120);});
+
+rotulos(); render();
+</script>
+
+<script>
+"use strict";
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+function ev(nome){
+  var payload=JSON.stringify({
+    event:nome, page:"consorcio-cota",
+    utm_source:qs.get("utm_source")||"", utm_medium:qs.get("utm_medium")||"",
+    utm_campaign:qs.get("utm_campaign")||"", lp:qs.get("lp")||"",
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+var jaSimulou=false;
+document.addEventListener("input",function(e){
+  if(jaSimulou) return;
+  if(!e.target.closest("input[type=range]")) return;
+  jaSimulou=true; ev("simulou");
+},{passive:true});
+
+// A navegação propaga os UTM (mesma razão do simulador).
+function comUtm(href){
+  var p=new URLSearchParams();
+  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
+    .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+  var s=p.toString();
+  return s ? href+"?"+s : href;
+}
+["n-estudo","n-sim"].forEach(function(id){
+  var a=document.getElementById(id); a.href=comUtm(a.getAttribute("href"));
+});
+
+/* O diagnóstico, recalculado das MESMAS funções puras que render() usa — não de
+   uma cópia dos números já pintados na tela. Se o motor mudar, isto acompanha. */
+function diagnostico(){
+  var e=estado(), c=continuar(), l=darLance(), p=parar();
+  var ops=[["lance",l.vpl],["continuar",c.vpl],["parar",p.vpl],["vender",D.venda]];
+  var melhor=ops.reduce(function(a,b){return b[1]>a[1]?b:a;});
+  return {
+    melhor:melhor[0], vpl:Math.round(melhor[1]),
+    minvenda:Math.round(Math.max(c.vpl,l.vpl,p.vpl)),
+    parcela:Math.round(e.parcela), faltam:e.faltam,
+    medianaLance:l.mediana||"", medianaSorteio:c.mediana||""
+  };
+}
+
+function resumoCota(){
+  var e=estado();
+  return [
+    "Carta "+brl(D.carta),
+    "assembleia "+D.assembleia+" de "+D.prazo,
+    pct(D.pagoFundo,3)+" do bem amortizado",
+    "taxa de administração "+pct(D.adm,2),
+    "fundo de reserva "+pct(D.fr,1),
+    "lance fixo "+pct(D.lancePct,0),
+    D.ofertantes+" cotas disputando o lance",
+    D.poolAtivos+" ativas na fila e "+D.poolExcl+" na restituição",
+    "multa de exclusão "+pct(D.multa,0),
+    "retorno de referência IPCA + "+pct(D.ret,1),
+    (D.venda>0 ? "proposta de "+brl(D.venda)+" pela cota" : "sem proposta pela cota"),
+    "parcela média restante de "+brl(e.parcela)+" por "+e.faltam+" assembleias"
+  ].join(" · ")+".";
+}
+window.imprimirDiagnostico=function(){
+  document.getElementById("resumo-txt").textContent=resumoCota();
+  window.print();
+};
+
+var FF_ORIGIN="https://forms.fillout.com";
+var FF_FORM="";   // id do formulário de captura; vazio = página sem captura
+
+var btn=document.getElementById("btn-print");
+if(!FF_FORM){
+  /* Sem formulário publicado a captura inteira sai de cena e o botão nasce
+     liberado. A página nunca fica com um iframe vazio no ar. */
+  document.getElementById("ff").style.display="none";
+  document.getElementById("dica-print").style.display="none";
+  document.querySelector("#captura .sub").textContent=
+    "Gera um PDF de uma página com os quatro caminhos, o veredito e a tabela — com os números da "+
+    "sua cota, não os do contrato de exemplo.";
+  btn.disabled=false;
+}else{
+  var ffEmbedId=String(Math.floor(Date.now()%1e9));
+  function paramsCota(){
+    var d=diagnostico();
+    var p=new URLSearchParams({
+      carta:D.carta, prazo:D.prazo, assembleia:D.assembleia, pagoFundo:D.pagoFundo,
+      adm:D.adm, fr:D.fr, lance:D.lancePct, multa:D.multa, ofertantes:D.ofertantes,
+      ret:D.ret, venda:D.venda,
+      melhor:d.melhor, vpl:d.vpl, minvenda:d.minvenda, parcela:d.parcela, faltam:d.faltam
+    });
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
+      .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+    // Sem estes três, o iframe carrega como página solta e não posta mensagem nenhuma
+    // (server.fillout.com/embed/v1: o handler do filho é montado por embed-type/dynamic-resize).
+    p.set("fillout-embed-id",ffEmbedId);
+    p.set("fillout-embed-type","standard");
+    p.set("fillout-embed-dynamic-resize","true");
+    return p;
+  }
+
+  // O src só é montado quando a captura entra em tela: assim o formulário carrega
+  // a cota que a pessoa realmente descreveu, não os valores iniciais da página.
+  new IntersectionObserver(function(es,obs){
+    if(!es.some(function(e){return e.isIntersecting;})) return;
+    document.getElementById("ff").src=FF_ORIGIN+"/t/"+FF_FORM+"?"+paramsCota().toString();
+    obs.disconnect();
+  },{threshold:.25}).observe(document.getElementById("captura"));
+
+  function liberarImpressao(){
+    if(!btn.disabled) return;
+    btn.disabled=false;
+    document.getElementById("dica-print").style.display="none";
+    ev("lead");
+  }
+
+  // Buffer de diagnóstico: o embed do Fillout usa `type` em snake_case
+  // (form_resized, check_scroll_up). O nome do evento de submissão fica gravado
+  // aqui para conferência ao vivo, em vez de ser adivinhado.
+  window.__ffMsgs=[];
+  addEventListener("message",function(e){
+    if(e.origin!==FF_ORIGIN) return;
+    var d=e.data||{};
+    window.__ffMsgs.push(typeof d==="object"?d.type:String(d));
+    if(d.embedId && d.embedId!==ffEmbedId) return;
+    if(typeof d.type==="string" && /submi|complet|thank/i.test(d.type)) liberarImpressao();
+    if(d.type==="form_resized" && d.size) document.getElementById("ff").style.height=d.size+"px";
+  });
+}
+
+btn.onclick=function(){ev("download");window.imprimirDiagnostico();};
+</script>
+</body>
+</html>
