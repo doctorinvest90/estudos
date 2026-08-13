@@ -105,7 +105,7 @@ border:0;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45}
 <div class="wrap">
   <div class="painel">
     <h2>Sua cota</h2>
-    <p class="sub">Preenchida com um contrato real. Os primeiros campos saem do extrato da cota; os pools, do extrato do grupo; e o número de concorrentes ao lance, do seu histórico de posições.</p>
+    <p class="sub">Começa preenchida com um contrato real, de exemplo. Troque pelos seus: os primeiros campos saem do extrato da cota; os pools, do extrato do grupo; e o número de concorrentes ao lance, do seu histórico de posições.</p>
     <div id="controles"></div>
   </div>
 
@@ -275,6 +275,17 @@ function parar(){
 }
 
 // ---------- render ----------
+/* Os controles nascem com um contrato real, que é o do estudo. Enquanto a pessoa
+   não troca nenhum campo, os números na tela descrevem esse contrato de exemplo e
+   não a cota dela — então a página não coroa caminho nenhum: sem selo MELHOR, sem
+   borda de melhor/pior, e o bloco do veredito pede os números dela. Depois do
+   primeiro toque, tudo aparece.
+
+   Isto é gate de apresentação, não de cálculo: escolher defaults que abrissem num
+   empate exigiria inventar um grupo que não existe, o que seria pior que abrir com
+   veredito. O motor continua rodando o contrato real desde o primeiro pixel. */
+let tocou=false;
+
 function render(){
   const e=estado(), c=continuar(), l=darLance(), p=parar();
   const ops=[
@@ -294,13 +305,14 @@ function render(){
   ];
   const max=Math.max(...ops.map(o=>o.v)), min=Math.min(...ops.map(o=>o.v));
   document.getElementById("opcoes").innerHTML = ops.map(o=>
-    "<div class='op "+(o.v===max?"melhor":(o.v===min?"pior":""))+"'>"+
-    "<div><div class='nome'>"+o.n+(o.v===max?"<span class='selo'>MELHOR</span>":"")+"</div>"+
+    "<div class='op "+(tocou?(o.v===max?"melhor":(o.v===min?"pior":"")):"")+"'>"+
+    "<div><div class='nome'>"+o.n+(tocou&&o.v===max?"<span class='selo'>MELHOR</span>":"")+"</div>"+
     "<div class='det'>"+o.d+"</div></div>"+
     "<div class='val "+(o.v>=0?"pos":"neg")+"'>"+brlF(o.v)+"</div></div>").join("");
 
   const alt=Math.max(c.vpl,l.vpl,p.vpl);
   const best=ops.find(o=>o.v===max);
+
   let v="<p><b>"+best.n+"</b> é o caminho de maior valor presente hoje: "+brlF(max)+".</p>";
   if(c.vpl<0){
     const be=(()=>{for(let M=1;M<=e.faltam;M++) if(c.vplSe(M)<0) return M; return null;})();
@@ -315,7 +327,11 @@ function render(){
     v+="<p>O lance costuma ser opção gratuita: em geral só se paga se vencer. Verifique essa "+
        "cláusula no seu contrato — se for o caso, ofertar todo mês não tem custo.</p>";
   }
-  document.getElementById("veredito").innerHTML=v;
+  document.getElementById("veredito").innerHTML = tocou ? v :
+    "<p>Os campos ao lado estão preenchidos com um contrato real, que serve de exemplo. "+
+    "Os valores acima descrevem <b>esse</b> contrato, não o seu.</p>"+
+    "<p>Troque pelos números do seu extrato e do regulamento do seu grupo. O veredito "+
+    "aparece quando os números forem os seus.</p>";
 
   document.getElementById("tab").innerHTML =
     "<tr><th>Item</th><th>Valor</th></tr>"+
@@ -400,6 +416,7 @@ CTRL.forEach(c=>{
   const inp=d.querySelector("input");
   inp.value=D[c.k];
   inp.addEventListener("input",()=>{
+    tocou=true;
     D[c.k]=parseFloat(inp.value);
     if(c.k==="prazo" && D.assembleia>=D.prazo){ D.assembleia=D.prazo-1;
       document.getElementById("i_assembleia").value=D.assembleia; }
