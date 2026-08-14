@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de antecipação de plantões · Doctor Invest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;
+--verm:#A8443C;--verde:#4F7A5B;--linha:#E8E4DA;--cinza:#6B7480}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);font-family:"DM Sans",sans-serif;color:#22303F}
+header{background:var(--azul);color:var(--marfim);padding:26px 30px 24px}
+header .marca{font-size:10px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{font-family:"Cormorant Garamond",serif;font-size:33px;margin:12px 0 6px;font-weight:600}
+header p{margin:0;color:#AFBACB;font-size:13.5px;max-width:660px;line-height:1.55}
+.wrap{display:flex;gap:26px;padding:26px 30px 40px;align-items:flex-start}
+.painel{flex:0 0 330px;background:#fff;border:1px solid var(--linha);padding:20px 20px 24px;
+  position:sticky;top:18px}
+.res{flex:1;min-width:0}
+h2{font-family:"Cormorant Garamond",serif;font-size:20px;margin:0 0 4px;color:var(--azul);font-weight:600}
+.hr{height:2px;width:34px;background:var(--ouro);margin:0 0 16px}
+label{display:block;font-size:11.5px;letter-spacing:.05em;color:var(--cinza);
+  text-transform:uppercase;font-weight:700;margin:16px 0 6px}
+label:first-of-type{margin-top:0}
+input[type=range]{width:100%;accent-color:var(--conf);margin:2px 0}
+.val{font-family:"Cormorant Garamond",serif;font-size:23px;color:var(--azul);font-weight:700}
+.val small{font-family:"DM Sans";font-size:12px;color:var(--cinza);font-weight:400}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:60px;padding:8px 4px;border:1px solid var(--linha);background:#fff;
+  font-family:"DM Sans";font-size:12.5px;cursor:pointer;color:var(--cinza);transition:.15s}
+.seg button.on{background:var(--azul);color:#fff;border-color:var(--azul);font-weight:700}
+.seg.conv button{font-size:11.5px;line-height:1.3;padding:9px 6px}
+.presets{margin-top:20px;padding-top:16px;border-top:1px solid var(--linha)}
+.presets button{display:block;width:100%;text-align:left;padding:9px 11px;margin-bottom:6px;
+  border:1px solid var(--linha);background:#fff;cursor:pointer;font-family:"DM Sans";
+  font-size:12.5px;color:var(--conf)}
+.presets button:hover{border-color:var(--ouro);background:#FAF8F3}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.card{background:#fff;border-top:2.5px solid var(--ouro);padding:13px 14px 15px}
+.card .n{font-family:"Cormorant Garamond",serif;font-size:27px;font-weight:700;
+  color:var(--azul);line-height:1.05}
+.card .t{font-size:11px;color:var(--cinza);line-height:1.4;margin-top:5px}
+.card.alerta{border-top-color:var(--verm)} .card.alerta .n{color:var(--verm)}
+.card.bom{border-top-color:var(--verde)} .card.bom .n{color:var(--verde)}
+.bloco{background:#fff;border:1px solid var(--linha);padding:18px 20px 20px;margin-bottom:18px}
+.veredito{padding:15px 18px;margin-bottom:18px;font-size:14px;line-height:1.5}
+.veredito.ruim{background:#0D1B2A;color:#E4E0D6;border-left:4px solid var(--verm)}
+.veredito.bom{background:#0D1B2A;color:#E4E0D6;border-left:4px solid var(--verde)}
+.veredito b{color:var(--ouro)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:8px 7px;text-align:right;
+  font-size:10.5px;letter-spacing:.04em}
+th:first-child{text-align:left}
+td{padding:7px;text-align:right;border-bottom:1px solid var(--linha)}
+td.l{text-align:left} .neg{color:var(--verm)} .pos{color:var(--verde)}
+tr.destaque td{background:#FAF8F3;font-weight:700}
+.leg{font-size:11px;color:#8A909B;margin:8px 0 0}
+svg{width:100%;height:auto;display:block}
+footer{background:#F2F0EA;padding:18px 30px 26px;font-size:11px;color:#5A616B;line-height:1.55}
+footer b{color:var(--azul)}
+.cta{background:var(--azul);color:#E4E0D6;padding:18px 20px;margin-bottom:18px;font-size:13.5px;
+  line-height:1.55}
+.cta a{color:var(--ouro);font-weight:700;text-decoration:none}
+@media(max-width:900px){
+  .wrap{flex-direction:column;padding:18px 16px 30px;gap:18px}
+  .painel{flex:none;width:100%;position:static}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  header{padding:20px 16px} header h1{font-size:26px}
+  footer{padding:16px}
+}
+/* --- blocos da página, somados ao simulador entregue --- */
+.faixa{padding:26px 30px 0}
+.faixa .bloco{margin-bottom:0}
+.faixa ol{padding-left:18px;line-height:1.72;font-size:13.5px;margin:0}
+.faixa li{margin-bottom:9px}
+.faixa .baixar{margin:16px 0 0;font-size:13.5px;line-height:1.6}
+.faixa .baixar a{color:var(--conf);font-weight:700}
+#captura .sub{font-size:13px;color:var(--cinza);line-height:1.55;margin:0 0 14px}
+#btn-print{margin-top:14px;padding:11px 18px;background:var(--azul);color:var(--marfim);
+  border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45}
+#btn-print:not(:disabled){opacity:1}
+#resumo-print{display:none}
+@media(max-width:900px){ .faixa{padding:18px 16px 0} }
+@media print{
+  /* No papel fica a simulação, não a captação: some o painel de controles, o
+     formulário e o link de download; entra o resumo do que a pessoa montou. */
+  header p, .painel, #captura, .faixa .baixar, .cta{display:none}
+  #resumo-print{display:block;font-size:12px;line-height:1.6;margin-bottom:14px}
+  .wrap{display:block;padding:0 12px}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="marca">DOCTOR INVEST · SIMULADOR</div>
+  <h1>Quanto a antecipação de plantões custa de verdade</h1>
+  <p>Mexa nos controles com os seus números. O simulador converte a taxa cotada em taxa
+  anual, mostra o saldo que você carrega sem saber e calcula em quantos meses você sai.
+  Repare no que acontece quando você muda só o prazo de pagamento.</p>
+</header>
+
+<div class="faixa">
+  <div class="bloco">
+    <h2>O que o estudo achou</h2><div class="hr"></div>
+    <p class="leg" style="margin:0 0 14px">Este estudo começou procurando um vilão e não
+    encontrou nenhum. O achado é outro, e é mais desconfortável: o preço certo, cobrado
+    indefinidamente, custa mais do que o preço errado cobrado uma vez.</p>
+    <ol>
+      <li><b>O prazo do contratante é o multiplicador, não a taxa.</b> Na convenção praticada
+      no mercado, o custo anual é o mesmo em qualquer prazo. O que triplica é a conta: quem é
+      pago em 90 dias entrega R$ 22.176 por ano; o mesmo médico, à mesma taxa, pago em 30 dias,
+      entrega R$ 7.392.</li>
+      <li><b>E o preço, nessa convenção, está certo.</b> Fica entre a média do crédito livre
+      para empresas (24,4%) e o consignado (28,3%), praticamente empatado com o financiamento
+      de um veículo (26,4%). Este estudo não tem denúncia a fazer.</li>
+      <li><b>O descasamento de caixa é um nível, não um fluxo.</b> Quem trabalha todo mês passa
+      a receber todo mês, apenas atrasado. O atraso cobra uma vez, no começo. No caso-base,
+      essa uma vez vale R$ 46.200.</li>
+      <li><b>Quem antecipa todo mês não tem um custo. Tem uma dívida.</b> Um saldo rotativo de
+      R$ 46.200 que nunca amortiza, ao custo de R$ 924 por mês. Ninguém assinaria um
+      financiamento de veículo desse tamanho sem saber o prazo.</li>
+      <li><b>Existe um ponto abaixo do qual não há saída.</b> Com esforço mensal de até R$ 924,
+      o saldo nunca cai: o dinheiro paga o deságio e acaba. A R$ 1.500 por mês, são 48 meses.
+      A R$ 2.500, 23.</li>
+      <li><b>Negociar a taxa resolve pouco. Achar excedente resolve tudo.</b> Baixar de 2,0%
+      para 1,5% encurta a saída para 42 meses. Encontrar R$ 1.000 de excedente no próprio
+      orçamento, sem mexer na taxa, encurta para 23 — e continua rendendo depois que a dívida
+      acaba.</li>
+    </ol>
+    <p class="baixar">
+      <a href="estudo.pdf" id="dl">Baixar o estudo completo (PDF, 19 páginas)</a>
+      — inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis objeções mais
+      fortes que um leitor técnico faria, e a limitação de dado declarada na segunda página:
+      nenhum dos cinco operadores verificados publica tabela de preços.
+      <br><a href="base-de-dados.csv" id="dl-csv">Baixar a base de dados (CSV)</a>
+      — todos os números do documento saem dela.
+    </p>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="painel">
+  <h2>Seus números</h2><div class="hr"></div>
+
+  <label>Quanto você recebe por plantão</label>
+  <div class="val" id="vRenda"></div>
+  <input type="range" id="vp" min="600" max="6000" step="50" value="2200">
+
+  <label>Prazo até o pagamento</label>
+  <div class="seg" id="segPrazo">
+    <button data-v="30">30 dias</button><button data-v="45">45 dias</button>
+    <button data-v="60">60 dias</button><button data-v="90">90 dias</button>
+  </div>
+
+  <label>Como a taxa é cobrada</label>
+  <div class="seg conv" id="segConv">
+    <button data-v="flat">Uma vez sobre<br>o valor</button>
+    <button data-v="pr">Ao mês, até<br>o vencimento</button>
+  </div>
+
+  <label>Taxa cobrada</label>
+  <div class="val" id="vTaxa"></div>
+  <input type="range" id="taxa" min="0.2" max="8" step="0.1" value="2">
+
+  <label>Quanto você consegue destinar por mês para sair</label>
+  <div class="val" id="vEsf"></div>
+  <input type="range" id="esf" min="0" max="12000" step="100" value="1500">
+
+  <label>Plantões por mês / horas por plantão</label>
+  <div class="seg" id="segPl">
+    <button data-v="8">8</button><button data-v="10">10</button>
+    <button data-v="12">12</button><button data-v="14">14</button>
+    <button data-v="16">16</button><button data-v="18">18</button>
+  </div>
+  <div class="seg" id="segH" style="margin-top:6px">
+    <button data-v="6">6h</button><button data-v="12">12h</button><button data-v="24">24h</button>
+  </div>
+
+  <div class="presets">
+    <label style="margin-top:0">Cenários do estudo</label>
+    <button data-p="anest">Anestesista em SP · R$ 2.200, 45 dias</button>
+    <button data-p="geral">Generalista · R$ 1.250, 45 dias</button>
+    <button data-p="longo">Mesmo médico, contratante que paga em 90 dias</button>
+    <button data-p="neutro">Exatamente no ponto neutro</button>
+  </div>
+</div>
+
+<div class="res">
+  <div id="resumo-print"><b>Os números que você informou.</b> <span id="resumo-txt"></span></div>
+  <div class="cards">
+    <div class="card" id="cTaxa"><div class="n"></div><div class="t">custo anual sobre o saldo que a antecipação cria</div></div>
+    <div class="card"><div class="n" id="nSaldo"></div><div class="t">saldo que você carrega sem enxergar como dívida</div></div>
+    <div class="card"><div class="n" id="nMin"></div><div class="t">de cada plantão trabalhados de graça</div></div>
+    <div class="card"><div class="n" id="nPl"></div><div class="t">plantões por ano trabalhados de graça</div></div>
+  </div>
+
+  <div class="veredito" id="veredito"></div>
+
+  <div class="bloco">
+    <h2>A saída</h2><div class="hr"></div>
+    <div id="saidaTxt" style="font-size:14px;line-height:1.6;margin-bottom:14px"></div>
+    <svg id="graf" viewBox="0 0 700 300" preserveAspectRatio="xMidYMid meet"></svg>
+    <p class="leg">Saldo devedor mês a mês. A área dourada é o deságio pago no caminho.</p>
+  </div>
+
+  <div class="bloco">
+    <h2>Onde a sua taxa se encaixa</h2><div class="hr"></div>
+    <table id="tRegua"></table>
+    <p class="leg">Taxas médias por modalidade · Banco Central, junho de 2026. A sua
+    antecipação aparece destacada.</p>
+  </div>
+
+  <div class="bloco">
+    <h2>O que muda se o prazo for outro</h2><div class="hr"></div>
+    <table id="tPrazos"></table>
+    <p class="leg">Mesma taxa e mesmo faturamento, variando apenas o prazo de pagamento
+    do contratante.</p>
+  </div>
+
+  <div class="cta">
+    Este simulador entrega a régua, não o veredito. As três perguntas que respondem o seu
+    caso são o prazo real dos seus contratos, a convenção de cobrança da sua taxa e quanto
+    de excedente o seu orçamento gera hoje. Para fazer essa conta com apoio:
+fale com a <b>Doctor Invest</b>.
+  </div>
+</div>
+</div>
+
+<div class="faixa" style="padding-bottom:26px"><div class="bloco" id="captura">
+  <h2>Leve esta simulação com você</h2><div class="hr"></div>
+  <p class="sub">Gera um PDF de uma página com os seus números, a régua do Banco Central e a
+  trajetória de saída. O estudo completo continua livre acima — isto é só a sua simulação.</p>
+  <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber a simulação"></iframe>
+  <button id="btn-print" disabled>Gerar o PDF desta simulação</button>
+  <p class="leg" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
+  <b>Cmd+P</b> imprime esta página do mesmo jeito.</p>
+</div></div>
+
+<footer>
+<b>Aviso importante.</b> Material informativo e educacional. Não constitui recomendação de
+investimento, oferta, nem consultoria de valores mobiliários individualizada, nos termos da
+regulamentação da CVM. Os resultados decorrem de simulação com premissas declaradas,
+desconsideram IOF, tarifas, ad valorem e efeitos tributários — omissões que reduzem o custo
+apresentado em relação ao custo real. Rentabilidade passada não garante rentabilidade futura.
+Menções a modalidades e instituições têm finalidade ilustrativa e analítica. Antes de contratar
+ou investir, avalie seus objetivos, sua situação financeira e sua tolerância a risco,
+preferencialmente com apoio de profissional habilitado.
+<br><br>
+<b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · agosto de 2026 ·
+premissas: CDI 13,90% ao ano, IR de 22,5%, retorno real de longo prazo de IPCA + 6%.
+</footer>
+
+<script>
+// ---- premissas, idênticas ao motor em Python -------------------------------
+var CDI = 0.1390, IR = 0.225, CDI_LIQ = CDI * (1 - IR), REAL = 0.06, DIAS = 365;
+var BCB = [["Cheque especial · PF",1.398],["Crédito pessoal sem consignação · PF",1.273],
+           ["Média do crédito livre · PF",0.640],["Crédito consignado · PF",0.283],
+           ["Financiamento de veículo · PF",0.264],["Média do crédito livre · PJ",0.244],
+           ["CDI líquido de IR",CDI_LIQ]];
+
+var S = {vp:2200, prazo:45, conv:"pr", taxa:2, esf:1500, pl:14, h:12};
+
+function brl(v,d){ d=d||0;
+  return "R$ " + v.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function pc(v,d){ d=(d===undefined)?1:d;
+  return (v*100).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d})+"%"; }
+
+// ---- núcleo de cálculo ------------------------------------------------------
+function calc(){
+  var pm = S.prazo/30;
+  var d = (S.conv==="flat") ? S.taxa/100 : (S.taxa/100)*pm;   // deságio efetivo
+  d = Math.min(d, 0.95);
+  var custoAno = Math.pow(1/(1-d), DIAS/S.prazo) - 1;          // taxa anual equivalente
+  var renda = S.vp * S.pl;
+  var saldo = renda * pm;                                    // estoque vendido
+  var desMes = renda * d;
+  var iMes = desMes / saldo;                                   // juro mensal sobre o saldo
+  // O estudo tem DUAS taxas anuais e usa as duas: `custoAno` é o custo da
+  // operação (Tabela 3, 28,0% no caso-base) e `saldoAno` é o custo sobre o
+  // saldo rotativo (Tabelas 2, 4 e 5, e a capa: 26,8%). A régua do §05 compara
+  // contra linhas do Banco Central, que são taxas sobre saldo — então é
+  // `saldoAno` que a página mostra, para o número daqui ser o mesmo do PDF.
+  var saldoAno = Math.pow(1+iMes,12)-1;
+  var neutro = 1 - Math.pow(1+CDI_LIQ, -S.prazo/DIAS);
+  var minGratis = d * S.h * 60;
+  var plGratis = d * S.pl * 12;
+  var horaBruta = renda / (S.pl * S.h);
+
+  // amortização
+  var meses = null, totDes = null, serie = [];
+  if (S.esf > desMes){
+    meses = -Math.log(1 - saldo*iMes/S.esf) / Math.log(1+iMes);
+    var sd = saldo, acum = 0;
+    serie.push({m:0, s:sd, a:0});
+    for (var k=1; k<=Math.ceil(meses)+1 && k<=720; k++){
+      var j = sd*iMes; sd = Math.max(0, sd - (S.esf - j)); acum += j;
+      serie.push({m:k, s:sd, a:acum});
+      if (sd<=0.005){ totDes = acum; break; }
+    }
+  }
+  var rendCol = saldo * (Math.pow(1+CDI_LIQ,1/12)-1);
+  var virada = desMes + rendCol;
+  var r20 = Math.pow(1+REAL,1/12)-1;
+  var vf20 = virada * ((Math.pow(1+r20,240)-1)/r20);
+
+  return {d:d,custoAno:custoAno,saldoAno:saldoAno,saldo:saldo,desMes:desMes,iMes:iMes,neutro:neutro,
+          minGratis:minGratis,plGratis:plGratis,horaBruta:horaBruta,meses:meses,
+          totDes:totDes,serie:serie,rendCol:rendCol,virada:virada,vf20:vf20};
+}
+
+// ---- desenho ----------------------------------------------------------------
+function grafico(serie, esf){
+  var g = document.getElementById("graf");
+  if (!serie.length){ g.innerHTML =
+    '<text x="350" y="150" text-anchor="middle" font-family="DM Sans" font-size="15" '+
+    'fill="#A8443C">Com esse esforço mensal o saldo nunca cai.</text>'; return; }
+  var W=700,H=300,ml=68,mr=18,mt=14,mb=34;
+  var n = serie.length-1, maxS = serie[0].s;
+  var X = function(m){ return ml + (m/n)*(W-ml-mr); };
+  var Y = function(v){ return mt + (1 - v/maxS)*(H-mt-mb); };
+  var s = '';
+  for (var i=0;i<=4;i++){
+    var v = maxS*i/4, y = Y(v);
+    s += '<line x1="'+ml+'" y1="'+y+'" x2="'+(W-mr)+'" y2="'+y+'" stroke="#E8E4DA"/>';
+    s += '<text x="'+(ml-7)+'" y="'+(y+4)+'" text-anchor="end" font-family="DM Sans" '+
+         'font-size="10.5" fill="#8A909B">'+brl(v)+'</text>';
+  }
+  var passo = Math.max(1, Math.ceil(n/6));
+  for (var m=0;m<=n;m+=passo){
+    s += '<text x="'+X(m)+'" y="'+(H-12)+'" text-anchor="middle" font-family="DM Sans" '+
+         'font-size="10.5" fill="#8A909B">'+m+'</text>';
+  }
+  var area = 'M'+ml+','+Y(maxS);
+  var lin = '';
+  serie.forEach(function(p,i){
+    lin += (i?'L':'M')+X(p.m)+','+Y(p.s);
+    area += 'L'+X(p.m)+','+Y(p.s);
+  });
+  area += 'L'+X(n)+','+Y(maxS)+'Z';
+  s += '<path d="'+area+'" fill="#C9A84C" opacity=".16"/>';
+  s += '<path d="'+lin+'" fill="none" stroke="#1B3A5C" stroke-width="2.6"/>';
+  s += '<text x="'+(W-mr)+'" y="'+(H-12)+'" text-anchor="end" font-family="DM Sans" '+
+       'font-size="10.5" fill="#8A909B">meses</text>';
+  g.innerHTML = s;
+}
+
+function render(){
+  var c = calc();
+  document.getElementById("vRenda").innerHTML = brl(S.vp)+
+    ' <small>por plantão · '+brl(S.vp*S.pl)+' por mês</small>';
+  document.getElementById("vTaxa").innerHTML = pc(S.taxa/100,1).replace("%","%") +
+    ' <small>' + (S.conv==="flat" ? "uma vez sobre o valor" : "ao mês, pro rata die") +
+    ' · deságio de ' + pc(c.d,2) + '</small>';
+  document.getElementById("vEsf").innerHTML = brl(S.esf)+' <small>por mês</small>';
+
+  var ct = document.getElementById("cTaxa");
+  ct.className = "card " + (c.saldoAno > CDI_LIQ ? "alerta" : "bom");
+  ct.querySelector(".n").textContent = pc(c.saldoAno,1) + " a.a.";
+  document.getElementById("nSaldo").textContent = brl(c.saldo);
+  document.getElementById("nMin").textContent = Math.round(c.minGratis) + " min";
+  document.getElementById("nPl").textContent = c.plGratis.toLocaleString("pt-BR",
+    {minimumFractionDigits:1,maximumFractionDigits:1});
+
+  var v = document.getElementById("veredito");
+  if (c.d <= c.neutro){
+    v.className = "veredito bom";
+    v.innerHTML = "Sua taxa está <b>abaixo da linha neutra</b> de "+pc(c.neutro,2)+
+      " para "+S.prazo+" dias. Nesse ponto, antecipar e investir o dinheiro no CDI rende "+
+      "mais do que esperar o pagamento. Antecipar aqui cria valor — desde que o dinheiro "+
+      "realmente vá para o investimento, e não para a despesa corrente.";
+  } else {
+    var mult = c.d / c.neutro;
+    v.className = "veredito ruim";
+    v.innerHTML = "Sua taxa está <b>"+mult.toLocaleString("pt-BR",{maximumFractionDigits:1})+
+      " vezes acima da linha neutra</b> de "+pc(c.neutro,2)+" para "+S.prazo+" dias. "+
+      "Antecipando todo mês, você carrega um saldo rotativo de <b>"+brl(c.saldo)+
+      "</b> a <b>"+pc(c.saldoAno,1)+" ao ano</b> — e sua hora cai de "+brl(c.horaBruta,2)+
+      " para "+brl(c.horaBruta*(1-c.d),2)+".";
+  }
+
+  var st = document.getElementById("saidaTxt");
+  if (c.meses === null){
+    st.innerHTML = "<span style='color:#A8443C'><b>Com "+brl(S.esf)+" por mês você não sai.</b></span> "+
+      "O deságio do primeiro mês já é "+brl(c.desMes)+". Todo o esforço paga a taxa e nada "+
+      "reduz o saldo. É preciso passar de "+brl(c.desMes)+" por mês para a conta começar a andar.";
+  } else {
+    st.innerHTML = "Com <b>"+brl(S.esf)+" por mês</b>, você zera o saldo em <b>"+
+      Math.round(c.meses)+" meses</b> ("+(c.meses/12).toLocaleString("pt-BR",
+      {maximumFractionDigits:1})+" anos), pagando <b>"+brl(c.totDes)+"</b> de deságio no caminho. "+
+      "Depois disso, os "+brl(c.desMes)+" que você deixa de pagar mais "+brl(c.rendCol)+
+      " de rendimento do próprio caixa viram <b>"+brl(c.virada)+" por mês</b> — que a "+
+      "IPCA + 6% ao ano real chegam a <b>"+brl(c.vf20)+"</b> em 20 anos.";
+  }
+  grafico(c.serie, S.esf);
+
+  var linhas = BCB.concat([["A SUA antecipação", c.saldoAno, true]])
+                  .sort(function(a,b){ return b[1]-a[1]; });
+  var h = "<tr><th>Linha de crédito</th><th>Ao ano</th><th>Ao mês</th></tr>";
+  linhas.forEach(function(l){
+    h += "<tr"+(l[2]?" class='destaque'":"")+"><td class='l'>"+l[0]+"</td><td class="+
+      (l[1]>CDI_LIQ?"'neg'":"'pos'")+">"+pc(l[1],1)+"</td><td>"+
+      pc(Math.pow(1+l[1],1/12)-1,2)+"</td></tr>";
+  });
+  document.getElementById("tRegua").innerHTML = h;
+
+  var h2 = "<tr><th>Prazo</th><th>Deságio</th><th>Custo ao ano</th><th>Saldo devedor</th>"+
+           "<th>Por mês</th><th>Plantões grátis/ano</th></tr>";
+  [30,45,60,90].forEach(function(pz){
+    var pm = pz/30, dd = Math.min((S.conv==="flat" ? S.taxa/100 : (S.taxa/100)*pm), .95);
+    // Mesma base do card e da régua: taxa sobre o saldo, como a Tabela 2 do
+    // estudo. É por isso que a coluna fica plana na convenção pro rata — que
+    // é justamente o achado do §04.
+    var ca = Math.pow(1+dd/pm, 12)-1, rd = S.vp*S.pl;
+    h2 += "<tr"+(pz===S.prazo?" class='destaque'":"")+"><td class='l'>"+pz+" dias</td><td>"+
+      pc(dd,2)+"</td><td class="+(ca>CDI_LIQ?"'neg'":"'pos'")+">"+pc(ca,1)+"</td><td>"+
+      brl(rd*pm)+"</td><td>"+brl(rd*dd)+"</td><td>"+
+      (dd*S.pl*12).toLocaleString("pt-BR",{maximumFractionDigits:1})+"</td></tr>";
+  });
+  document.getElementById("tPrazos").innerHTML = h2;
+}
+
+// ---- controles --------------------------------------------------------------
+function seg(id, chave, cast){
+  var el = document.getElementById(id);
+  el.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    S[chave] = cast ? cast(b.dataset.v) : b.dataset.v;
+    marcar(); render();
+  });
+}
+function marcar(){
+  [["segPrazo","prazo"],["segConv","conv"],["segPl","pl"],["segH","h"]].forEach(function(x){
+    document.querySelectorAll("#"+x[0]+" button").forEach(function(b){
+      b.classList.toggle("on", String(S[x[1]]) === b.dataset.v);
+    });
+  });
+}
+seg("segPrazo","prazo",Number); seg("segConv","conv"); seg("segPl","pl",Number);
+seg("segH","h",Number);
+["vp","taxa","esf"].forEach(function(id){
+  document.getElementById(id).addEventListener("input", function(e){
+    S[id] = Number(e.target.value); render();
+  });
+});
+document.querySelector(".presets").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-p]"); if(!b) return;
+  var p = {anest:{vp:2200,pl:14,prazo:45,conv:"pr",taxa:2,esf:1500},
+           geral:{vp:1250,pl:14,prazo:45,conv:"pr",taxa:2,esf:900},
+           longo:{vp:2200,pl:14,prazo:90,conv:"pr",taxa:2,esf:1500},
+           neutro:{vp:2200,pl:14,prazo:45,conv:"flat",taxa:1.25,esf:1500}}[b.dataset.p];
+  Object.assign(S,p);
+  document.getElementById("vp").value = S.vp;
+  document.getElementById("taxa").value = S.taxa;
+  document.getElementById("esf").value = S.esf;
+  marcar(); render();
+});
+
+marcar(); render();
+</script>
+
+<script>
+// Resumo impresso: o que a pessoa informou, para o PDF não sair sem contexto.
+function resumoSimulacao(){
+  var c = calc();
+  return [
+    brl(S.vp)+" por plantão · "+S.pl+" plantões de "+S.h+"h por mês",
+    "Prazo de pagamento: "+S.prazo+" dias",
+    "Taxa: "+pc(S.taxa/100,1)+" "+(S.conv==="flat"?"uma vez sobre o valor":"ao mês, pro rata die"),
+    "Deságio efetivo: "+pc(c.d,2),
+    "Saldo rotativo: "+brl(c.saldo),
+    "Excedente mensal informado: "+brl(S.esf),
+    "Custo anual sobre o saldo: "+pc(c.saldoAno,1)
+  ].join(" — ");
+}
+window.imprimirSimulacao=function(){
+  document.getElementById("resumo-txt").textContent=resumoSimulacao();
+  window.print();
+};
+</script>
+
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+function ev(nome){
+  var payload=JSON.stringify({
+    event:nome, page:"antecipacao",
+    utm_source:qs.get("utm_source")||"", utm_medium:qs.get("utm_medium")||"",
+    utm_campaign:qs.get("utm_campaign")||"", lp:qs.get("lp")||"",
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+// "simulou" dispara uma vez, na primeira mexida em qualquer controle: separa quem
+// só abriu de quem de fato usou a ferramenta. Pega slider (input) e também os
+// segmentados e os presets (click) — trocar o prazo de 45 para 90 dias é uso da
+// ferramenta tanto quanto arrastar um slider, e é justamente o achado do estudo.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou) return;
+  if(!e.target.closest("input[type=range],.seg,.presets")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+document.getElementById("dl").addEventListener("click",function(){ev("download");});
+document.getElementById("dl-csv").addEventListener("click",function(){ev("download");});
+</script>
+
+<script>
+var FF_ORIGIN="https://forms.fillout.com";
+// Formulário COMPARTILHADO com os estudos de alocação e consórcio. O que separa
+// os três é o parâmetro `estudo`, e o `estudo-intake` roteia por ele o texto de
+// boas-vindas e o corpo da Note. Por isso a página manda só DOIS parâmetros:
+// campo novo no Fillout exigiria mexer no formulário que os outros dois usam.
+var FF_FORM="jMJQg14vTUus";
+var btn=document.getElementById("btn-print");
+
+if(!FF_FORM){
+  /* Sem formulário publicado a captura sai de cena e o botão nasce liberado.
+     A página nunca fica com um iframe vazio no ar. */
+  document.getElementById("ff").style.display="none";
+  document.getElementById("dica-print").style.display="none";
+  btn.disabled=false;
+}else{
+  var ffEmbedId=String(Math.floor(Date.now()%1e9));
+
+  function paramsSimulacao(){
+    var c=calc();
+    var dados=[
+      ["renda",S.vp*S.pl],["plantoes",S.pl],["prazo",S.prazo],["conv",S.conv],
+      ["taxa",S.taxa],["desagio",(c.d*100).toFixed(2)],["saldo",Math.round(c.saldo)],
+      ["desmes",Math.round(c.desMes)],["custoano",(c.saldoAno*100).toFixed(1)],
+      ["plgratis",c.plGratis.toFixed(1)],["esforco",S.esf],
+      ["meses",c.meses===null?"nunca":Math.round(c.meses)]
+    ].map(function(par){return par[0]+":"+par[1];}).join("|");
+    var p=new URLSearchParams({estudo:"antecipacao", dados:dados});
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
+      .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+    // Sem estes três, o iframe carrega como página solta e não posta mensagem nenhuma
+    // (server.fillout.com/embed/v1: o handler do filho é montado por embed-type/dynamic-resize).
+    p.set("fillout-embed-id",ffEmbedId);
+    p.set("fillout-embed-type","standard");
+    p.set("fillout-embed-dynamic-resize","true");
+    return p;
+  }
+
+  // O src só é montado quando a captura entra em tela: assim o formulário carrega
+  // os números que a pessoa realmente informou, não os valores iniciais da página.
+  new IntersectionObserver(function(es,obs){
+    if(!es.some(function(e){return e.isIntersecting;})) return;
+    document.getElementById("ff").src=FF_ORIGIN+"/t/"+FF_FORM+"?"+paramsSimulacao().toString();
+    obs.disconnect();
+  },{threshold:.25}).observe(document.getElementById("captura"));
+
+  function liberarImpressao(){
+    if(!btn.disabled) return;
+    btn.disabled=false;
+    document.getElementById("dica-print").style.display="none";
+    ev("lead");
+  }
+
+  // Buffer de diagnóstico: o embed do Fillout usa `type` em snake_case
+  // (form_resized, check_scroll_up). O nome do evento de submissão fica gravado
+  // aqui para conferência ao vivo, em vez de ser adivinhado.
+  window.__ffMsgs=[];
+  addEventListener("message",function(e){
+    if(e.origin!==FF_ORIGIN) return;
+    var d=e.data||{};
+    window.__ffMsgs.push(typeof d==="object"?d.type:String(d));
+    if(d.embedId && d.embedId!==ffEmbedId) return;
+    if(typeof d.type==="string" && /submi|complet|thank/i.test(d.type)) liberarImpressao();
+    if(d.type==="form_resized" && d.size) document.getElementById("ff").style.height=d.size+"px";
+  });
+}
+btn.onclick=function(){ev("download");window.imprimirSimulacao();};
+</script>
+</body>
+</html>
