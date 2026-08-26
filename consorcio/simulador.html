@@ -419,11 +419,18 @@ render();
 // Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
 var API="https://webhook.drheliobarros.com.br/api/funnel/events";
 var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e a redirect de formulario. Sem isto o evento de
+// conversao nasce sem fonte e todo lead parece trafego direto. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
 function ev(nome){
   var payload=JSON.stringify({
     event:nome, page:"consorcio-simulador",
-    utm_source:qs.get("utm_source")||"", utm_medium:qs.get("utm_medium")||"",
-    utm_campaign:qs.get("utm_campaign")||"", lp:qs.get("lp")||"",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
     ts:new Date().toISOString()
   });
   if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
@@ -451,7 +458,7 @@ document.addEventListener("click",function(e){
   var a=document.getElementById(id);
   var p=new URLSearchParams();
   ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
-    .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+    .forEach(function(k){ if(u(k)) p.set(k,u(k)); });
   var s=p.toString();
   if(s) a.href=a.getAttribute("href")+"?"+s;
 });

@@ -440,11 +440,18 @@ rotulos(); render();
 // Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
 var API="https://webhook.drheliobarros.com.br/api/funnel/events";
 var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e a redirect de formulario. Sem isto o evento de
+// conversao nasce sem fonte e todo lead parece trafego direto. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
 function ev(nome){
   var payload=JSON.stringify({
     event:nome, page:"consorcio-cota",
-    utm_source:qs.get("utm_source")||"", utm_medium:qs.get("utm_medium")||"",
-    utm_campaign:qs.get("utm_campaign")||"", lp:qs.get("lp")||"",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
     ts:new Date().toISOString()
   });
   if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
@@ -463,7 +470,7 @@ document.addEventListener("input",function(e){
 function comUtm(href){
   var p=new URLSearchParams();
   ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
-    .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+    .forEach(function(k){ if(u(k)) p.set(k,u(k)); });
   var s=p.toString();
   return s ? href+"?"+s : href;
 }
@@ -540,7 +547,7 @@ if(!FF_FORM){
     ].map(function(par){return par[0]+":"+par[1];}).join("|");
     var p=new URLSearchParams({estudo:"consorcio", dados:dados});
     ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
-      .forEach(function(k){ if(qs.get(k)) p.set(k,qs.get(k)); });
+      .forEach(function(k){ if(u(k)) p.set(k,u(k)); });
     // Sem estes três, o iframe carrega como página solta e não posta mensagem nenhuma
     // (server.fillout.com/embed/v1: o handler do filho é montado por embed-type/dynamic-resize).
     p.set("fillout-embed-id",ffEmbedId);
