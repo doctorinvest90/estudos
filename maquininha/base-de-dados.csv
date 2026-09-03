@@ -1,0 +1,161 @@
+bloco;chave;detalhe;valor;unidade
+cotacao_anunciada;Cotação 1;debito;0.008800;pct
+cotacao_anunciada;Cotação 1;avista;0.032000;pct
+cotacao_anunciada;Cotação 1;6x;0.078000;pct
+cotacao_anunciada;Cotação 1;12x;0.125900;pct
+cotacao_anunciada;Cotação 1;tarifa_fixa;0.000000;BRL
+cotacao_anunciada;Cotação 1;liquidacao_credito_dias;1.000000;dias
+custo_efetivo;Cotação 1;1x;0.032000;pct
+custo_efetivo;Cotação 1;6x;0.078000;pct
+custo_efetivo;Cotação 1;12x;0.125900;pct
+cotacao_anunciada;Cotação 2;debito;0.015700;pct
+cotacao_anunciada;Cotação 2;avista;0.026900;pct
+cotacao_anunciada;Cotação 2;6x;0.032500;pct
+cotacao_anunciada;Cotação 2;12x;0.037900;pct
+cotacao_anunciada;Cotação 2;tarifa_fixa;0.000000;BRL
+cotacao_anunciada;Cotação 2;liquidacao_credito_dias;30.000000;dias
+custo_efetivo;Cotação 2;1x;0.035389;pct
+custo_efetivo;Cotação 2;6x;0.061899;pct
+custo_efetivo;Cotação 2;12x;0.091809;pct
+cotacao_anunciada;Cotação 3;avista;0.029900;pct
+cotacao_anunciada;Cotação 3;6x;0.032700;pct
+cotacao_anunciada;Cotação 3;12x;0.036300;pct
+cotacao_anunciada;Cotação 3;tarifa_fixa;0.290000;BRL
+cotacao_anunciada;Cotação 3;liquidacao_credito_dias;32.000000;dias
+custo_efetivo;Cotação 3;1x;0.039920;pct
+custo_efetivo;Cotação 3;6x;0.063617;pct
+custo_efetivo;Cotação 3;12x;0.091714;pct
+cotacao_anunciada;Cotação 4;debito;0.009200;pct
+cotacao_anunciada;Cotação 4;avista;0.030500;pct
+cotacao_anunciada;Cotação 4;6x;0.070800;pct
+cotacao_anunciada;Cotação 4;12x;0.114000;pct
+cotacao_anunciada;Cotação 4;tarifa_fixa;0.350000;BRL
+cotacao_anunciada;Cotação 4;liquidacao_credito_dias;14.000000;dias
+custo_efetivo;Cotação 4;1x;0.031667;pct
+custo_efetivo;Cotação 4;6x;0.071967;pct
+custo_efetivo;Cotação 4;12x;0.115167;pct
+cotacao_anunciada;Cotação 5;avista;0.017100;pct
+cotacao_anunciada;Cotação 5;6x;0.024800;pct
+cotacao_anunciada;Cotação 5;12x;0.029800;pct
+cotacao_anunciada;Cotação 5;tarifa_fixa;0.490000;BRL
+cotacao_anunciada;Cotação 5;liquidacao_credito_dias;32.000000;dias
+custo_efetivo;Cotação 5;1x;0.027786;pct
+custo_efetivo;Cotação 5;6x;0.056384;pct
+custo_efetivo;Cotação 5;12x;0.085880;pct
+cotacao_anunciada;Cotação 6;debito;0.007400;pct
+cotacao_anunciada;Cotação 6;avista;0.010500;pct
+cotacao_anunciada;Cotação 6;6x;0.014000;pct
+cotacao_anunciada;Cotação 6;12x;0.015000;pct
+cotacao_anunciada;Cotação 6;tarifa_fixa;0.000000;BRL
+cotacao_anunciada;Cotação 6;liquidacao_credito_dias;30.000000;dias
+custo_efetivo;Cotação 6;1x;0.025400;pct
+custo_efetivo;Cotação 6;6x;0.066150;pct
+custo_efetivo;Cotação 6;12x;0.111850;pct
+custo_efetivo;Cotação 6;12x_sem_antecipar;0.068909;pct
+cotacao_anunciada;InfinitePay · faixa até R$20 mil/mês;debito;0.013700;pct
+cotacao_anunciada;InfinitePay · faixa até R$20 mil/mês;avista;0.031500;pct
+cotacao_anunciada;InfinitePay · faixa até R$20 mil/mês;6x;0.124000;pct
+cotacao_anunciada;InfinitePay · faixa até R$20 mil/mês;12x;0.124000;pct
+cotacao_anunciada;InfinitePay · faixa até R$20 mil/mês;tarifa_fixa;0.000000;BRL
+cotacao_anunciada;InfinitePay · faixa até R$20 mil/mês;liquidacao_credito_dias;1.000000;dias
+custo_efetivo;InfinitePay · faixa até R$20 mil/mês;1x;0.031500;pct
+custo_efetivo;InfinitePay · faixa até R$20 mil/mês;6x;0.124000;pct
+custo_efetivo;InfinitePay · faixa até R$20 mil/mês;12x;0.124000;pct
+cotacao_anunciada;InfinitePay · faixa R$20–80 mil/mês;debito;0.007900;pct
+cotacao_anunciada;InfinitePay · faixa R$20–80 mil/mês;avista;0.027900;pct
+cotacao_anunciada;InfinitePay · faixa R$20–80 mil/mês;6x;0.095600;pct
+cotacao_anunciada;InfinitePay · faixa R$20–80 mil/mês;12x;0.095600;pct
+cotacao_anunciada;InfinitePay · faixa R$20–80 mil/mês;tarifa_fixa;0.000000;BRL
+cotacao_anunciada;InfinitePay · faixa R$20–80 mil/mês;liquidacao_credito_dias;1.000000;dias
+custo_efetivo;InfinitePay · faixa R$20–80 mil/mês;1x;0.027900;pct
+custo_efetivo;InfinitePay · faixa R$20–80 mil/mês;6x;0.095600;pct
+custo_efetivo;InfinitePay · faixa R$20–80 mil/mês;12x;0.095600;pct
+cotacao_anunciada;InfinitePay · faixa acima de R$80 mil/mês;debito;0.007500;pct
+cotacao_anunciada;InfinitePay · faixa acima de R$80 mil/mês;avista;0.026900;pct
+cotacao_anunciada;InfinitePay · faixa acima de R$80 mil/mês;6x;0.089900;pct
+cotacao_anunciada;InfinitePay · faixa acima de R$80 mil/mês;12x;0.089900;pct
+cotacao_anunciada;InfinitePay · faixa acima de R$80 mil/mês;tarifa_fixa;0.000000;BRL
+cotacao_anunciada;InfinitePay · faixa acima de R$80 mil/mês;liquidacao_credito_dias;1.000000;dias
+custo_efetivo;InfinitePay · faixa acima de R$80 mil/mês;1x;0.026900;pct
+custo_efetivo;InfinitePay · faixa acima de R$80 mil/mês;6x;0.089900;pct
+custo_efetivo;InfinitePay · faixa acima de R$80 mil/mês;12x;0.089900;pct
+cotacao_anunciada;Asaas · cobrança online;debito;0.018900;pct
+cotacao_anunciada;Asaas · cobrança online;avista;0.029900;pct
+cotacao_anunciada;Asaas · cobrança online;6x;0.034900;pct
+cotacao_anunciada;Asaas · cobrança online;12x;0.039900;pct
+cotacao_anunciada;Asaas · cobrança online;tarifa_fixa;0.490000;BRL
+cotacao_anunciada;Asaas · cobrança online;liquidacao_credito_dias;32.000000;dias
+custo_efetivo;Asaas · cobrança online;1x;0.044867;pct
+custo_efetivo;Asaas · cobrança online;6x;0.081117;pct
+custo_efetivo;Asaas · cobrança online;12x;0.123617;pct
+custo_efetivo;Asaas · cobrança online;12x_sem_antecipar;0.095980;pct
+cotacao_anunciada;Asaas Tap · maquininha;debito;0.012500;pct
+cotacao_anunciada;Asaas Tap · maquininha;avista;0.029900;pct
+cotacao_anunciada;Asaas Tap · maquininha;6x;0.034900;pct
+cotacao_anunciada;Asaas Tap · maquininha;12x;0.039900;pct
+cotacao_anunciada;Asaas Tap · maquininha;tarifa_fixa;0.000000;BRL
+cotacao_anunciada;Asaas Tap · maquininha;liquidacao_credito_dias;2.000000;dias
+custo_efetivo;Asaas Tap · maquininha;1x;0.029900;pct
+custo_efetivo;Asaas Tap · maquininha;6x;0.034900;pct
+custo_efetivo;Asaas Tap · maquininha;12x;0.039900;pct
+escada_faixas;até R$20 mil/mês;custo_pct;0.083440;pct
+escada_faixas;até R$20 mil/mês;custo_ano;40051.200000;BRL
+escada_faixas;R$20–80 mil/mês;custo_pct;0.064520;pct
+escada_faixas;R$20–80 mil/mês;custo_ano;30969.600000;BRL
+escada_faixas;acima de R$80 mil/mês;custo_pct;0.060820;pct
+escada_faixas;acima de R$80 mil/mês;custo_ano;29193.600000;BRL
+distancia_publica;Cotação 1 x InfinitePay · faixa até R$20 mil/mês;1x;0.000500;pct
+distancia_publica;Cotação 1 x InfinitePay · faixa até R$20 mil/mês;12x;0.001900;pct
+distancia_publica;Cotação 1 x InfinitePay · faixa R$20–80 mil/mês;1x;0.004100;pct
+distancia_publica;Cotação 1 x InfinitePay · faixa R$20–80 mil/mês;12x;0.030300;pct
+distancia_publica;Cotação 1 x InfinitePay · faixa acima de R$80 mil/mês;1x;0.005100;pct
+distancia_publica;Cotação 1 x InfinitePay · faixa acima de R$80 mil/mês;12x;0.036000;pct
+distancia_publica;Cotação 3 x Asaas · cobrança online;1x;0.000000;pct
+distancia_publica;Cotação 3 x Asaas · cobrança online;12x;-0.003600;pct
+distancia_publica;Cotação 5 x Asaas · cobrança online;1x;-0.012800;pct
+distancia_publica;Cotação 5 x Asaas · cobrança online;12x;-0.010100;pct
+niveis_parcelado;30% parcelado;com_antecipacao;21700.240000;BRL
+niveis_parcelado;30% parcelado;sem_antecipacao;14404.131196;BRL
+estoque_recebiveis;30% parcelado;principal;92466.666667;BRL
+custo_oportunidade;30% parcelado;10_anos;98785.326144;BRL
+custo_oportunidade;30% parcelado;20_anos;275694.799921;BRL
+custo_oportunidade;30% parcelado;estoque_20_anos;296553.126664;BRL
+niveis_parcelado;60% parcelado;com_antecipacao;35409.280000;BRL
+niveis_parcelado;60% parcelado;sem_antecipacao;22406.597021;BRL
+estoque_recebiveis;60% parcelado;principal;164266.666667;BRL
+custo_oportunidade;60% parcelado;10_anos;176049.222030;BRL
+custo_oportunidade;60% parcelado;20_anos;491326.565780;BRL
+custo_oportunidade;60% parcelado;estoque_20_anos;526825.453569;BRL
+niveis_parcelado;90% parcelado;com_antecipacao;49118.320000;BRL
+niveis_parcelado;90% parcelado;sem_antecipacao;30409.062847;BRL
+estoque_recebiveis;90% parcelado;principal;236066.666667;BRL
+custo_oportunidade;90% parcelado;10_anos;253313.117916;BRL
+custo_oportunidade;90% parcelado;20_anos;706958.331640;BRL
+custo_oportunidade;90% parcelado;estoque_20_anos;757097.780474;BRL
+sensibilidade_convencao;Cotação 4;adicional_sobre_n;0.114000;pct
+sensibilidade_convencao;Cotação 4;adicional_sobre_n_menos_1;0.106800;pct
+divida_rotativa;30% parcelado;custo_mes;1377.753333;BRL
+divida_rotativa;30% parcelado;taxa_ano_saldo;0.194205;a.a.
+quitacao;30% parcelado · esforço 2000;meses;78.942470;meses
+quitacao;30% parcelado · esforço 5000;meses;21.794563;meses
+quitacao;30% parcelado · esforço 10000;meses;10.022891;meses
+divida_rotativa;60% parcelado;custo_mes;2447.573333;BRL
+divida_rotativa;60% parcelado;taxa_ano_saldo;0.194205;a.a.
+quitacao;60% parcelado · esforço 5000;meses;45.462440;meses
+quitacao;60% parcelado · esforço 10000;meses;18.980023;meses
+divida_rotativa;90% parcelado;custo_mes;3517.393333;BRL
+divida_rotativa;90% parcelado;taxa_ano_saldo;0.194205;a.a.
+quitacao;90% parcelado · esforço 5000;meses;82.192636;meses
+quitacao;90% parcelado · esforço 10000;meses;29.307633;meses
+desagio_neutro;30d;desagio;0.008374;pct
+desagio_neutro;45d;desagio;0.012534;pct
+desagio_neutro;60d;desagio;0.016677;pct
+desagio_neutro;90d;desagio;0.024911;pct
+desagio_neutro;180d;desagio;0.049202;pct
+regua_bcb;BCB SGS 20721;antecipacao_cartao_pj;0.162500;a.a.
+regua_bcb;CDI liquido;referencia;0.107725;a.a.
+regua_bcb;antecipacao automatica;ao_ano;0.194205;a.a.
+regua_bcb;antecipacao eventual;ao_ano;0.268242;a.a.
+breakeven_pix;30% parcelado;faturamento_extra;0.047349;pct
+breakeven_pix;60% parcelado;faturamento_extra;0.079645;pct
+breakeven_pix;90% parcelado;faturamento_extra;0.113995;pct

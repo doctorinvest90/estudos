@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A taxa não é o preço · Simulador da maquininha — Doctor Invest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;
+--verm:#A8443C;--verde:#4F7A5B;--linha:#E8E4DA;--cinza:#6B7480;--suave:#7A8290}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);font-family:"DM Sans",sans-serif;color:#22303F;font-size:15px;line-height:1.55}
+h1,h3{font-family:"Cormorant Garamond",serif;font-weight:600;margin:0;color:var(--azul)}
+h2{font-family:"Cormorant Garamond",serif;font-size:20px;margin:0 0 4px;color:var(--azul);font-weight:600}
+.hr{height:2px;width:34px;background:var(--ouro);margin:0 0 16px}
+
+header{background:var(--azul);color:var(--marfim);padding:26px 30px 24px}
+header .marca{font-size:10px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{font-family:"Cormorant Garamond",serif;font-size:33px;margin:12px 0 6px;font-weight:600;color:var(--marfim)}
+header p{margin:0;color:#AFBACB;font-size:13.5px;max-width:660px;line-height:1.55}
+
+.faixa{padding:26px 30px 0}
+.bloco{background:#fff;border:1px solid var(--linha);padding:18px 20px 20px;margin-bottom:18px}
+.faixa .bloco{margin-bottom:0}
+.faixa ol{padding-left:18px;line-height:1.72;font-size:13.5px;margin:0}
+.faixa li{margin-bottom:9px}
+.faixa .baixar{margin:16px 0 0;font-size:13.5px;line-height:1.6}
+.faixa .baixar a{color:var(--conf);font-weight:700}
+.leg{font-size:11px;color:#8A909B;margin:8px 0 0}
+
+.cta{background:var(--azul);color:#E4E0D6;padding:18px 20px;margin-bottom:18px;font-size:13.5px;line-height:1.55}
+.cta a{color:var(--ouro);font-weight:700;text-decoration:none}
+
+/* ---- calculadora (simulador_maquininha.html, embutido — motor e ids inalterados) ---- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 30px 40px}
+.grid{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+.card{background:#fff;border:1px solid var(--linha);border-radius:3px;padding:20px 22px;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:4px}
+.card .hint{font-size:12.5px;color:var(--suave);margin:0 0 16px}
+.card .nota{font-size:11.8px;color:var(--suave);line-height:1.5;margin:14px 0 0}
+
+label{display:block;font-size:12.5px;color:var(--conf);font-weight:500;margin:14px 0 5px}
+.row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.row span:last-child{font-weight:700;color:var(--azul);font-size:13.5px;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:var(--linha);
+  border-radius:2px;outline:none;margin:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;
+  border-radius:50%;background:var(--azul);cursor:pointer;border:2.5px solid #fff;
+  box-shadow:0 0 0 1px var(--azul)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--azul);
+  cursor:pointer;border:2.5px solid #fff}
+
+.presets{display:flex;gap:6px;margin:4px 0 14px;flex-wrap:wrap}
+.pbtn{flex:1;min-width:90px;padding:8px 4px;border:1px solid var(--linha);background:#fff;
+  font-family:inherit;font-size:12.5px;cursor:pointer;color:var(--conf);border-radius:2px;
+  transition:all .12s}
+.pbtn:hover{border-color:var(--ouro)}
+.pbtn.on{background:var(--azul);color:var(--marfim);border-color:var(--azul)}
+
+.toggle{display:flex;gap:0;margin:6px 0 4px;border:1px solid var(--linha);border-radius:2px;overflow:hidden}
+.toggle button{flex:1;padding:9px 4px;border:0;background:#fff;font-family:inherit;font-size:12.5px;
+  cursor:pointer;color:var(--conf)}
+.toggle button.on{background:var(--conf);color:#fff}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}
+.field{margin:10px 0}
+.field label{margin:0 0 5px}
+.iunit{display:flex;align-items:stretch;border:1px solid var(--linha);border-radius:2px;overflow:hidden;background:#fff}
+.iunit input{width:100%;min-width:0;border:0;padding:8px 8px;text-align:right;font-family:inherit;
+  font-size:13.5px;color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
+.iunit input:focus{outline:none;background:#FAF9F4}
+.iunit input:disabled{color:var(--suave);background:#F5F3EE}
+.iunit span{padding:8px 9px;font-size:11.5px;color:var(--suave);background:#FAF9F6;
+  border-left:1px solid var(--linha);white-space:nowrap;display:flex;align-items:center}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);
+  border:1px solid var(--linha);margin-bottom:18px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;padding:16px 14px;min-width:0}
+.kpi .v{font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:700;color:var(--azul);
+  line-height:1.08;letter-spacing:-.01em;word-break:break-word}
+.kpi .t{font-size:11px;color:var(--suave);margin-top:6px;line-height:1.35}
+.kpi.dark{background:var(--azul)}
+.kpi.dark .v{color:var(--ouro)}
+.kpi.dark .t{color:#9AA8BC}
+
+#captura .sub{font-size:13px;color:var(--cinza);line-height:1.55;margin:0 0 14px}
+#captura iframe{width:100%;border:0;display:block;margin-top:2px}
+#captura .leg a{color:var(--ouro);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(201,168,76,.45)}
+#resumo-print{display:none}
+
+footer{background:#F2F0EA;padding:18px 30px 26px;font-size:11px;color:#5A616B;line-height:1.55}
+footer b{color:var(--azul)}
+
+@media(max-width:900px){
+  .faixa{padding:18px 16px 0}
+  .wrap{padding:0 16px 30px}
+  header{padding:20px 16px} header h1{font-size:26px}
+  footer{padding:16px}
+}
+@media print{
+  /* No papel fica a simulação, não a captação: some os controles, o formulário de
+     captura e os links de download; entra o resumo do que a pessoa ajustou. */
+  header p, .controles, #captura, .faixa .baixar, .cta{display:none}
+  #resumo-print{display:block;font-size:12px;line-height:1.6;margin-bottom:14px}
+  .grid{display:block}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="marca">DOCTOR INVEST · SIMULADOR</div>
+  <h1>A taxa não é o preço</h1>
+  <p>O que custa, de verdade, receber por cartão num consultório — e por que a conta que
+  aparece na proposta não é a conta que sai da conta. Ajuste os controles com os seus números
+  e veja os quatro que decidem: custo anual, custo sobre o faturamento, estoque de recebíveis
+  parado e quanto o cartão precisa faturar a mais para empatar com o Pix.</p>
+</header>
+
+<div class="faixa">
+  <div class="bloco" id="achados">
+    <h2>O que o estudo achou</h2><div class="hr"></div>
+    <p class="leg" style="margin:0 0 14px">Toda proposta de maquininha chega com um número na
+    capa. Este estudo pega 6 propostas reais e 5 tabelas públicas de preço e faz com elas a
+    única conta que nenhuma traz: quanto sai da conta do consultório por real faturado, com o
+    prazo dentro. No caso-base — consultório de R$ 40 mil por mês, 60% do faturamento
+    parcelado em 12x, antecipação automática ligada — o cartão custa 7,38% do faturamento:
+    R$ 35.409 por ano, e deixa R$ 164.267 permanentemente na mão do adquirente.</p>
+    <ol>
+      <li><b>A taxa anunciada não inclui o prazo.</b> A cotação de menor taxa da amostra
+      anuncia 1,50% para uma venda em 12x. Com o prazo dentro, a mesma venda custa 11,19% —
+      quase sete vezes e meia o número da proposta.</li>
+      <li><b>Ordenar pela taxa anunciada dá uma lista; ordenar pelo custo efetivo dá outra.</b>
+      A cotação mais barata da amostra em 12x pelo número anunciado fica atrás de três outras
+      quando a conta inclui o prazo. A cotação que anuncia a maior taxa da amostra, 12,59%, é
+      a única em que o número anunciado é o preço: ele não muda.</li>
+      <li><b>O mix decide mais que a taxa.</b> Na mesma tabela e sobre o mesmo faturamento,
+      passar de 30% para 90% de vendas parceladas leva o custo anual de R$ 21.700 para
+      R$ 49.118. Nenhuma renegociação de taxa move tanto.</li>
+      <li><b>Antecipar todo mês é uma dívida que nunca amortiza.</b> No caso-base o
+      consultório carrega R$ 164.267 de recebíveis e paga R$ 2.448 por mês só para
+      adiantá-los — 19,42% ao ano sobre o saldo, e o saldo não cai sozinho. A taxa sobre a
+      venda é conta separada: aqui entra apenas o preço do prazo.</li>
+      <li><b>O custo evitável é o que dá para capitalizar.</b> A diferença entre antecipar e
+      esperar é R$ 13.003 por ano no caso-base. Aportada a IPCA + 6% ao ano, vira R$ 491.327
+      em vinte anos, em poder de compra de hoje.</li>
+      <li><b>A alavanca que este estudo mediu com precisão é trocar de tabela, não esperar a
+      Selic cair.</b> Em 175 meses de série do Banco Central, o dado não decide se o
+      adquirente repassa a queda da Selic para a taxa de antecipação — o intervalo de
+      confiança vai de repasse quase nulo ao dobro do repasse integral. Quem espera essa
+      queda aposta num mecanismo que a série não confirma.</li>
+    </ol>
+    <p class="baixar">
+      <a href="estudo.pdf" id="dl">Baixar o estudo completo (PDF, 18 páginas)</a>
+      — inclui a seção “Onde este estudo pode estar errado”, com as seis objeções mais fortes
+      que um leitor técnico faria, e a limitação de dado já na segunda página: são 6 cotações
+      reais coletadas por um único interessado, não amostra estatística do mercado.
+      <br><a href="base-de-dados.csv" id="dl-csv">Baixar a base de dados (CSV)</a>
+      — todos os números do documento saem dela.
+    </p>
+  </div>
+</div>
+
+<div class="wrap"><div class="grid">
+
+<!-- CONTROLES — de simulador_maquininha.html, ids e defaults intocados (paridade com
+     paridade_casos.json, caso "capa") -->
+<div class="controles">
+
+  <div class="card">
+    <h3>Seu consultório</h3>
+    <p class="hint">Faturamento no cartão e ticket médio da consulta.</p>
+    <div class="row"><span>Faturamento mensal no cartão</span><span id="o_fat">R$ 40.000</span></div>
+    <input type="range" id="faturamento" min="5000" max="200000" step="1000" value="40000">
+    <div class="row" style="margin-top:14px"><span>Ticket médio</span><span id="o_tkt">R$ 300</span></div>
+    <input type="range" id="ticket" min="20" max="1000" step="10" value="300">
+  </div>
+
+  <div class="card">
+    <h3>Como o cartão é usado</h3>
+    <p class="hint">Um nível pronto de parcelamento, ou os três pesos abaixo — eles sempre somam 100%.</p>
+    <div class="presets" id="presets">
+      <button class="pbtn" data-nivel="30">30% parcelado</button>
+      <button class="pbtn on" data-nivel="60">60% parcelado</button>
+      <button class="pbtn" data-nivel="90">90% parcelado</button>
+    </div>
+    <div class="row"><span>Débito</span><span id="o_mxd">20%</span></div>
+    <input type="range" id="mx_debito" min="0" max="100" step="1" value="20">
+    <div class="row" style="margin-top:12px"><span>Crédito à vista (1x)</span><span id="o_mxa">20%</span></div>
+    <input type="range" id="mx_avista" min="0" max="100" step="1" value="20">
+    <div class="row" style="margin-top:12px"><span>Parcelado</span><span id="o_mxp">60%</span></div>
+    <input type="range" id="mx_parcelado" min="0" max="100" step="1" value="60">
+    <div class="row" style="margin-top:14px"><span>Número de parcelas</span><span id="o_parc">12x</span></div>
+    <input type="range" id="parcelas" min="1" max="12" step="1" value="12">
+  </div>
+
+  <div class="card">
+    <h3>As taxas da sua maquininha</h3>
+    <p class="hint">Digite o que está no seu contrato — é isso que muda o resultado, não o nosso exemplo.</p>
+    <div class="grid2">
+      <div class="field">
+        <label for="mdr_debito">MDR débito</label>
+        <div class="iunit"><input type="number" id="mdr_debito" step="0.01" min="0" max="20" value="0.74"><span>%</span></div>
+      </div>
+      <div class="field">
+        <label for="mdr_avista">MDR à vista (1x)</label>
+        <div class="iunit"><input type="number" id="mdr_avista" step="0.01" min="0" max="20" value="1.05"><span>%</span></div>
+      </div>
+      <div class="field">
+        <label for="mdr_parcelado">MDR no parcelado acima</label>
+        <div class="iunit"><input type="number" id="mdr_parcelado" step="0.01" min="0" max="30" value="1.50"><span>%</span></div>
+      </div>
+      <div class="field">
+        <label for="tarifa_fixa">Tarifa fixa por venda</label>
+        <div class="iunit"><span style="border-left:0;border-right:1px solid var(--linha)">R$</span><input type="number" id="tarifa_fixa" step="0.01" min="0" max="10" value="0.00"></div>
+      </div>
+      <div class="field">
+        <label for="liq_debito">Prazo até cair — débito</label>
+        <div class="iunit"><input type="number" id="liq_debito" step="1" min="0" max="90" value="1"><span>dias</span></div>
+      </div>
+      <div class="field">
+        <label for="liq_credito">Prazo até cair — crédito</label>
+        <div class="iunit"><input type="number" id="liq_credito" step="1" min="0" max="90" value="30"><span>dias</span></div>
+      </div>
+    </div>
+    <p class="nota">O prazo é a parte que quase ninguém vê: com a mesma taxa anunciada, quem
+       recebe em D+1 imobiliza bem menos capital de giro do que quem recebe em D+30.</p>
+  </div>
+
+  <div class="card">
+    <h3>Antecipação</h3>
+    <p class="hint">Pedir o dinheiro adiantado tem preço próprio, separado da MDR.</p>
+    <div class="toggle" id="tg_antecip">
+      <button data-v="1" class="on">Antecipa</button><button data-v="0">Não antecipa</button>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <label for="taxa_antecip" style="margin:0">Taxa de antecipação</label>
+    </div>
+    <div class="iunit"><input type="number" id="taxa_antecip" step="0.01" min="0" max="10" value="1.49"><span>% ao mês</span></div>
+    <p class="nota">Desligada, a conta usa como referência o CDI líquido de Imposto de Renda —
+       o que o dinheiro parado deixaria de render, não uma taxa de mercado.</p>
+  </div>
+
+</div>
+
+<!-- RESULTADOS -->
+<div class="resultados">
+  <div id="resumo-print"><b>Os números que você informou.</b> <span id="resumo-txt"></span></div>
+  <div class="kpis">
+    <div class="kpi dark"><div class="v" id="k1">—</div><div class="t">Custo da maquininha por ano</div></div>
+    <div class="kpi"><div class="v" id="k2">—</div><div class="t">Custo como % do faturamento</div></div>
+    <div class="kpi"><div class="v" id="k3">—</div><div class="t">Estoque de recebíveis parado</div></div>
+    <div class="kpi"><div class="v" id="k4">—</div><div class="t">Quanto a mais o cartão precisa faturar pra empatar com o Pix</div></div>
+  </div>
+
+  <div class="cta">
+    Este simulador entrega a régua, não o veredito. As três perguntas que respondem o seu caso
+    são o mix entre débito, à vista e parcelado, o prazo até o dinheiro cair e se vale
+    antecipar ou esperar. Quer as próximas análises assim que saírem?
+    <a href="#captura" id="ir-captura">Assine a newsletter</a>.
+  </div>
+
+  <p class="leg">Cmd+P (ou Ctrl+P) imprime esta página com os números que você ajustou acima.</p>
+</div>
+
+</div></div>
+
+<div class="faixa" style="padding-bottom:26px"><div class="bloco" id="captura">
+  <h2>Receba os próximos estudos assim que saírem</h2><div class="hr"></div>
+  <p class="sub">O estudo já está livre para baixar, logo ali em cima — PDF e CSV, sem
+  cadastro. Este e-mail é só para quem quer as próximas análises antes de qualquer outro
+  canal, duas vezes por semana.</p>
+  <iframe src="https://subscribe-forms.beehiiv.com/318f62e9-8672-4379-9b0f-81ee20053d79"
+          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+          frameborder="0" scrolling="no" title="Assinar a newsletter"></iframe>
+  <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  <p class="leg" style="margin-top:14px">
+    Já recebe a newsletter?
+    <a href="#achados" data-ja-assina>O estudo está aqui em cima, sem precisar assinar de novo.</a>
+  </p>
+</div></div>
+
+<footer>
+<b>Aviso importante.</b> Material informativo e educacional da Doctor Invest. Não constitui
+recomendação de produto financeiro, de pagamento ou de crédito, nem consultoria de valores
+mobiliários individualizada, nos termos da regulamentação da CVM. Os números vêm de fórmulas
+simples aplicadas às taxas que você digita — confira sempre com o seu adquirente antes de
+decidir. Quando a antecipação está desligada, o custo do prazo usa como referência o CDI
+líquido de Imposto de Renda, não uma taxa de mercado nem garantia de rendimento.
+<br><br>
+<b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · setembro de 2026 ·
+premissas: CDI 13,90% ao ano, IR de 22,5% no prazo curto, CDI líquido de 10,77% ao ano,
+retorno real de longo prazo de IPCA + 6%.
+</footer>
+
+<script id="motor">
+// Espelho em JavaScript de motor.py. Qualquer mudança aqui exige rodar
+// `node paridade.mjs` antes de publicar.
+(function () {
+  var CDI_ANO = 0.1390, IR_CURTO = 0.225;
+  var CDI_LIQ_ANO = CDI_ANO * (1 - IR_CURTO);
+  var CDI_LIQ_MES = Math.pow(1 + CDI_LIQ_ANO, 1 / 12) - 1;
+
+  function esperaMedia(parcelas, liquidacaoDias) {
+    return (parcelas - 1) / 2 + liquidacaoDias / 30;
+  }
+
+  function custoEfetivo(mdr, tarifaFixa, ticket, parcelas, liquidacaoDias, antecipMes) {
+    var custo = mdr + (ticket ? tarifaFixa / ticket : 0);
+    var meses = esperaMedia(parcelas, liquidacaoDias);
+    if (antecipMes === null || antecipMes === undefined) {
+      custo += 1 - Math.pow(1 + CDI_LIQ_MES, -meses);
+    } else {
+      custo += antecipMes * meses;
+    }
+    return custo;
+  }
+
+  function custoMix(e) {
+    var debito = 0;
+    if (e.debito && e.mdr_debito !== null && e.mdr_debito !== undefined) {
+      debito = e.debito * custoEfetivo(e.mdr_debito, e.tarifa_fixa, e.ticket, 1,
+                                       e.liquidacao_debito_dias, e.antecipacao_mes);
+    }
+    var avista = e.avista * custoEfetivo(e.mdr_avista, e.tarifa_fixa, e.ticket, 1,
+                                         e.liquidacao_credito_dias, e.antecipacao_mes);
+    var parcelado = e.parcelado * custoEfetivo(e.mdr_parcelado, e.tarifa_fixa, e.ticket,
+                                               e.parcelas, e.liquidacao_credito_dias,
+                                               e.antecipacao_mes);
+    return debito + avista + parcelado;
+  }
+
+  function custoAno(e) { return custoMix(e) * e.faturamento_mes * 12; }
+
+  function estoqueRecebiveis(e) {
+    // A liquidação vem da entrada, nunca fixa em 30: uma máquina que paga
+    // em D+1 imobiliza bem menos capital de giro. O débito é que fica em
+    // 1 dia, espelhando o default do Python.
+    var liq = e.liquidacao_credito_dias;
+    return e.faturamento_mes * (
+      e.debito * esperaMedia(1, 1)
+      + e.avista * esperaMedia(1, liq)
+      + e.parcelado * esperaMedia(e.parcelas, liq)
+    );
+  }
+
+  function breakevenPix(custoPct) { return 1 / (1 - custoPct) - 1; }
+
+  globalThis.MOTOR = {
+    CDI_LIQ_ANO: CDI_LIQ_ANO, CDI_LIQ_MES: CDI_LIQ_MES,
+    esperaMedia: esperaMedia, custoEfetivo: custoEfetivo, custoMix: custoMix,
+    custoAno: custoAno, estoqueRecebiveis: estoqueRecebiveis,
+    breakevenPix: breakevenPix
+  };
+})();
+</script>
+
+<script>
+// Camada de interface — lê os controles, monta a entrada e chama SEMPRE o
+// MOTOR acima. Nenhuma conta de negócio vive aqui: se um número precisa de
+// fórmula, a fórmula mora no motor, nunca neste bloco.
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var fBRL = function (v) { return "R$ " + Math.round(v).toLocaleString("pt-BR"); };
+  var fP = function (v, d) {
+    d = d === undefined ? 2 : d;
+    return (v * 100).toFixed(d).replace(".", ",") + "%";
+  };
+
+  var mix = { debito: 20, avista: 20, parcelado: 60 };
+  var antecipa = true;
+
+  // Redistribui os outros dois pesos proporcionalmente, sempre fechando 100.
+  function ajustarMix(alterado, valor) {
+    valor = Math.round(Math.max(0, Math.min(100, valor)));
+    var chaves = ["debito", "avista", "parcelado"];
+    var outros = chaves.filter(function (k) { return k !== alterado; });
+    var restante = 100 - valor;
+    var somaOutros = mix[outros[0]] + mix[outros[1]];
+    mix[alterado] = valor;
+    if (somaOutros <= 0) {
+      mix[outros[0]] = Math.round(restante / 2);
+      mix[outros[1]] = restante - mix[outros[0]];
+    } else {
+      mix[outros[0]] = Math.round(restante * mix[outros[0]] / somaOutros);
+      mix[outros[1]] = restante - mix[outros[0]];
+    }
+  }
+
+  function refletirMix() {
+    $("mx_debito").value = mix.debito;
+    $("mx_avista").value = mix.avista;
+    $("mx_parcelado").value = mix.parcelado;
+    $("o_mxd").textContent = mix.debito + "%";
+    $("o_mxa").textContent = mix.avista + "%";
+    $("o_mxp").textContent = mix.parcelado + "%";
+    document.querySelectorAll(".pbtn").forEach(function (b) {
+      var nivel = +b.dataset.nivel;
+      var alvo = (100 - nivel) / 2;
+      var bate = Math.abs(mix.parcelado - nivel) < 0.6 &&
+                 Math.abs(mix.debito - alvo) < 0.6 &&
+                 Math.abs(mix.avista - alvo) < 0.6;
+      b.classList.toggle("on", bate);
+    });
+  }
+
+  [["mx_debito", "debito"], ["mx_avista", "avista"], ["mx_parcelado", "parcelado"]]
+    .forEach(function (par) {
+      $(par[0]).addEventListener("input", function () {
+        ajustarMix(par[1], +$(par[0]).value);
+        refletirMix();
+        atualizar();
+      });
+    });
+
+  document.querySelectorAll(".pbtn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var nivel = +b.dataset.nivel;
+      var resto = (100 - nivel) / 2;
+      mix = { debito: resto, avista: resto, parcelado: nivel };
+      refletirMix();
+      atualizar();
+    });
+  });
+
+  $("faturamento").addEventListener("input", function () {
+    $("o_fat").textContent = fBRL(+$("faturamento").value);
+    atualizar();
+  });
+  $("ticket").addEventListener("input", function () {
+    $("o_tkt").textContent = fBRL(+$("ticket").value);
+    atualizar();
+  });
+  $("parcelas").addEventListener("input", function () {
+    $("o_parc").textContent = $("parcelas").value + "x";
+    atualizar();
+  });
+
+  ["mdr_debito", "mdr_avista", "mdr_parcelado", "tarifa_fixa", "liq_debito",
+   "liq_credito", "taxa_antecip"].forEach(function (id) {
+    $(id).addEventListener("input", atualizar);
+  });
+
+  document.querySelectorAll("#tg_antecip button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      antecipa = b.dataset.v === "1";
+      document.querySelectorAll("#tg_antecip button").forEach(function (x) {
+        x.classList.toggle("on", x === b);
+      });
+      $("taxa_antecip").disabled = !antecipa;
+      atualizar();
+    });
+  });
+
+  function coletarEntrada() {
+    return {
+      mdr_avista: +$("mdr_avista").value / 100,
+      mdr_parcelado: +$("mdr_parcelado").value / 100,
+      mdr_debito: +$("mdr_debito").value / 100,
+      tarifa_fixa: +$("tarifa_fixa").value,
+      liquidacao_debito_dias: +$("liq_debito").value,
+      liquidacao_credito_dias: +$("liq_credito").value,
+      antecipacao_mes: antecipa ? (+$("taxa_antecip").value / 100) : null,
+      ticket: +$("ticket").value,
+      debito: mix.debito / 100,
+      avista: mix.avista / 100,
+      parcelado: mix.parcelado / 100,
+      parcelas: +$("parcelas").value,
+      faturamento_mes: +$("faturamento").value,
+    };
+  }
+
+  function atualizar() {
+    var e = coletarEntrada();
+    var custoPct = MOTOR.custoMix(e);
+    var custoAno = MOTOR.custoAno(e);
+    var estoque = MOTOR.estoqueRecebiveis(e);
+    var pixExtra = MOTOR.breakevenPix(custoPct);
+
+    $("k1").textContent = fBRL(custoAno);
+    $("k2").textContent = fP(custoPct);
+    $("k3").textContent = fBRL(estoque);
+    $("k4").textContent = fP(pixExtra);
+  }
+
+  refletirMix();
+  atualizar();
+})();
+</script>
+
+<script>
+// Beacon de funil + captura + impressão. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna. Sem isto o evento de conversao nasce sem fonte e todo
+// lead parece trafego direto. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  var payload=JSON.stringify({
+    event:nome, page:"maquininha",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+// "simulou" dispara uma vez, na primeira mexida em qualquer controle da calculadora —
+// slider, preset, número digitado ou o toggle de antecipação.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou) return;
+  if(!e.target.closest(".controles input,.pbtn,.toggle")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+
+document.getElementById("dl").addEventListener("click",function(){ev("download");});
+document.getElementById("dl-csv").addEventListener("click",function(){ev("download");});
+document.getElementById("ir-captura").addEventListener("click",function(){ev("form_scroll");});
+// Saida para quem ja assina: o beehiiv nao redireciona assinante existente (submit vira
+// no-op), e o material aqui ja e livre — o link so aponta pro que ja esta na pagina.
+// Evento proprio pra nao inflar a contagem de captacao.
+document.querySelectorAll("[data-ja-assina]").forEach(function(a){
+  a.addEventListener("click",function(){ev("ja_assinante");});
+});
+
+// Resumo impresso: le o que ja esta renderizado na tela, sem tocar no motor/interface acima.
+function resumoImpressao(){
+  var $=function(id){return document.getElementById(id);};
+  var on=document.querySelector("#tg_antecip button.on");
+  var antecipa=on && on.dataset.v==="1";
+  return [
+    $("o_fat").textContent+" por mês no cartão · ticket médio "+$("o_tkt").textContent,
+    "Mix: "+$("o_mxd").textContent+" débito · "+$("o_mxa").textContent+" à vista · "+
+      $("o_mxp").textContent+" parcelado em "+$("o_parc").textContent,
+    "MDR: "+$("mdr_debito").value+"% débito · "+$("mdr_avista").value+"% à vista · "+
+      $("mdr_parcelado").value+"% parcelado · tarifa fixa R$ "+$("tarifa_fixa").value,
+    "Prazo até cair: "+$("liq_debito").value+"d débito · "+$("liq_credito").value+"d crédito",
+    antecipa ? "Antecipa a "+$("taxa_antecip").value+"% ao mês" : "Não antecipa — referência é o CDI líquido",
+    "Custo anual: "+$("k1").textContent+" ("+$("k2").textContent+" do faturamento)",
+    "Estoque de recebíveis: "+$("k3").textContent+" · empata com o Pix a "+$("k4").textContent+" a mais"
+  ].join(" — ");
+}
+addEventListener("beforeprint",function(){
+  document.getElementById("resumo-txt").textContent=resumoImpressao();
+});
+</script>
+</body>
+</html>
