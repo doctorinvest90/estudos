@@ -6,7 +6,8 @@ import { readFileSync, readdirSync } from "node:fs";
 import assert from "node:assert/strict";
 
 const PAGES = ["alocacao/index.html", "consorcio/index.html", "consorcio/cota.html",
-               "consorcio/simulador.html", "antecipacao/index.html", "maquininha/index.html"];
+               "consorcio/simulador.html", "antecipacao/index.html", "maquininha/index.html",
+               "maquininha/obrigado.html"];
 
 function loadHelper(html, search, store) {
   const src = readFileSync(new URL(`../${html}`, import.meta.url), "utf8");
