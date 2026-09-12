@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Como eu começaria do zero hoje — simulador · Doctor Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--cinza:#8A94A6;--cinza2:#5A6478;--verde:#4F7A5B;--verm:#A8443C;--linha:#E8E4DA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:#22303F;font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:14px;line-height:1.5}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;color:var(--azul);margin:0;font-weight:600}
+header{background:var(--azul);color:var(--marfim);padding:22px 20px 18px}
+header .marca{font-size:10px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{color:var(--marfim);font-size:28px;line-height:1.1;margin-top:8px}
+header p{color:#AFBACB;margin:8px 0 0;max-width:720px;font-size:13px}
+.wrap{display:grid;grid-template-columns:340px 1fr;gap:18px;padding:18px;max-width:1240px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:1fr;padding:12px}}
+.painel{background:#fff;border:1px solid var(--linha);padding:16px}
+.painel h2{font-size:19px;margin-bottom:6px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.presets button{border:1px solid var(--conf);background:#fff;color:var(--conf);padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+.presets button.on{background:var(--conf);color:#fff}
+fieldset{border:0;padding:0;margin:0 0 12px}
+legend{font-size:10px;letter-spacing:.2em;color:#8A7330;font-weight:700;margin-bottom:6px}
+.campo{display:grid;grid-template-columns:1fr 92px;gap:8px;align-items:center;margin-bottom:6px}
+.campo label{font-size:12.5px;color:var(--cinza2)}
+.campo input,.campo select{width:100%;padding:6px 8px;border:1px solid #D8D3C6;font-family:inherit;font-size:13px;text-align:right;background:#FAF8F3}
+.fase{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
+.fase div{font-size:11px;color:var(--cinza2)}
+.fase input{width:100%;padding:5px 6px;border:1px solid #D8D3C6;font-family:inherit;font-size:13px;text-align:center;background:#FAF8F3}
+.fase .t{grid-column:1/-1;font-size:12px;color:var(--azul);font-weight:500;margin-top:4px}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+@media(max-width:560px){.nums{grid-template-columns:1fr}}
+.num{border-top:2px solid var(--ouro);padding-top:8px}
+.num .v{font-family:"Cormorant Garamond",Georgia,serif;font-size:30px;font-weight:700;color:var(--azul);line-height:1.05}
+.num .t{font-size:11.5px;color:#6B7480;margin-top:4px}
+.sec{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}
+@media(max-width:560px){.sec{grid-template-columns:repeat(2,1fr)}}
+.sec div{background:#FAF8F3;padding:8px 10px;font-size:12px;color:var(--cinza2)}
+.sec b{display:block;color:var(--azul);font-size:15px;font-weight:700}
+canvas{width:100%;height:auto;display:block;border:1px solid var(--linha);background:#fff}
+.cap{font-size:11px;color:#8A909B;margin:6px 0 14px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:7px 6px;text-align:right;font-size:10.5px;letter-spacing:.04em}
+th:first-child,td:first-child{text-align:left}
+td{padding:6px;text-align:right;border-bottom:1px solid var(--linha)}
+tr.fim td{background:#FAF8F3;font-weight:700}
+.destaque{background:var(--azul);color:#E4E0D6;padding:14px 16px;margin:0 0 14px;font-size:13px}
+.destaque .rot{font-size:10px;letter-spacing:.22em;color:var(--ouro);font-weight:700;margin-bottom:6px}
+.disc{font-size:10.5px;color:#6B7480;padding:14px 18px 26px;max-width:1240px;margin:0 auto;line-height:1.5}
+.aviso{font-size:11px;color:#8A7330;background:#FAF8F3;border-left:3px solid var(--ouro);padding:8px 10px;margin-top:8px}
+/* ---- página do estudo: achados + muro por e-mail (acréscimos; motor e interface acima intocados) ---- */
+.faixa{max-width:1240px;margin:0 auto;padding:18px 18px 0}
+.bloco{background:#fff;border:1px solid var(--linha);padding:18px 20px 20px}
+.bloco h2{font-size:21px;margin-bottom:4px}
+.hr{height:2px;width:34px;background:var(--ouro);margin:0 0 14px}
+.intro{font-size:13.5px;color:#4A5563;margin:0 0 14px;max-width:880px}
+#achados ol{padding-left:18px;margin:0;font-size:13.5px;line-height:1.7;max-width:980px}
+#achados li{margin-bottom:8px}
+#achados .destaque{margin:14px 0 0}
+.ir{margin:14px 0 0;font-size:13.5px}
+.ir a,#receber .nota a{color:var(--conf);font-weight:700}
+#receber{max-width:1240px;margin:0 auto;padding:0 18px 8px}
+#receber .bloco{border-top:3px solid var(--ouro)}
+#receber .sub{font-size:13.5px;color:#4A5563;margin:0 0 12px;max-width:760px}
+#receber iframe{width:100%;max-width:560px;border:0;display:block}
+#receber .nota{font-size:12px;color:#6B7480;margin:12px 0 0}
+@media(max-width:900px){.faixa{padding:12px 12px 0}#receber{padding:0 12px 8px}}
+/* grid 1fr não encolhe abaixo do min-content da tabela anual (8 colunas): no celular a página rolava de lado */
+.wrap>.painel{min-width:0}
+#tab{display:block;overflow-x:auto}
+@media print{#receber,.ir{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="marca">DOCTOR INVEST · SIMULADOR</div>
+  <h1>Como eu começaria do zero hoje</h1>
+  <p>Coloque os seus valores de plantão, a sua escala e o seu custo de vida. Tudo em reais de hoje, retorno real líquido, passo mensal — o mesmo motor do estudo. Em que ano a carteira passa a pagar a sua vida?</p>
+</header>
+
+<div class="faixa"><div class="bloco" id="achados">
+  <h2>O que o estudo achou</h2><div class="hr"></div>
+  <p class="intro">Em 8 de setembro de 2026 recebi por WhatsApp uma proposta de plantão de anestesia num
+  hospital privado de São Paulo: R$ 2.100 o diurno de semana, R$ 2.500 o diurno de fim de semana,
+  R$ 2.600 o noturno. A pergunta do estudo: se eu tivesse trinta anos, a residência recém-terminada e
+  patrimônio zero, o que essa proposta construiria em vinte anos, e em que ano eu poderia parar de
+  contar plantão? Tudo em reais de hoje, a IPCA + 6% ao ano líquido.</p>
+  <ol>
+    <li><b>A escala rende R$ 43.700 por mês, líquidos. Com custo de vida de R$ 23.700, sobram
+    R$ 20.000: 46% da renda.</b> Esse percentual, não o salário, é o número que decide o resultado.</li>
+    <li><b>Ao fim de vinte anos a carteira tem R$ 6,78 mi em reais de hoje.</b> O médico depositou
+    R$ 3,03 mi; o juro real pôs R$ 3,75 mi. Mais da metade do patrimônio não saiu de plantão nenhum.</li>
+    <li><b>Os três diurnos de semana pagam exatamente a vida. O patrimônio inteiro vem do noturno e do
+    fim de semana</b>, os dois plantões que ninguém quer. O noturno por dez anos vira R$ 2,9 mi; o fim
+    de semana por quinze anos vira R$ 3,7 mi.</li>
+    <li><b>A independência chega aos 14 anos e 3 meses, não aos vinte.</b> Com R$ 4,74 mi, a renda real
+    da carteira a IPCA + 6% iguala o custo de vida. Daí em diante, cada plantão é escolha.</li>
+    <li><b>Pela regra dos 4%, a mesma independência exige R$ 7,11 mi, e só chega aos 20 anos e 10
+    meses.</b> A taxa de retirada é a segunda variável escondida do estudo, e a menos discutida.</li>
+    <li><b>A conclusão mais frágil não é a taxa de retorno. É a premissa de que o valor do plantão
+    acompanha a inflação.</b> Com reajuste de metade do IPCA, o patrimônio final cai para R$ 4,30 mi e
+    a independência não chega em vinte anos.</li>
+  </ol>
+  <div class="destaque"><div class="rot">O ACHADO QUE SOBREVIVE A TODAS AS OBJEÇÕES</div>
+  A data muda com o retorno, com a inflação e com a vida. A estrutura não: numa escala de plantões, os
+  turnos que pagam o custo de vida não constroem nada. O patrimônio é feito pelos turnos a mais, e pelo
+  tempo que eles ficam investidos antes de serem abandonados.</div>
+  <p class="ir"><a href="#receber" id="ir-receber">Receber o estudo completo (PDF, 13 páginas)</a>
+  · a base de renda é uma única proposta, não média de mercado: troque pelos seus valores no simulador abaixo.</p>
+</div></div>
+
+<div class="wrap">
+  <div class="painel">
+    <h2>Premissas</h2>
+    <div class="presets" id="presets">
+      <button data-p="plano" class="on">O plano (5 → 4 → 3)</button>
+      <button data-p="tudo">Cinco até o fim</button>
+      <button data-p="quatro">Quatro (sem noturno)</button>
+      <button data-p="tres">Só os três diurnos</button>
+    </div>
+    <fieldset><legend>VALOR DO PLANTÃO (12 H), EM R$</legend>
+      <div class="campo"><label>Diurno de semana</label><input id="vd" type="number" step="50" value="2100"></div>
+      <div class="campo"><label>Noturno</label><input id="vn" type="number" step="50" value="2600"></div>
+      <div class="campo"><label>Diurno de fim de semana</label><input id="vf" type="number" step="50" value="2500"></div>
+      <div class="campo"><label>Semanas trabalhadas por ano</label><input id="sem" type="number" min="30" max="52" value="46"></div>
+    </fieldset>
+    <fieldset><legend>ESCALA POR FASE (PLANTÕES POR SEMANA)</legend>
+      <div class="fase"><div>anos</div><div>diurnos</div><div>noturnos</div><div>fim de sem.</div>
+        <div class="t">Fase 1</div>
+        <input id="a1" type="number" min="0" max="40" value="10"><input id="d1" type="number" min="0" max="7" value="3"><input id="n1" type="number" min="0" max="7" value="1"><input id="f1" type="number" min="0" max="2" value="1">
+        <div class="t">Fase 2</div>
+        <input id="a2" type="number" min="0" max="40" value="5"><input id="d2" type="number" min="0" max="7" value="3"><input id="n2" type="number" min="0" max="7" value="0"><input id="f2" type="number" min="0" max="2" value="1">
+        <div class="t">Fase 3</div>
+        <input id="a3" type="number" min="0" max="40" value="5"><input id="d3" type="number" min="0" max="7" value="3"><input id="n3" type="number" min="0" max="7" value="0"><input id="f3" type="number" min="0" max="2" value="0">
+      </div>
+    </fieldset>
+    <fieldset><legend>VIDA E CARTEIRA</legend>
+      <div class="campo"><label>Custo de vida mensal (R$ de hoje)</label><input id="custo" type="number" step="100" value="23700"></div>
+      <div class="campo"><label>Retorno real líquido (% a.a. acima do IPCA)</label><input id="r" type="number" step="0.5" min="0" max="15" value="6"></div>
+      <div class="campo"><label>Taxa de retirada na independência</label><select id="ret"><option value="0.06">6% (todo o retorno real)</option><option value="0.05">5%</option><option value="0.04">4% (regra dos 4%)</option></select></div>
+      <div class="campo"><label>Reajuste real do plantão (% a.a.; 0 = acompanha o IPCA)</label><input id="drift" type="number" step="0.5" min="-10" max="5" value="0"></div>
+      <div class="campo"><label>Limitar o reajuste aos primeiros N anos (0 = sempre)</label><input id="driftanos" type="number" min="0" max="40" value="0"></div>
+    </fieldset>
+    <div class="aviso">Os valores de plantão pré-carregados vêm de uma única proposta privada recebida em São Paulo em setembro de 2026. Não são média de mercado. Substitua pelos seus.</div>
+  </div>
+
+  <div class="painel">
+    <h2 id="titulo">Resultado</h2>
+    <div class="nums">
+      <div class="num"><div class="v" id="kP">—</div><div class="t" id="kPt">patrimônio real ao fim do horizonte</div></div>
+      <div class="num"><div class="v" id="kInd">—</div><div class="t" id="kIndt">até a renda da carteira igualar o custo de vida</div></div>
+      <div class="num"><div class="v" id="kRenda">—</div><div class="t" id="kRendat">renda mensal da carteira ao fim, na taxa escolhida</div></div>
+    </div>
+    <div class="sec">
+      <div>Aportado<b id="sAp">—</b></div>
+      <div>Juro real<b id="sJu">—</b></div>
+      <div>Poupa na fase 1<b id="sPoup">—</b></div>
+      <div>Patrimônio necessário<b id="sNec">—</b></div>
+    </div>
+    <canvas id="g" width="960" height="460"></canvas>
+    <p class="cap" id="cap">Patrimônio real ao longo do horizonte. Linha tracejada: patrimônio em que a renda da carteira, na taxa escolhida, iguala o custo de vida.</p>
+    <div class="destaque"><div class="rot">EM QUE MÊS A CARTEIRA PASSA A PAGAR…</div><div id="marcos">—</div></div>
+    <table id="tab"></table>
+  </div>
+</div>
+
+<div id="receber"><div class="bloco">
+  <h2>Receber o estudo completo</h2><div class="hr"></div>
+  <p class="sub">Treze páginas com as premissas abertas, os quatro ritmos de saída comparados, as duas
+  premissas que derrubam a data (retorno e reajuste do plantão) e a seção sobre onde o próprio estudo
+  pode estar errado. Deixe o e-mail e o estudo abre na sequência. Você passa a receber também as
+  análises que escrevo duas vezes por semana para médicos.</p>
+  <!-- Formulário beehiiv próprio deste estudo. Redirect de sucesso → /do-zero/obrigado.html
+       com remove_email_from_redirect_url = true (e-mail na URL vaza pro histórico e Referer).
+       Altura 130, não 70: o beehiiv usa o mesmo espaço pra responder ("já é assinante").
+       FORM_ID_PENDENTE: a página NÃO sobe com este placeholder. -->
+  <iframe src="https://subscribe-forms.beehiiv.com/FORM_ID_PENDENTE"
+          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+          frameborder="0" scrolling="no" title="Receber o estudo por e-mail"></iframe>
+  <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  <!-- Saída para quem JÁ assina: o beehiiv não redireciona assinante existente. -->
+  <p class="nota">Já recebe a newsletter?
+  <a href="obrigado.html?ja=1" data-ja-assina>O estudo está aqui, sem precisar preencher de novo.</a></p>
+  <p class="nota">Sem custo. Um e-mail por edição, duas vezes por semana, e o descadastro fica em todo rodapé.</p>
+</div></div>
+
+<div class="disc"><b>Aviso importante.</b> Este simulador tem caráter exclusivamente informativo e educacional e não constitui recomendação de investimento nem consultoria individualizada, nos termos da regulamentação da CVM. Os resultados são projeções baseadas nas premissas informadas pelo usuário — em especial retorno real, custo de vida constante e correção do plantão pela inflação — e não refletem o desempenho de nenhum produto disponível ao público. Rentabilidade passada não garante rentabilidade futura. Investimentos envolvem risco de perda, inclusive do capital principal. <b>Doctor Invest</b> · Gestão de investimentos e consultoria financeira para médicos · Hélio Cardoso de Barros, CGA · Setembro de 2026.</div>
+
+<script>
+/* ===== MOTOR (paridade validada com motor.py) ===== */
+function simular(p){
+  var i = Math.pow(1+p.r, 1/12) - 1;
+  var P = 0, mes = 0, out = [], marcos = [], aportado = 0, juros = 0;
+  for (var k = 0; k < p.fases.length; k++){
+    var f = p.fases[k], n = Math.round(f.anos*12);
+    var semanal = f.d*p.vd + f.n*p.vn + f.f*p.vf;
+    for (var j = 0; j < n; j++){
+      mes++;
+      var ano = Math.floor((mes-1)/12) + 1;
+      var e = ano - 1; if (p.driftAnos > 0) e = Math.min(e, p.driftAnos);
+      var fator = p.drift === 0 ? 1 : Math.pow(1+p.drift, e);
+      var renda = semanal * p.sem / 12 * fator;
+      var aporte = renda - p.custo;
+      var ju = P * i;
+      P = P + ju + aporte;
+      aportado += Math.max(aporte, 0); juros += ju;
+      out.push({mes:mes, ano:ano, fase:k+1, plantoes:f.d+f.n+f.f, renda:renda, aporte:aporte, juros:ju, P:P});
+    }
+    marcos.push(P);
+  }
+  return {linhas:out, marcos:marcos, P:P, aportado:aportado, juros:juros};
+}
+function mesCobre(sim, valor, taxa){ for (var k=0;k<sim.linhas.length;k++){ if (sim.linhas[k].P*taxa/12 >= valor) return sim.linhas[k].mes; } return null; }
+
+/* ===== UI ===== */
+var $ = function(id){ return document.getElementById(id); };
+var ids = ["vd","vn","vf","sem","a1","d1","n1","f1","a2","d2","n2","f2","a3","d3","n3","f3","custo","r","ret","drift","driftanos"];
+var PRESETS = {
+  plano:  {a1:10,d1:3,n1:1,f1:1, a2:5,d2:3,n2:0,f2:1, a3:5,d3:3,n3:0,f3:0},
+  tudo:   {a1:20,d1:3,n1:1,f1:1, a2:0,d2:3,n2:1,f2:1, a3:0,d3:3,n3:1,f3:1},
+  quatro: {a1:20,d1:3,n1:0,f1:1, a2:0,d2:3,n2:0,f2:1, a3:0,d3:3,n3:0,f3:1},
+  tres:   {a1:20,d1:3,n1:0,f1:0, a2:0,d2:3,n2:0,f2:0, a3:0,d3:3,n3:0,f3:0}
+};
+var fmtBRL = new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",maximumFractionDigits:0});
+function mi(v){ return "R$ " + (v/1e6).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2}) + " mi"; }
+function anosTxt(m){ if (m===null) return "não chega"; var y=Math.floor(m/12), r=m%12; return y+" a"+(r?" "+r+" m":""); }
+function ler(){
+  var v = function(id){ return parseFloat($(id).value) || 0; };
+  return {vd:v("vd"), vn:v("vn"), vf:v("vf"), sem:v("sem"), custo:v("custo"), r:v("r")/100, ret:parseFloat($("ret").value),
+          drift:v("drift")/100, driftAnos:v("driftanos"),
+          fases:[{anos:v("a1"),d:v("d1"),n:v("n1"),f:v("f1")},{anos:v("a2"),d:v("d2"),n:v("n2"),f:v("f2")},{anos:v("a3"),d:v("d3"),n:v("n3"),f:v("f3")}]};
+}
+function render(){
+  var p = ler(); var s = simular(p); var H = s.linhas.length/12;
+  if (!s.linhas.length){ return; }
+  var necessario = p.custo*12/p.ret;
+  var mInd = mesCobre(s, p.custo, p.ret);
+  var renda1 = (p.fases[0].d*p.vd + p.fases[0].n*p.vn + p.fases[0].f*p.vf)*p.sem/12;
+  $("kP").textContent = mi(s.P); $("kPt").textContent = "patrimônio real ao fim de "+H.toLocaleString("pt-BR")+" anos, em reais de hoje";
+  $("kInd").textContent = anosTxt(mInd); $("kIndt").textContent = "até a renda da carteira ("+Math.round(p.ret*100)+"%) igualar o custo de vida de "+fmtBRL.format(p.custo);
+  $("kRenda").textContent = fmtBRL.format(s.P*p.ret/12); $("kRendat").textContent = "renda mensal da carteira ao fim, a "+Math.round(p.ret*100)+"% do patrimônio";
+  $("sAp").textContent = mi(s.aportado); $("sJu").textContent = mi(s.juros);
+  $("sPoup").textContent = renda1>0 ? Math.round((renda1-p.custo)/renda1*100)+"%" : "—";
+  $("sNec").textContent = mi(necessario);
+  // marcos
+  var vd = p.vd*p.sem/12, vn = p.vn*p.sem/12, vf = p.vf*p.sem/12;
+  var itens = [["um diurno de semana", vd],["o noturno", vn],["o noturno e o fim de semana", vn+vf],["o custo de vida", p.custo],["a renda da fase 1", renda1]];
+  $("marcos").innerHTML = itens.map(function(it){ var m = mesCobre(s, it[1], p.ret); return "<div>… "+it[0]+" ("+fmtBRL.format(it[1])+"/mês): <b style='color:#fff'>"+(m===null?"não chega em "+H+" anos":"mês "+m+" · "+anosTxt(m))+"</b></div>"; }).join("");
+  desenhar(s, p, necessario, mInd);
+  // tabela anual
+  var html = "<tr><th>Ano</th><th>Plantões</th><th>Renda/mês</th><th>Aporte/mês</th><th>Aportado no ano</th><th>Juro real no ano</th><th>Patrimônio</th><th>Renda carteira/mês</th></tr>";
+  for (var a=1; a<=Math.ceil(H); a++){
+    var ls = s.linhas.filter(function(l){ return l.ano===a; }); if (!ls.length) continue;
+    var ap=0, ju=0; ls.forEach(function(l){ ap+=l.aporte; ju+=l.juros; });
+    var last = ls[ls.length-1], fim = (a===H || s.marcos.indexOf(last.P)>=0);
+    html += "<tr"+(fim?" class='fim'":"")+"><td>"+a+"</td><td>"+ls[0].plantoes+"</td><td>"+fmtBRL.format(ls[0].renda)+"</td><td>"+fmtBRL.format(ls[0].aporte)+"</td><td>"+fmtBRL.format(ap)+"</td><td>"+fmtBRL.format(ju)+"</td><td>"+fmtBRL.format(last.P)+"</td><td>"+fmtBRL.format(last.P*p.ret/12)+"</td></tr>";
+  }
+  $("tab").innerHTML = html;
+}
+function desenhar(s, p, nec, mInd){
+  var c = $("g"), ctx = c.getContext("2d"), W = c.width, Hh = c.height, L=88, R=24, T=28, B=44;
+  ctx.clearRect(0,0,W,Hh); ctx.fillStyle="#fff"; ctx.fillRect(0,0,W,Hh);
+  var n = s.linhas.length, ymax = Math.max(nec*1.15, s.P*1.12, 1e5), ymin = Math.min(0, s.P);
+  s.linhas.forEach(function(l){ if (l.P<ymin) ymin=l.P; });
+  var X = function(m){ return L + (W-L-R)*m/n; }, Y = function(v){ return T + (Hh-T-B)*(1-(v-ymin)/(ymax-ymin)); };
+  // fases
+  var cores=["#EEF2F6","#F6F3EA","#FBF6EA"], m0=0;
+  s.marcos.forEach(function(_,k){ var mf = m0 + Math.round(p.fases[k].anos*12); ctx.fillStyle=cores[k]; ctx.fillRect(X(m0),T,X(mf)-X(m0),Hh-T-B); m0=mf; });
+  // grid
+  ctx.strokeStyle="#E8E4DA"; ctx.lineWidth=1; ctx.fillStyle="#5A6478"; ctx.font="12px DM Sans, sans-serif"; ctx.textAlign="right";
+  var passo = Math.pow(10, Math.floor(Math.log10(ymax-ymin))); if ((ymax-ymin)/passo<3) passo/=2; if ((ymax-ymin)/passo>8) passo*=2;
+  for (var v=Math.ceil(ymin/passo)*passo; v<=ymax; v+=passo){ ctx.beginPath(); ctx.moveTo(L,Y(v)); ctx.lineTo(W-R,Y(v)); ctx.stroke(); ctx.fillText((v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mi", L-8, Y(v)+4); }
+  ctx.textAlign="center"; for (var a=0; a<=n/12; a+=(n/12>24?5:2)){ ctx.fillText(a, X(a*12), Hh-B+18); }
+  ctx.fillText("anos desde o início", (L+W-R)/2, Hh-8);
+  // linha da independência
+  if (nec<ymax){ ctx.setLineDash([6,5]); ctx.strokeStyle="#C9A84C"; ctx.beginPath(); ctx.moveTo(L,Y(nec)); ctx.lineTo(W-R,Y(nec)); ctx.stroke(); ctx.setLineDash([]); ctx.textAlign="left"; ctx.fillStyle="#8A7330"; ctx.fillText("independência a "+Math.round(p.ret*100)+"%: "+mi(nec), L+8, Y(nec)-6); }
+  // curva
+  ctx.strokeStyle="#1B3A5C"; ctx.lineWidth=2.6; ctx.beginPath(); ctx.moveTo(X(0),Y(0));
+  s.linhas.forEach(function(l){ ctx.lineTo(X(l.mes),Y(l.P)); }); ctx.stroke();
+  // marcos
+  ctx.fillStyle="#C9A84C"; var mm=0; ctx.font="bold 12.5px DM Sans, sans-serif"; ctx.textAlign="right";
+  s.marcos.forEach(function(v,k){ mm += Math.round(p.fases[k].anos*12); if (!p.fases[k].anos) return; ctx.beginPath(); ctx.arc(X(mm),Y(v),5,0,7); ctx.fill(); ctx.fillStyle="#0D1B2A"; ctx.fillText(mi(v), X(mm)-6, Y(v)-10); ctx.fillStyle="#C9A84C"; });
+  if (mInd){ var l = s.linhas[mInd-1]; ctx.fillStyle="#4F7A5B"; ctx.beginPath(); ctx.arc(X(mInd),Y(l.P),6,0,7); ctx.fill(); ctx.textAlign="left"; ctx.fillText(anosTxt(mInd)+": independência", X(mInd)+9, Y(l.P)+16); }
+  ctx.strokeStyle="#D8D3C6"; ctx.lineWidth=1; ctx.strokeRect(L,T,W-L-R,Hh-T-B);
+}
+function preset(nome){
+  var p = PRESETS[nome]; for (var k in p) $(k).value = p[k];
+  document.querySelectorAll("#presets button").forEach(function(b){ b.classList.toggle("on", b.dataset.p===nome); });
+  render();
+}
+document.querySelectorAll("#presets button").forEach(function(b){ b.addEventListener("click", function(){ preset(b.dataset.p); }); });
+ids.forEach(function(id){ $(id).addEventListener("input", function(){ document.querySelectorAll("#presets button").forEach(function(b){ b.classList.remove("on"); }); render(); }); $(id).addEventListener("change", render); });
+render();
+</script>
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var live=/drheliobarros\.com\.br$/.test(location.hostname); // preview local não polui o funil
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e ao redirect do beehiiv. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  if(!live) return;
+  var payload=JSON.stringify({
+    event:nome, page:"do-zero",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+// "simulou" dispara uma vez, na primeira mexida em qualquer controle do simulador.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou||!e.target.closest||!e.target.closest(".painel input,.painel select,#presets button")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+document.getElementById("ir-receber").addEventListener("click",function(){ev("form_scroll");});
+// O ja_assinante é contado aqui; obrigado.html?ja=1 não conta lead de novo.
+document.querySelectorAll("[data-ja-assina]").forEach(function(a){
+  a.addEventListener("click",function(){ev("ja_assinante");});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seu estudo está pronto | Doctor Invest</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--azul:#0D1B2A;--conf:#1B3A5C;--ouro:#C9A84C;--marfim:#F7F5F0;--dark:#060c14}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;font-weight:400;color:var(--azul);background:var(--marfim);font-size:16px;line-height:1.6}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:600;line-height:1.15}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px}
+  .label{font-size:12px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--ouro)}
+  .btn{display:inline-block;background:var(--ouro);color:var(--azul);font-weight:500;font-size:16px;letter-spacing:.5px;padding:16px 38px;border-radius:6px;text-decoration:none;box-shadow:0 6px 24px rgba(201,168,76,.35);transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.linha{background:transparent;color:var(--azul);border:1px solid var(--conf);box-shadow:none;font-size:15px;padding:14px 30px}
+
+  .hero{background:linear-gradient(165deg,#152538 0%,var(--azul) 45%,var(--dark) 100%);color:var(--marfim);padding:56px 0 60px;text-align:center}
+  .hero h1{font-size:clamp(30px,4.4vw,44px);font-weight:700;margin:14px 0 14px}
+  .hero p{color:rgba(247,245,240,.82);max-width:32em;margin:0 auto 30px}
+  .hero .sub{display:block;font-size:12.5px;color:rgba(247,245,240,.55);margin-top:12px}
+  .hero .extra{display:block;font-size:13px;color:rgba(247,245,240,.75);margin-top:16px}
+  .hero .extra a{color:inherit}
+
+  section.bloco{padding:52px 0}
+  .aviso{background:#fff;border:1px solid #E4DFD3;border-left:3px solid var(--ouro);border-radius:0 6px 6px 0;padding:20px 24px;margin-top:-26px}
+  .aviso strong{font-weight:500}
+
+  footer{background:var(--dark);color:rgba(247,245,240,.5);font-size:13px;text-align:center;padding:30px 22px;line-height:1.65}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="label">Doctor Invest · Estudo quantitativo</div>
+    <h1>Está pronto.</h1>
+    <p>Uma proposta real de plantão em São Paulo, cinco turnos por semana e vinte anos de conta. Treze páginas, a série completa e a seção que mostra onde este estudo pode estar errado.</p>
+    <a class="btn" href="estudo.pdf" download data-baixar>Baixar o estudo em PDF</a>
+    <span class="sub">Abre no navegador ou salva no seu aparelho.</span>
+    <span class="extra"><a href="base-de-dados.csv" download data-baixar>Baixar também a série mês a mês (CSV) →</a></span>
+  </div>
+</section>
+
+<section class="bloco" id="confirmar">
+  <div class="wrap">
+    <div class="aviso">
+      <strong>Confirme o e-mail para receber as próximas.</strong> Enviei uma mensagem de confirmação agora. Sem esse clique, o estudo já é seu, mas as análises das próximas semanas não chegam.
+    </div>
+  </div>
+</section>
+
+<section class="bloco" style="padding-top:0">
+  <div class="wrap">
+    <div class="aviso" style="border-left-color:var(--conf);margin-top:0">
+      <strong>Tem um simulador junto.</strong> O estudo usa uma única proposta: R$ 2.100 o diurno de semana, R$ 2.600 o noturno, R$ 2.500 o fim de semana e custo de vida de R$ 23.700. No simulador você troca pelos seus valores, pela sua escala e pelo seu custo de vida, e vê em que mês a carteira passa a pagar a sua vida.
+      <div style="margin-top:16px"><a class="btn linha" href="index.html">Abrir o simulador</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Doctor Invest · Hélio Cardoso de Barros, CEO e especialista de investimentos CGA.<br>
+  Material com finalidade exclusivamente educacional e informativa. Não constitui recomendação, oferta ou solicitação de compra ou venda de qualquer ativo, nem consultoria ou análise de valores mobiliários nos termos da regulamentação da CVM. As projeções são ilustrativas, construídas sobre premissas explicitadas no documento, e não representam promessa ou garantia de rentabilidade futura.<br>
+  estudos.drheliobarros.com.br/do-zero
+</footer>
+
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var live=/drheliobarros\.com\.br$/.test(location.hostname); // preview local não polui o funil
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive ao redirect do beehiiv: obrigado.html chega sem query string, e sem
+// isto o evento de conversao nasce sem fonte e todo lead parece trafego direto.
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  if(!live) return;
+  var payload=JSON.stringify({
+    event:nome, page:"do-zero",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+// ?ja=1 = chegou pela saída de quem já assina (o ja_assinante já foi contado na página
+// anterior). Sem esta guarda o assinante antigo vira "lead" e infla a captação.
+if(qs.has("ja")){ document.getElementById("confirmar").hidden=true; }
+else { ev("lead"); }
+document.querySelectorAll("[data-baixar]").forEach(function(a){
+  a.addEventListener("click",function(){ev("download");});
+});
+</script>
+</body>
+</html>
