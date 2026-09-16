@@ -167,7 +167,7 @@ footer b{color:var(--azul)}
   </div>
 
   <h2 style="margin-bottom:4px">Faça a conta com os seus números</h2>
-  <p class="sub">Duas ferramentas, para os dois momentos da decisão. Nenhuma pede cadastro para
+  <p class="sub">Três ferramentas, para três momentos da decisão. Nenhuma pede cadastro para
   funcionar.</p>
 
   <div class="portas">
@@ -188,6 +188,14 @@ footer b{color:var(--azul)}
       <span class="ir">Abrir a calculadora →</span>
     </a>
   </div>
+  <a class="porta" href="carta-contemplada/" id="p-carta" style="margin-bottom:22px">
+    <div class="q">VOU COMPRAR UMA CARTA CONTEMPLADA</div>
+    <h3>Mas e carta contemplada?</h3>
+    <p>O apêndice de setembro: 148 cartas de imóvel à venda, o custo de cada uma e o índice que decide se
+    ela vale a pena. Com uma calculadora que recebe os números do anúncio e mostra o ágio e o reajuste em
+    que a carta empata com o financiamento.</p>
+    <span class="ir">Abrir o apêndice →</span>
+  </a>
 
 </div>
 
@@ -234,7 +242,7 @@ document.getElementById("dl-csv").addEventListener("click",function(){ev("downlo
 
 // As duas portas propagam os UTM: sem isso a atribuição morre no primeiro clique
 // e o lead que sai da calculadora aparece como tráfego direto.
-["p-sim","p-cota"].forEach(function(id){
+["p-sim","p-cota","p-carta"].forEach(function(id){
   var a=document.getElementById(id);
   var manter=["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"];
   var p=new URLSearchParams();
