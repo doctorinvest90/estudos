@@ -121,8 +121,10 @@ Sistema de Consórcios, dez/2024), FipeZAP, IBGE e FGV.
 <script>
 "use strict";
 const P = {
-  preco:802476, capital:160495, prazo:216, adm:13.99, fr:0.0, seguro:0.0,
-  incc:0.09, ret:6.0, fin:11.5, ipca:4.44, entrada:20, yield_:6.13, valor:0.0,
+  // preco e capital exatos do estudo (R$ 802.476,50 e 20%): com os valores arredondados
+  // a tabela saía R$ 2 a R$ 28 fora do PDF e da errata.
+  preco:802476.5, capital:160495.3, prazo:216, adm:13.99, fr:0.0, seguro:0.0,
+  incc:0.09, ret:6.0, fin:13.78575, ipca:4.44, entrada:20, yield_:6.13, valor:0.0,
   mc:73, lance:0
 };
 
@@ -137,7 +139,9 @@ const CTRL = [
   {k:"fr", l:"Fundo de reserva", min:0, max:5, step:0.1, f:v=>pct(v,1)},
   {k:"incc", l:"Correção da carta acima do IPCA", min:0, max:3, step:0.01, f:v=>pct(v,2)+" a.a."},
   {k:"ret", l:"Retorno real dos investimentos", min:2, max:10, step:0.1, f:v=>"IPCA + "+pct(v,1)},
-  {k:"fin", l:"Juros do financiamento", min:8, max:16, step:0.1, f:v=>pct(v,2)+" a.a."},
+  // fin inclui a TR: (1,115 × 1,0205) − 1 = 13,78575% ao ano. A versão de agosto usava 11,5 sem TR
+  // e o break-even contra o financiamento saía no mês 78; com a TR é 111 (errata de set/2026).
+  {k:"fin", l:"Juros do financiamento, com TR", min:8, max:16, step:0.1, f:v=>pct(v,2)+" a.a."},
   {k:"valor", l:"Valorização real do imóvel", min:-3, max:4, step:0.1, f:v=>pct(v,2)+" a.a."},
   {k:"yield_", l:"Aluguel sobre o valor do imóvel", min:3, max:10, step:0.1, f:v=>pct(v,2)+" a.a."}
 ];

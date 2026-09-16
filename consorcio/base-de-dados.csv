@@ -1,5 +1,5 @@
 ﻿BASE DE DADOS - O consorcio que ninguem calcula
-Doctor Invest - agosto de 2026
+Doctor Invest - agosto de 2026 - ERRATA de setembro de 2026: o financiamento passou a incluir a TR de 2,05% ao ano. Mudam tres linhas (juros do financiamento, patrimonio do financiamento, que era 2058986, e break-even contra o financiamento, que era mes 78). Nada mais muda.
 
 SERIES ANUAIS (%)
 Ano;FipeZAP Venda;FipeZAP Locacao;IPCA;FipeZAP Venda real
@@ -114,7 +114,7 @@ IPCA 12 meses ate jul/2026;4,44%
 INCC-M 12 meses ate jul/2026;6,40%
 Spread do reajuste sobre IPCA adotado;0,09 p.p. ao ano (medido no contrato)
 Selic;14,00% ao ano
-Juros do financiamento;11,50% ao ano nominal
+Juros do financiamento;11,50% ao ano nominal + TR 2,05% ao ano (13,79% ao ano; 8,95% real) - corrigido em set/2026
 Entrada do financiamento;20%
 Retorno real de referencia;IPCA + 6,00% ao ano
 Rental yield;6,13% ao ano (FipeZAP jun/2026)
@@ -138,7 +138,7 @@ Mes;Anos;Patrimonio liquido real em 217 meses (R$);VPL do contrato a IPCA+6% (R$
 200;16,7;1322120;-260606;nao e credito
 216;18,0;1253750;-283320;nao e credito
 
-Financiamento (imovel no mes 0);2058986
+Financiamento (imovel no mes 0);1814200
 Juntar e comprar a vista (mes 100);2101467
 Break-even contra juntar e comprar a vista;mes 73
-Break-even contra o financiamento;mes 78
+Break-even contra o financiamento;mes 111
