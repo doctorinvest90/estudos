@@ -1,0 +1,362 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monitor de dividendos · Doctor Invest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--cinza:#8A94A6;--verm:#A8443C;--verde:#4F7A5B;--linha:#E8E4DA}
+*{box-sizing:border-box}body{margin:0;font-family:"DM Sans",system-ui,sans-serif;background:var(--marfim);color:#22303F;font-size:14px;line-height:1.5}
+header{background:var(--azul);color:var(--marfim);padding:22px 20px 18px}
+header .marca{font-size:10px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{font-family:"Cormorant Garamond",Georgia,serif;font-size:30px;margin:6px 0 4px;font-weight:600;line-height:1.1}
+header p{margin:0;color:#AFBACB;font-size:13px;max-width:720px}
+.wrap{display:grid;grid-template-columns:340px 1fr;gap:18px;padding:18px;max-width:1240px;margin:0 auto}
+@media(max-width:900px){.wrap{grid-template-columns:1fr;padding:12px}}
+.card{background:#fff;border:1px solid var(--linha);padding:16px 18px}
+.card h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px;margin:0 0 10px;color:var(--azul);font-weight:600}
+.rot{font-size:10px;letter-spacing:.22em;color:#8A7330;font-weight:700;margin:14px 0 6px}
+label{display:block;font-size:12px;color:var(--conf);margin:9px 0 3px}
+label span.v{float:right;color:var(--azul);font-weight:700}
+input[type=range]{width:100%;accent-color:var(--ouro)}
+input[type=number]{width:100%;padding:6px 8px;border:1px solid var(--linha);font:inherit;font-size:13px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.presets button{flex:1;background:#fff;border:1px solid var(--conf);color:var(--conf);padding:7px 6px;font:inherit;font-size:12px;cursor:pointer}
+.presets button.on{background:var(--azul);color:#fff;border-color:var(--azul)}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:600px){.nums{grid-template-columns:repeat(2,1fr)}}
+.nums div{border-top:2px solid var(--ouro);padding-top:6px}
+.nums .v{font-family:"Cormorant Garamond",Georgia,serif;font-size:27px;font-weight:700;color:var(--azul);line-height:1.05}
+.nums .t{font-size:11px;color:#6B7480;margin-top:3px;line-height:1.3}
+.destaque{background:var(--azul);color:#E4E0D6;padding:14px 16px;margin:14px 0;font-size:13px}
+.destaque b{color:var(--ouro)}
+.aviso{background:#FAF8F3;border-left:3px solid var(--ouro);padding:10px 14px;margin:12px 0;font-size:12.5px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+th{background:var(--azul);color:#fff;font-weight:500;text-align:right;padding:6px 7px;font-size:11px}
+th:first-child,td:first-child{text-align:left}td{padding:5px 7px;text-align:right;border-bottom:1px solid var(--linha)}
+td.hi{font-weight:700;color:var(--azul)}.neg{color:var(--verm)}.pos{color:var(--verde)}
+svg{width:100%;height:auto;display:block}
+.cap{font-size:11px;color:#8A909B;margin:4px 0 0}
+footer{padding:14px 18px 28px;max-width:1240px;margin:0 auto;font-size:11px;color:#5A616B;line-height:1.5}
+.tag{display:inline-block;font-size:10px;padding:2px 6px;border:1px solid var(--linha);color:#6B7480;margin-left:6px;vertical-align:middle}
+/* ---- página do estudo: achados + muro por e-mail (acréscimos; motor e interface acima intocados) ---- */
+.faixa{max-width:1240px;margin:0 auto;padding:18px 18px 0}
+.bloco{background:#fff;border:1px solid var(--linha);padding:18px 20px 20px}
+.bloco h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:21px;margin:0 0 4px;color:var(--azul);font-weight:600}
+.hr{height:2px;width:34px;background:var(--ouro);margin:0 0 14px}
+.intro{font-size:13.5px;color:#4A5563;margin:0 0 14px;max-width:880px}
+#achados ol{padding-left:18px;margin:0;font-size:13.5px;line-height:1.7;max-width:980px}
+#achados li{margin-bottom:8px}
+#achados .destaque{margin:14px 0 0}
+#achados .destaque .rot{font-size:10px;letter-spacing:.22em;color:var(--ouro);font-weight:700;margin:0 0 6px}
+.ir{margin:14px 0 0;font-size:13.5px}
+.ir a,#receber .nota a{color:var(--conf);font-weight:700}
+#receber{max-width:1240px;margin:0 auto;padding:0 18px 8px}
+#receber .bloco{border-top:3px solid var(--ouro)}
+#receber .sub{font-size:13.5px;color:#4A5563;margin:0 0 12px;max-width:760px}
+#receber iframe{width:100%;max-width:560px;border:0;display:block}
+#receber .nota{font-size:12px;color:#6B7480;margin:12px 0 0}
+@media(max-width:900px){.faixa{padding:12px 12px 0}#receber{padding:0 12px 8px}}
+/* grid 1fr não encolhe abaixo do min-content dos filhos: sem isto a página pode rolar de lado no celular */
+.wrap>div{min-width:0}
+@media print{#receber,.ir{display:none}}
+</style></head><body>
+<header><div class="marca">DOCTOR INVEST · MONITOR DE DIVIDENDOS</div>
+<h1>Quanto a Lei 15.270 cobra de você — e onde colocar o próximo real</h1>
+<p>Imposto mínimo, retenção de 10% e o break-even da LCI, calculados para a sua PJ e a sua carteira. Motor idêntico ao do estudo. Nada é enviado ou guardado.</p></header>
+
+<div class="faixa"><div class="bloco" id="achados">
+  <h2>O que o estudo achou</h2><div class="hr"></div>
+  <p class="intro">A Lei 15.270/2025 foi vendida em dois números: 10% retidos sobre dividendos acima de R$ 50 mil
+  por mês e um imposto mínimo de até 10% para quem ganha mais de R$ 600 mil por ano. Nenhum dos dois decide
+  quanto o médico com PJ vai pagar. O estudo simulou três médicos no lucro presumido, com R$ 40 mil, R$ 70 mil e
+  R$ 100 mil de faturamento mensal e carteiras proporcionais, em 2026 com a regra antiga e com a nova, e depois
+  por mais dez anos com a mesma renda real.</p>
+  <ol>
+    <li><b>A retenção de 10% é adiantamento.</b> Ela é compensada, ou devolvida, na declaração anual. Espalhar a
+    distribuição em parcelas de R$ 50 mil, ou entre duas PJs, muda o caixa e deixa o imposto igual. No perfil de
+    R$ 100 mil por mês, a diferença é um custo de caixa de R$ 8.589 por ano.</li>
+    <li><b>O imposto que existe é o mínimo anual, e ele tem uma alíquota escondida.</b> A alíquota efetiva vai de
+    0% a 10% entre R$ 600 mil e R$ 1,2 milhão de renda. A marginal, sobre cada real adicional, vai de 10% a 30%.
+    É ela que decide onde colocar o próximo real.</li>
+    <li><b>Dois dos três perfis não pagam nada em 2026.</b> O consultório de R$ 40 mil está R$ 190 mil abaixo do
+    piso. O de R$ 70 mil está na faixa, mas o mínimo bruto (R$ 17.721) fica abaixo dos créditos que ele já tem
+    (R$ 28.730), e só passa a cobrar numa base de R$ 812.230, R$ 69 mil acima de onde ele está.</li>
+    <li><b>Na zona do mínimo, o endereço da renda fixa vale entre 15% e 30% do rendimento.</b> No perfil de
+    R$ 100 mil por mês, levar o bloco de renda fixa para títulos fora da base reduz o imposto em R$ 38.395 por ano
+    e, mesmo com a LCI a 88% do CDI, aumenta o rendimento líquido em R$ 18.739. Concentração, liquidez e FGC
+    entram na conta, e o estudo trata disso na seção 06.</li>
+    <li><b>O PGBL deixa de funcionar onde o mínimo cobra.</b> A economia da dedução volta real por real no
+    cálculo do mínimo, e o resgate ainda tributa o principal. No perfil de R$ 100 mil, o PGBL perde do VGBL; nos
+    outros dois, ainda ganha.</li>
+    <li><b>A faixa vem até você.</b> Com inflação de 4,5% ao ano e os limites da lei congelados, o perfil de
+    R$ 70 mil passa a pagar em 2030 e chega a 9% de alíquota efetiva em 2036, com a mesma renda real de hoje. O de
+    R$ 40 mil entra na faixa em 2035.</li>
+  </ol>
+  <div class="destaque"><div class="rot">O ACHADO QUE SOBREVIVE A TODAS AS OBJEÇÕES</div>
+  O que a lei cobra se decide na soma do ano: quanto entra na base e quanto crédito você já tem. O calendário da
+  distribuição mensal mexe só no caixa. Entre R$ 600 mil e R$ 1,2 milhão, cada real de CDB ou de dividendo custa
+  mais do que custa para quem ganha R$ 3 milhões, e é nessa faixa que a composição da carteira passa a valer
+  imposto de verdade.</div>
+  <p class="ir"><a href="#receber" id="ir-receber">Receber o estudo completo (PDF, 13 páginas)</a>
+  · os três perfis são estilizados: coloque os seus números no simulador abaixo.</p>
+</div></div>
+
+<div class="wrap">
+<div class="card">
+  <h2>Seus números</h2>
+  <div class="rot">PRESETS DO ESTUDO</div>
+  <div class="presets"><button data-p="P1">P1 · R$ 40 mil</button><button data-p="P2" class="on">P2 · R$ 70 mil</button><button data-p="P3">P3 · R$ 100 mil</button></div>
+  <div class="rot">PESSOA JURÍDICA (LUCRO PRESUMIDO)</div>
+  <label>Faturamento mensal da PJ <span class="v" id="v_rec"></span></label><input type="range" id="rec" min="10000" max="250000" step="1000">
+  <label>Custos da PJ, sem pró-labore (% da receita) <span class="v" id="v_cus"></span></label><input type="range" id="cus" min="0" max="40" step="1">
+  <label>Pró-labore mensal <span class="v" id="v_pro"></span></label><input type="range" id="pro" min="1621" max="40000" step="any">
+  <label>Quantas PJs pagam seus dividendos <span class="v" id="v_npj"></span></label><input type="range" id="npj" min="1" max="4" step="1">
+  <label>Outras rendas tributáveis no ano (CLT, aluguéis) <span class="v" id="v_out"></span></label><input type="range" id="out" min="0" max="600000" step="5000">
+  <div class="rot">CARTEIRA</div>
+  <label>Patrimônio financeiro <span class="v" id="v_pat"></span></label><input type="range" id="pat" min="0" max="10000000" step="50000">
+  <label>Renda fixa tributada (CDB, Tesouro, fundos) <span class="v" id="v_rf"></span></label><input type="range" id="rf" min="0" max="100" step="1">
+  <label>Fora da base (LCI, LCA, CRI, CRA, incentivadas) <span class="v" id="v_is"></span></label><input type="range" id="is" min="0" max="100" step="1">
+  <label>Ações Brasil <span class="v" id="v_ac"></span></label><input type="range" id="ac" min="0" max="100" step="1">
+  <label>Fundos imobiliários <span class="v" id="v_fi"></span></label><input type="range" id="fi" min="0" max="100" step="1">
+  <p class="cap" id="somaAloc"></p>
+  <label>Aporte anual em PGBL <span class="v" id="v_pg"></span></label><input type="range" id="pg" min="0" max="120000" step="1000">
+  <div class="rot">PREMISSAS DE MERCADO</div>
+  <label>CDI (a.a.) <span class="v" id="v_cdi"></span></label><input type="range" id="cdi" min="5" max="20" step="0.05">
+  <label>LCI/CRI em % do CDI <span class="v" id="v_lci"></span></label><input type="range" id="lci" min="60" max="110" step="1">
+  <label>Dividend yield das ações <span class="v" id="v_dya"></span></label><input type="range" id="dya" min="0" max="12" step="0.5">
+  <label>Distribuição dos FII (a.a.) <span class="v" id="v_dyf"></span></label><input type="range" id="dyf" min="0" max="16" step="0.5">
+  <label>Inflação para a projeção (a.a.) <span class="v" id="v_ipca"></span></label><input type="range" id="ipca" min="2" max="8" step="0.5">
+</div>
+
+<div>
+  <div class="card">
+    <h2>Resultado em 2026 <span class="tag" id="tagBind"></span></h2>
+    <div class="nums">
+      <div><div class="v" id="n_adic"></div><div class="t">imposto mínimo adicional no ano — o que a lei efetivamente acrescenta</div></div>
+      <div><div class="v" id="n_marg"></div><div class="t" id="t_marg">alíquota marginal: o que o próximo real de dividendo ou CDB paga</div></div>
+      <div><div class="v" id="n_lci"></div><div class="t">do CDI: até onde uma LCI pode render menos e ainda empatar com o CDB</div></div>
+      <div><div class="v" id="n_ano"></div><div class="t" id="t_ano">ano em que o mínimo passa a morder, com a mesma renda real</div></div>
+    </div>
+    <div class="destaque" id="leitura"></div>
+    <svg id="g" viewBox="0 0 720 300"></svg>
+    <p class="cap">Alíquota efetiva (azul) e marginal (ouro) do imposto mínimo. O ponto é a sua base de 2026. Válido quando o mínimo supera os créditos.</p>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h2>A conta, linha a linha</h2>
+    <table id="tab"></table>
+    <div class="aviso" id="pgblBox"></div>
+    <div class="aviso" id="retBox"></div>
+  </div>
+</div>
+</div>
+<div id="receber"><div class="bloco">
+  <h2>Receber o estudo completo</h2><div class="hr"></div>
+  <p class="sub">Treze páginas com os dois mecanismos da lei lado a lado, a conta dos três perfis, a curva da renda
+  fixa, PGBL e holding, a segunda janela de dez anos e a seção sobre onde o próprio estudo pode estar errado.
+  Deixe o e-mail e o estudo abre na sequência, com a base de dados e o motor de cálculo. Você passa a receber
+  também as análises que escrevo duas vezes por semana para médicos.</p>
+  <!-- Formulário beehiiv próprio deste estudo. Redirect de sucesso → /dividendos/obrigado.html
+       com remove_email_from_redirect_url = true (e-mail na URL vaza pro histórico e Referer).
+       Altura 130, não 70: o beehiiv usa o mesmo espaço pra responder ("já é assinante").
+       Form "Estudo — Monitor de dividendos (landing)", criado 2026-09-17. -->
+  <iframe src="https://subscribe-forms.beehiiv.com/e8629a4f-3af6-429b-a03e-35484935acee"
+          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+          frameborder="0" scrolling="no" title="Receber o estudo por e-mail"></iframe>
+  <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  <!-- Saída para quem JÁ assina: o beehiiv não redireciona assinante existente. -->
+  <p class="nota">Já recebe a newsletter?
+  <a href="obrigado.html?ja=1" data-ja-assina>O estudo está aqui, sem precisar preencher de novo.</a></p>
+  <p class="nota">Sem custo. Um e-mail por edição, duas vezes por semana, e o descadastro fica em todo rodapé.</p>
+</div></div>
+
+<footer><b>Aviso.</b> Material informativo e educacional. Não constitui recomendação de investimento, consultoria de valores mobiliários, tributária ou jurídica. Simulação com parâmetros públicos da Lei 15.270/2025 (retenção de 10% acima de R$ 50 mil/mês por PJ; imposto mínimo de 0% a 10% entre R$ 600 mil e R$ 1,2 milhão; créditos do IRPF e do IR retido), lucro presumido com presunção de 32%, tabela do IRPF vigente e teto do INSS de 2026. A lei ainda não teve sua primeira apuração anual; sua interpretação pode mudar. Desconsidera Simples Nacional, dependentes, despesas dedutíveis, ganhos de capital e custos operacionais. Rentabilidade passada não garante rentabilidade futura. <b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · set/2026.</footer>
+
+<script>
+// Motor do "Monitor de dividendos" — porte 1:1 de motor.py. Doctor Invest, set/2026.
+const LEI = { PISO: 600000, TETO: 1200000, MAX: 0.10, RET_LIM: 50000, RET_ALIQ: 0.10, REDUTOR: 0.34 };
+const TABELA = [[29145.60, 0, 0], [33919.80, .075, 2185.92], [45012.60, .15, 4729.92], [55976.16, .225, 8105.88], [Infinity, .275, 10904.76]];
+const PJ = { PRES: .32, IRPJ: .15, ADIC: .10, ADIC_LIM: 240000, CSLL: .09, PISCOF: .0365, ISS: .02 };
+const INSS = { TETO: 8475.55, SEG: .11, PAT: .20 };
+const DEF = { cdi: .1365, ipca: .045, irRf: .15, lciPct: .88, dyAcoes: .05, dyFii: .10, atraso: 11 };
+
+function irpfAnual(base) {
+  if (base <= 0) return 0;
+  for (const [lim, a, d] of TABELA) if (base <= lim) return Math.max(0, base * a - d);
+  return 0;
+}
+function aliqIrpfm(b) { return b <= LEI.PISO ? 0 : b >= LEI.TETO ? LEI.MAX : (b / 60000 - 10) / 100; }
+function margIrpfm(b) { return b <= LEI.PISO ? 0 : b >= LEI.TETO ? LEI.MAX : b / 3000000 - 0.10; }
+
+function pjPresumido(rec, custosPct, prolMes) {
+  const base = rec * PJ.PRES;
+  const irpj = base * PJ.IRPJ + Math.max(0, base - PJ.ADIC_LIM) * PJ.ADIC;
+  const csll = base * PJ.CSLL, piscof = rec * PJ.PISCOF, iss = rec * PJ.ISS;
+  const trib = irpj + csll + piscof + iss, prol = prolMes * 12, pat = prol * INSS.PAT, custos = rec * custosPct;
+  const lucro = Math.max(0, rec - trib - custos - prol - pat);
+  return { irpj, csll, piscof, iss, trib, prol, pat, custos, lucro, cargaPj: (irpj + csll) / Math.max(1, lucro) };
+}
+
+// p: {receitaMes, patrimonio, custosPct, prolMes, rfTrib, isentos, acoes, fii, pgbl, nPjs, outros}
+// m: {cdi, ipca, irRf, lciPct, dyAcoes, dyFii}
+function simular(p, m, lei = true) {
+  m = Object.assign({}, DEF, m || {});
+  const pj = pjPresumido(p.receitaMes * 12, p.custosPct, p.prolMes);
+  const div = pj.lucro, prol = pj.prol;
+  const inssSeg = Math.min(p.prolMes, INSS.TETO) * INSS.SEG * 12;
+  const pgbl = Math.min(p.pgbl || 0, 0.12 * (prol + (p.outros || 0)));
+  const baseIrpf = prol + (p.outros || 0) - inssSeg - pgbl;
+  const irpf = irpfAnual(baseIrpf);
+  const rendRf = p.patrimonio * p.rfTrib * m.cdi, irRf = rendRf * m.irRf;
+  const rendIs = p.patrimonio * p.isentos * m.cdi * m.lciPct;
+  const divAc = p.patrimonio * p.acoes * m.dyAcoes, rendFii = p.patrimonio * p.fii * m.dyFii;
+  const divMesPj = div / 12 / Math.max(1, p.nPjs || 1);
+  const ret = (lei && divMesPj > LEI.RET_LIM) ? div * LEI.RET_ALIQ : 0;
+  const base = prol + (p.outros || 0) + div + rendRf + divAc;
+  const aliq = lei ? aliqIrpfm(base) : 0, bruto = aliq * base;
+  const creditos = irpf + irRf + ret;
+  const liquido = Math.max(0, bruto - irpf - irRf);
+  const restituicao = Math.max(0, ret - liquido);
+  const custoCaixa = ret * m.cdi * (1 - m.irRf) * DEF.atraso / 12;
+  const mg = lei ? margIrpfm(base) : 0, binding = lei && bruto > irpf + irRf;
+  const margDiv = binding ? mg : 0, margRf = binding ? mg : m.irRf;
+  const impostoPf = irpf + irRf + liquido, impostoTotal = pj.irpj + pj.csll + impostoPf;
+  const renda = prol + (p.outros || 0) + div + rendRf + rendIs + divAc + rendFii;
+  return { ...pj, div, divMes: div / 12, inssSeg, pgbl, baseIrpf, irpf, rendRf, irRf, rendIs, divAc, rendFii,
+    base, aliq, bruto, creditos, ret, restituicao, liquido, custoCaixa, impostoPf, impostoTotal, renda,
+    cargaTotal: impostoTotal / renda, mg, binding, margDiv, margRf, lciBe: 1 - margRf,
+    cargaComb: pj.cargaPj + aliq, distPiso: LEI.PISO - base };
+}
+
+function baseOndeMorde(p, m) {
+  const s = simular(p, m); const cred = s.irpf + s.irRf;
+  let lo = LEI.PISO, hi = 3000000;
+  for (let i = 0; i < 80; i++) { const mid = (lo + hi) / 2; if (aliqIrpfm(mid) * mid > cred) hi = mid; else lo = mid; }
+  return hi;
+}
+function erosao(p, m, anos = 11) {
+  m = Object.assign({}, DEF, m || {}); const out = [];
+  for (let t = 0; t < anos; t++) {
+    const f = Math.pow(1 + m.ipca, t);
+    const q = { ...p, receitaMes: p.receitaMes * f, patrimonio: p.patrimonio * f, prolMes: p.prolMes * f,
+      outros: (p.outros || 0) * f, pgbl: (p.pgbl || 0) * f };
+    const s = simular(q, m);
+    out.push({ ano: 2026 + t, base: s.base, aliq: s.aliq, irpfmReal: s.liquido / f, binding: s.binding });
+  }
+  return out;
+}
+function pgblVsVgbl(p, m, anos = 10) {
+  m = Object.assign({}, DEF, m || {});
+  const aporte = p.pgbl && p.pgbl > 0 ? Math.min(p.pgbl, 0.12 * (p.prolMes * 12 + (p.outros || 0))) : 0.12 * (p.prolMes * 12 + (p.outros || 0));
+  const ret = (1 + m.ipca) * 1.06 - 1;
+  const sem = simular({ ...p, pgbl: 0 }, m), com = simular({ ...p, pgbl: aporte }, m);
+  const econ = sem.irpf - com.irpf, dev = com.liquido - sem.liquido, benef = econ - dev;
+  const custoVp = aporte * 0.10 / Math.pow(1 + ret, anos); // (10% do saldo − 10% do ganho) = 10% do aporte, trazido a valor presente
+  return { aporte, econ, dev, benef, custoVp, resultado: benef - custoVp, binding: sem.binding };
+}
+if (false) module.exports = { simular, baseOndeMorde, erosao, pgblVsVgbl, aliqIrpfm, margIrpfm, LEI, DEF };
+
+const PRESETS = {
+  P1:{rec:40000,cus:8,pro:8475.55,npj:1,out:0,pat:600000,rf:60,is:20,ac:12,fi:8,pg:0},
+  P2:{rec:70000,cus:8,pro:8475.55,npj:1,out:0,pat:1200000,rf:60,is:20,ac:12,fi:8,pg:0},
+  P3:{rec:100000,cus:8,pro:8475.55,npj:1,out:0,pat:2000000,rf:60,is:20,ac:12,fi:8,pg:0}};
+const MKT = {cdi:13.65,lci:88,dya:5,dyf:10,ipca:4.5};
+const $ = id => document.getElementById(id);
+const R = v => "R$ " + Math.round(v).toLocaleString("pt-BR");
+const Rk = v => Math.abs(v) >= 1e6 ? "R$ " + (v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:2}) + " mi" : "R$ " + Math.round(v/1e3).toLocaleString("pt-BR") + " mil";
+const P = (v,d=1) => (v*100).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d}) + "%";
+function setPreset(k){ for (const [id,v] of Object.entries(PRESETS[k])) $(id).value = v; for (const [id,v] of Object.entries(MKT)) $(id).value = v;
+  document.querySelectorAll(".presets button").forEach(b => b.classList.toggle("on", b.dataset.p === k)); run(); }
+function ler(){
+  const rf=+$("rf").value, is=+$("is").value, ac=+$("ac").value, fi=+$("fi").value, soma = rf+is+ac+fi || 1;
+  return { p:{receitaMes:+$("rec").value, custosPct:+$("cus").value/100, prolMes:+$("pro").value, nPjs:+$("npj").value, outros:+$("out").value,
+    patrimonio:+$("pat").value, rfTrib:rf/soma, isentos:is/soma, acoes:ac/soma, fii:fi/soma, pgbl:+$("pg").value},
+    m:{cdi:+$("cdi").value/100, lciPct:+$("lci").value/100, dyAcoes:+$("dya").value/100, dyFii:+$("dyf").value/100, ipca:+$("ipca").value/100}, soma };
+}
+function run(){
+  const {p,m,soma} = ler();
+  $("v_rec").textContent=R(p.receitaMes); $("v_cus").textContent=$("cus").value+"%"; $("v_pro").textContent=R(p.prolMes);
+  $("v_npj").textContent=$("npj").value; $("v_out").textContent=R(p.outros); $("v_pat").textContent=Rk(p.patrimonio);
+  $("v_rf").textContent=P(p.rfTrib,0); $("v_is").textContent=P(p.isentos,0); $("v_ac").textContent=P(p.acoes,0); $("v_fi").textContent=P(p.fii,0);
+  $("somaAloc").textContent = soma === 100 ? "Alocação soma 100%." : "Pesos informados somam " + soma + "% — normalizados para 100%.";
+  $("v_pg").textContent=R(p.pgbl); $("v_cdi").textContent=$("cdi").value+"%"; $("v_lci").textContent=$("lci").value+"% do CDI";
+  $("v_dya").textContent=$("dya").value+"%"; $("v_dyf").textContent=$("dyf").value+"%"; $("v_ipca").textContent=$("ipca").value+"%";
+  const s = simular(p,m), s0 = simular(p,m,false), morde = baseOndeMorde(p,m), er = erosao(p,m,15), g = pgblVsVgbl(p,m);
+  $("n_adic").textContent = R(s.liquido); $("n_marg").textContent = P(s.binding ? s.mg : (s.base>LEI.PISO?0:0),1);
+  $("n_lci").textContent = P(s.lciBe,0);
+  $("t_marg").textContent = s.binding ? "alíquota marginal: o que o próximo real de dividendo ou CDB paga" : "alíquota marginal do mínimo sobre o próximo real de dividendo. O CDB segue nos 15% de sempre";
+  const anoM = er.find(e=>e.binding);
+  $("n_ano").textContent = anoM ? anoM.ano : "> 2040"; $("t_ano").textContent = anoM && anoM.ano===2026 ? "o mínimo já morde em 2026" : "ano em que o mínimo passa a morder, com a mesma renda real e inflação de " + $("ipca").value + "%";
+  $("tagBind").textContent = s.binding ? "mínimo mordendo" : s.base > LEI.PISO ? "na faixa, coberto pelos créditos" : "abaixo do piso";
+  let L;
+  if (s.base <= LEI.PISO) L = `Sua base de <b>${R(s.base)}</b> está <b>${R(s.distPiso)}</b> abaixo do piso de R$ 600 mil. Em 2026 a lei não cobra nada. Com renda real constante e inflação de ${$("ipca").value}%, a base cruza o piso em <b>${er.find(e=>e.aliq>0)?er.find(e=>e.aliq>0).ano:"depois de 2040"}</b> e passa a morder em <b>${anoM?anoM.ano:"depois de 2040"}</b>. Enquanto isso, a conta da LCI é a de sempre: empate a ${P(s.lciBe,0)} do CDI.`;
+  else if (!s.binding) L = `Você está na faixa: base de <b>${R(s.base)}</b>, alíquota efetiva de ${P(s.aliq)}, mínimo bruto de ${R(s.bruto)}. Mas seus créditos (IRPF ${R(s.irpf)} + IR na renda fixa ${R(s.irRf)}) cobrem tudo. Adicional: <b>zero</b>. O mínimo passa a morder a partir de uma base de <b>${R(morde)}</b> — faltam <b>${R(morde - s.base)}</b>. Sem mudar nada, isso acontece em <b>${anoM?anoM.ano:"depois de 2040"}</b>.`;
+  else L = `O mínimo já cobra: base de <b>${R(s.base)}</b>, alíquota efetiva de ${P(s.aliq)}, adicional de <b>${R(s.liquido)}</b> por ano. Cada real a mais de dividendo ou de CDB custa <b>${P(s.mg)}</b>. Uma LCI empata com o CDB a <b>${P(s.lciBe,0)} do CDI</b>${s.base>=LEI.TETO?" — acima de R$ 1,2 milhão a marginal cai a 10% e o isento perde parte do apelo":""}. Seu imposto de renda total (PJ + PF) foi de ${R(s0.impostoTotal)} para <b>${R(s.impostoTotal)}</b>.`;
+  $("leitura").innerHTML = L;
+  const rows = [["Receita da PJ", s.trib>0?p.receitaMes*12:0],["IRPJ + CSLL da PJ", s.irpj+s.csll],["PIS/COFINS + ISS (fora da conta de renda)", s.piscof+s.iss],
+    ["Custos, pró-labore e INSS patronal", s.custos+s.prol+s.pat],["Dividendos distribuídos", s.div],["Dividendo por mês, por PJ", s.divMes/Math.max(1,p.nPjs)],
+    ["— Base do imposto mínimo —", null],["Pró-labore + outras rendas tributáveis", s.prol+p.outros],["Dividendos da PJ", s.div],["Rendimento de renda fixa tributada", s.rendRf],
+    ["Dividendos de ações", s.divAc],["(fora da base) LCI/CRI + FII", s.rendIs+s.rendFii],["Base do imposto mínimo", s.base],
+    ["— Apuração —", null],["Alíquota efetiva", P(s.aliq,2)],["Imposto mínimo bruto", s.bruto],["Crédito: IRPF devido", -s.irpf],["Crédito: IR retido na renda fixa", -s.irRf],
+    ["Imposto mínimo adicional", s.liquido],["Retenção de 10% sofrida no ano", s.ret],["Restituída no ajuste", s.restituicao],
+    ["— Totais —", null],["Imposto de renda total sem a lei", s0.impostoTotal],["Imposto de renda total com a lei", s.impostoTotal],["Carga sobre a renda bruta total", P(s.cargaTotal)],
+    ["Carga combinada PJ + PF (redutor a partir de 34%)", P(s.cargaComb)]];
+  $("tab").innerHTML = "<tr><th>Item</th><th>2026</th></tr>" + rows.map(([k,v]) => v===null ? `<tr><td colspan=2 style="font-size:10px;letter-spacing:.18em;color:#8A7330;font-weight:700;padding-top:10px">${k.replace(/—/g,"").trim().toUpperCase()}</td></tr>` :
+    `<tr><td>${k}</td><td class="${/adicional|total com|Base do imposto/.test(k)?"hi":""}">${typeof v==="string"?v:R(v)}</td></tr>`).join("");
+  $("pgblBox").innerHTML = `<b>PGBL × VGBL.</b> Aporte de ${R(g.aporte)}${p.pgbl>0?"":" (12% da renda tributável)"}: economia de ${R(g.econ)} no IRPF, <span class="neg">${R(g.dev)} devolvidos</span> no imposto mínimo, benefício líquido hoje de ${R(g.benef)}; custo extra do resgate sobre o principal (valor presente, 10 anos): ${R(g.custoVp)}. Resultado: <b class="${g.resultado>=0?"pos":"neg"}">${g.resultado>=0?"PGBL ganha do VGBL por ":"PGBL perde do VGBL por "}${R(Math.abs(g.resultado))}</b>.`;
+  $("retBox").innerHTML = s.ret>0 ? `<b>Retenção mensal.</b> ${R(s.divMes/Math.max(1,p.nPjs))} por mês por PJ ultrapassa R$ 50 mil: retenção de ${R(s.ret)} no ano, dos quais ${R(s.restituicao)} voltam no ajuste. Espalhar em ${Math.ceil(s.divMes/50000)} PJs ou limitar a R$ 50 mil/mês zera a retenção e não muda o imposto final; o ganho é só o rendimento do dinheiro parado: ${R(s.custoCaixa)} por ano.`
+    : `<b>Retenção mensal.</b> Nenhuma: ${R(s.divMes/Math.max(1,p.nPjs))} por mês por PJ fica abaixo de R$ 50 mil. Lembre que os dividendos entram na base do mínimo mesmo sem retenção.`;
+  grafico(s);
+}
+function grafico(s){
+  const W=720,H=300,ml=54,mr=16,mt=16,mb=40, x0=300000,x1=1700000, y1=.34;
+  const X=v=>ml+(v-x0)/(x1-x0)*(W-ml-mr), Y=v=>H-mb-v/y1*(H-mt-mb);
+  let pth=(f)=>{let d="";for(let v=x0;v<=x1;v+=5000){d+=(d?"L":"M")+X(v).toFixed(1)+","+Y(f(v)).toFixed(1);}return d;};
+  let sv=`<rect x="${X(600000)}" y="${mt}" width="${X(1200000)-X(600000)}" height="${H-mt-mb}" fill="#C9A84C" opacity=".08"/>`;
+  for(const yv of [0,.1,.2,.3]) sv+=`<line x1="${ml}" x2="${W-mr}" y1="${Y(yv)}" y2="${Y(yv)}" stroke="#E8E4DA"/><text x="${ml-6}" y="${Y(yv)+4}" font-size="11" text-anchor="end" fill="#5A6478">${Math.round(yv*100)}%</text>`;
+  for(const xv of [400000,600000,800000,1000000,1200000,1400000,1600000]) sv+=`<text x="${X(xv)}" y="${H-mb+18}" font-size="11" text-anchor="middle" fill="#5A6478">${xv>=1e6?(xv/1e6).toFixed(1).replace(".",",")+" mi":Math.round(xv/1e3)+" mil"}</text>`;
+  sv+=`<path d="${pth(margIrpfm)}" fill="none" stroke="#C9A84C" stroke-width="2.6"/><path d="${pth(aliqIrpfm)}" fill="none" stroke="#1B3A5C" stroke-width="2.6"/>`;
+  const bx=Math.min(Math.max(s.base,x0),x1), by=s.binding?s.mg:aliqIrpfm(s.base);
+  sv+=`<circle cx="${X(bx)}" cy="${Y(by)}" r="6" fill="#0D1B2A"/><text x="${X(bx)}" y="${Y(by)-12}" font-size="11" font-weight="700" text-anchor="middle" fill="#0D1B2A">você · ${Rk(s.base)}</text>`;
+  sv+=`<text x="${X(900000)}" y="${mt+14}" font-size="11" text-anchor="middle" fill="#8A7330">zona de transição</text>`;
+  $("g").innerHTML=sv;
+}
+document.querySelectorAll(".presets button").forEach(b=>b.addEventListener("click",()=>setPreset(b.dataset.p)));
+document.querySelectorAll("input").forEach(i=>i.addEventListener("input",()=>{document.querySelectorAll(".presets button").forEach(b=>b.classList.remove("on"));run();}));
+setPreset("P2");
+</script>
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var live=/drheliobarros\.com\.br$/.test(location.hostname); // preview local não polui o funil
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e ao redirect do beehiiv. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  if(!live) return;
+  var payload=JSON.stringify({
+    event:nome, page:"dividendos",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+// "simulou" dispara uma vez, na primeira mexida em qualquer controle do simulador.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou||!e.target.closest||!e.target.closest(".wrap input,.presets button")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+document.getElementById("ir-receber").addEventListener("click",function(){ev("form_scroll");});
+// O ja_assinante é contado aqui; obrigado.html?ja=1 não conta lead de novo.
+document.querySelectorAll("[data-ja-assina]").forEach(function(a){
+  a.addEventListener("click",function(){ev("ja_assinante");});
+});
+</script>
+</body></html>
