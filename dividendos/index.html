@@ -111,6 +111,7 @@ footer{padding:14px 18px 28px;max-width:1240px;margin:0 auto;font-size:11px;colo
   <label>Pró-labore mensal <span class="v" id="v_pro"></span></label><input type="range" id="pro" min="1621" max="40000" step="any">
   <label>Quantas PJs pagam seus dividendos <span class="v" id="v_npj"></span></label><input type="range" id="npj" min="1" max="4" step="1">
   <label>Outras rendas tributáveis no ano (CLT, aluguéis) <span class="v" id="v_out"></span></label><input type="range" id="out" min="0" max="600000" step="5000">
+  <label>Deduções no IR: dependentes, saúde, instrução (ano) <span class="v" id="v_ded"></span></label><input type="range" id="ded" min="0" max="150000" step="1000">
   <div class="rot">CARTEIRA</div>
   <label>Patrimônio financeiro <span class="v" id="v_pat"></span></label><input type="range" id="pat" min="0" max="10000000" step="50000">
   <label>Renda fixa tributada (CDB, Tesouro, fundos) <span class="v" id="v_rf"></span></label><input type="range" id="rf" min="0" max="100" step="1">
@@ -168,7 +169,7 @@ footer{padding:14px 18px 28px;max-width:1240px;margin:0 auto;font-size:11px;colo
   <p class="nota">Sem custo. Um e-mail por edição, duas vezes por semana, e o descadastro fica em todo rodapé.</p>
 </div></div>
 
-<footer><b>Aviso.</b> Material informativo e educacional. Não constitui recomendação de investimento, consultoria de valores mobiliários, tributária ou jurídica. Simulação com parâmetros públicos da Lei 15.270/2025 (retenção de 10% acima de R$ 50 mil/mês por PJ; imposto mínimo de 0% a 10% entre R$ 600 mil e R$ 1,2 milhão; créditos do IRPF e do IR retido), lucro presumido com presunção de 32%, tabela do IRPF vigente e teto do INSS de 2026. A lei ainda não teve sua primeira apuração anual; sua interpretação pode mudar. Desconsidera Simples Nacional, dependentes, despesas dedutíveis, ganhos de capital e custos operacionais. Rentabilidade passada não garante rentabilidade futura. <b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · set/2026.</footer>
+<footer><b>Aviso.</b> Material informativo e educacional. Não constitui recomendação de investimento, consultoria de valores mobiliários, tributária ou jurídica. Simulação com parâmetros públicos da Lei 15.270/2025 (retenção de 10% acima de R$ 50 mil/mês por PJ; imposto mínimo de 0% a 10% entre R$ 600 mil e R$ 1,2 milhão; créditos do IRPF e do IR retido), lucro presumido com presunção de 32%, tabela do IRPF vigente e teto do INSS de 2026. A lei ainda não teve sua primeira apuração anual; sua interpretação pode mudar. Desconsidera Simples Nacional, ganhos de capital e custos operacionais. Rentabilidade passada não garante rentabilidade futura. <b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · set/2026.</footer>
 
 <script>
 // Motor do "Monitor de dividendos" — porte 1:1 de motor.py. Doctor Invest, set/2026.
@@ -203,7 +204,7 @@ function simular(p, m, lei = true) {
   const div = pj.lucro, prol = pj.prol;
   const inssSeg = Math.min(p.prolMes, INSS.TETO) * INSS.SEG * 12;
   const pgbl = Math.min(p.pgbl || 0, 0.12 * (prol + (p.outros || 0)));
-  const baseIrpf = prol + (p.outros || 0) - inssSeg - pgbl;
+  const baseIrpf = prol + (p.outros || 0) - inssSeg - pgbl - (p.deducoes || 0);
   const irpf = irpfAnual(baseIrpf);
   const rendRf = p.patrimonio * p.rfTrib * m.cdi, irRf = rendRf * m.irRf;
   const rendIs = p.patrimonio * p.isentos * m.cdi * m.lciPct;
@@ -237,7 +238,7 @@ function erosao(p, m, anos = 11) {
   for (let t = 0; t < anos; t++) {
     const f = Math.pow(1 + m.ipca, t);
     const q = { ...p, receitaMes: p.receitaMes * f, patrimonio: p.patrimonio * f, prolMes: p.prolMes * f,
-      outros: (p.outros || 0) * f, pgbl: (p.pgbl || 0) * f };
+      outros: (p.outros || 0) * f, pgbl: (p.pgbl || 0) * f, deducoes: (p.deducoes || 0) * f };
     const s = simular(q, m);
     out.push({ ano: 2026 + t, base: s.base, aliq: s.aliq, irpfmReal: s.liquido / f, binding: s.binding });
   }
@@ -255,9 +256,9 @@ function pgblVsVgbl(p, m, anos = 10) {
 if (false) module.exports = { simular, baseOndeMorde, erosao, pgblVsVgbl, aliqIrpfm, margIrpfm, LEI, DEF };
 
 const PRESETS = {
-  P1:{rec:40000,cus:8,pro:8475.55,npj:1,out:0,pat:600000,rf:60,is:20,ac:12,fi:8,pg:0},
-  P2:{rec:70000,cus:8,pro:8475.55,npj:1,out:0,pat:1200000,rf:60,is:20,ac:12,fi:8,pg:0},
-  P3:{rec:100000,cus:8,pro:8475.55,npj:1,out:0,pat:2000000,rf:60,is:20,ac:12,fi:8,pg:0}};
+  P1:{rec:40000,cus:8,pro:8475.55,npj:1,out:0,pat:600000,rf:60,is:20,ac:12,fi:8,pg:0,ded:0},
+  P2:{rec:70000,cus:8,pro:8475.55,npj:1,out:0,pat:1200000,rf:60,is:20,ac:12,fi:8,pg:0,ded:0},
+  P3:{rec:100000,cus:8,pro:8475.55,npj:1,out:0,pat:2000000,rf:60,is:20,ac:12,fi:8,pg:0,ded:0}};
 const MKT = {cdi:13.65,lci:88,dya:5,dyf:10,ipca:4.5};
 const $ = id => document.getElementById(id);
 const R = v => "R$ " + Math.round(v).toLocaleString("pt-BR");
@@ -267,14 +268,14 @@ function setPreset(k){ for (const [id,v] of Object.entries(PRESETS[k])) $(id).va
   document.querySelectorAll(".presets button").forEach(b => b.classList.toggle("on", b.dataset.p === k)); run(); }
 function ler(){
   const rf=+$("rf").value, is=+$("is").value, ac=+$("ac").value, fi=+$("fi").value, soma = rf+is+ac+fi || 1;
-  return { p:{receitaMes:+$("rec").value, custosPct:+$("cus").value/100, prolMes:+$("pro").value, nPjs:+$("npj").value, outros:+$("out").value,
+  return { p:{receitaMes:+$("rec").value, custosPct:+$("cus").value/100, prolMes:+$("pro").value, nPjs:+$("npj").value, outros:+$("out").value, deducoes:+$("ded").value,
     patrimonio:+$("pat").value, rfTrib:rf/soma, isentos:is/soma, acoes:ac/soma, fii:fi/soma, pgbl:+$("pg").value},
     m:{cdi:+$("cdi").value/100, lciPct:+$("lci").value/100, dyAcoes:+$("dya").value/100, dyFii:+$("dyf").value/100, ipca:+$("ipca").value/100}, soma };
 }
 function run(){
   const {p,m,soma} = ler();
   $("v_rec").textContent=R(p.receitaMes); $("v_cus").textContent=$("cus").value+"%"; $("v_pro").textContent=R(p.prolMes);
-  $("v_npj").textContent=$("npj").value; $("v_out").textContent=R(p.outros); $("v_pat").textContent=Rk(p.patrimonio);
+  $("v_npj").textContent=$("npj").value; $("v_out").textContent=R(p.outros); $("v_ded").textContent=R(p.deducoes); $("v_pat").textContent=Rk(p.patrimonio);
   $("v_rf").textContent=P(p.rfTrib,0); $("v_is").textContent=P(p.isentos,0); $("v_ac").textContent=P(p.acoes,0); $("v_fi").textContent=P(p.fii,0);
   $("somaAloc").textContent = soma === 100 ? "Alocação soma 100%." : "Pesos informados somam " + soma + "% — normalizados para 100%.";
   $("v_pg").textContent=R(p.pgbl); $("v_cdi").textContent=$("cdi").value+"%"; $("v_lci").textContent=$("lci").value+"% do CDI";

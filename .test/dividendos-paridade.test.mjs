@@ -27,6 +27,19 @@ assert.equal(R(s3.custoCaixa), 8589); assert.equal(R(m.simular(p3, {}, false).im
 assert.equal(R(s3.impostoTotal), 194290); assert.equal(R(m.pgblVsVgbl(p3, {}).resultado), -439);
 assert.equal(R(m.pgblVsVgbl(perfil(40000, 600000), {}).resultado), 2917);
 
+// 1b. §09 item 6 (corrigido em 17/09): deduções aproximam a mordida, CLT/aluguel afastam.
+// Mesmos números de motor.py com prolabore_deducao_extra e outros_tributaveis.
+for (const [ded, folga] of [[0, 11009], [20000, 5509], [40000, 282]]) {
+  const s = m.simular({ ...p2, deducoes: ded }, {});
+  assert.equal(R(s.irpf + s.irRf - s.bruto), folga);
+}
+for (const [ded, adicional] of [[20000, 54672], [40000, 59899]]) {
+  assert.equal(R(m.simular({ ...p3, deducoes: ded }, {}).liquido), adicional);
+}
+const p2clt = { ...p2, outros: 240000 }, sclt = m.simular(p2clt, {});
+assert.equal(R(sclt.base), 983087); assert.equal(sclt.binding, false);
+assert.equal(R(m.pgblVsVgbl(p2clt, {}).resultado), 9802);
+
 // 2. Todo valor de preset (e de mercado) cabe no step do slider que o recebe.
 const presets = new Function(`${html.match(/const PRESETS = \{[\s\S]*?\}\};/)[0]}
   ${html.match(/const MKT = \{[^}]*\};/)[0]} return { PRESETS, MKT };`)();
