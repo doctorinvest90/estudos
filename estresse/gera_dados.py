@@ -25,6 +25,8 @@ BAIXA_DESDE = dt.date(1999, 12, 1)    # um mês antes, para o preenchimento pelo
 TOLERANCIA_PP = 0.3
 FRESCOR_DIAS = 10
 BURACO_DIAS = 10
+SALTO_MAX = 0.25       # maior variação diária aceita; o maior movimento real desde 2000 é ~16%
+CDI_DIA_MAX = 0.2      # % ao dia; o CDI mais alto desde 2000 (26,5% a.a.) dá ~0,09%
 UA = {"User-Agent": "Mozilla/5.0"}
 
 # Retorno anual oficial (último valor até 31/12 sobre o do ano anterior), em %.
@@ -151,6 +153,18 @@ def conferir(cal, series, brutos, hoje, referencia=CONFERENCIA):
     primeiro = next((i for i, x in enumerate(fii) if x is not None), None)
     if primeiro is None or any(x is None for x in fii[primeiro:]):
         erros.append("fii: sem valor depois do início do IFIX")
+    # Os anos de referência não cobrem o mês que acabou de entrar: cada dia é conferido.
+    for k in ("usd", "spx", "acoes", "fii"):
+        xs = series[k]
+        for i in range(1, len(xs)):
+            a, b = xs[i - 1], xs[i]
+            if a is not None and b is not None and abs(b / a - 1) > SALTO_MAX:
+                erros.append(f"{k}: salto de {100 * (b / a - 1):+.1f}% em {cal[i]}")
+                break
+    for d, taxa in sorted(brutos.get("cdi", {}).items()):
+        if not 0 <= taxa <= CDI_DIA_MAX:
+            erros.append(f"cdi: taxa diária de {taxa}% em {d}")
+            break
     return erros
 
 
@@ -211,6 +225,10 @@ def selftest():
     b2 = dict(brutos, spx={"2021-12-01": 3.0, "2021-12-30": 3.0})
     assert any("buraco" in e for e in conferir(cal2, series, b2, hoje, {}))
     assert any(e.startswith("fii") for e in conferir(cal2, dict(series, fii=[2.0, None]), brutos, hoje, {}))
+    # Dado recente errado (um fechamento pela metade) não pode passar: o gate olha cada dia,
+    # não só os anos de referência. O maior movimento diário real desde 2000 é de ~16%.
+    assert any("salto" in e for e in conferir(cal2, dict(series, acoes=[100.0, 50.0]), brutos, hoje, {}))
+    assert any("taxa" in e for e in conferir(cal2, series, dict(brutos, cdi={"2021-12-30": 0.5, "2021-12-31": 0.01}), hoje, {}))
 
     d = empacotar(cal2, series, "2022-01-05T12:00:00Z")
     assert d["ultima_data"] == "2021-12-31" and d["acoes"] == [100.0, 90.0] and d["fii"] == [None, 100.0]

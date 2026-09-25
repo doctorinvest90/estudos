@@ -28,7 +28,7 @@ h3{display:flex;align-items:center;gap:8px;font-size:14px;margin:0 0 10px;color:
 .ctrl label{display:block;font-size:12.5px;color:var(--cinza2);margin-bottom:2px}
 .par{display:flex;align-items:center;gap:8px}
 .par input[type=range]{flex:1;min-width:0;accent-color:var(--conf);margin:0}
-.par input[type=number]{width:58px;padding:4px 6px;border:1px solid var(--linha);font:inherit;font-size:14px;
+.par input[type=number]{width:62px;padding:4px 6px;border:1px solid var(--linha);font:inherit;font-size:16px;
 color:var(--azul);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
 .pc{font-size:13px;color:var(--cinza2)}
 .soma{font-size:12.5px;color:var(--cinza2);margin:4px 0 0}
@@ -332,6 +332,8 @@ const ROTULO = {
 };
 const CURTO = { ext: "exterior", rf: "renda fixa", acoes: "ações", fii: "FII" };
 const PADRAO = { a: { ext: 25, rf: 25, acoes: 25, fii: 25 }, b: { ext: 0, rf: 100, acoes: 0, fii: 0 } };
+// Rótulo das divisões padrão: nenhuma delas pode parecer recomendação.
+const ROTULO_PADRAO = { a: "exemplo: pesos iguais", b: "referência: só CDI" };
 const COR = { a: "#2A6DB0", b: "#A8781C" };
 const NOME = { a: "Carteira A", b: "Carteira B" };
 const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
@@ -351,6 +353,7 @@ function dataBr(iso) { return iso.slice(8, 10) + "/" + iso.slice(5, 7) + "/" + i
 function dolar(x) { return "R$ " + x.toFixed(2).replace(".", ","); }
 function meses(n) { return n === 1 ? "1 mês" : `${n} meses`; }
 function descreve(w) { return CLASSES.filter((k) => w[k] > 0).map((k) => `${w[k]}% ${CURTO[k]}`).join(" · "); }
+function ehPadrao(id) { return CLASSES.every((k) => estado[id][k] === PADRAO[id][k]); }
 
 function el(tag, attrs = {}, texto) {
   const e = document.createElement(tag);
@@ -370,9 +373,20 @@ function lerUrl() {
   estado.a = lerDivisao(q.get("a")) || { ...PADRAO.a };
   estado.b = lerDivisao(q.get("b")) || { ...PADRAO.b };
 }
+// O Safari limita o replaceState (cerca de 100 chamadas em 30 s) e lança erro depois disso;
+// arrastar um controle de ponta a ponta já chega lá. Grava o endereço só quando o controle
+// para, e a falha nunca impede o desenho.
+let esperaUrl;
 function gravarUrl() {
   const f = (w) => CLASSES.map((k) => w[k]).join(",");
-  history.replaceState(null, "", `${location.pathname}?a=${f(estado.a)}&b=${f(estado.b)}`);
+  clearTimeout(esperaUrl);
+  esperaUrl = setTimeout(() => {
+    try {
+      history.replaceState(null, "", `${location.pathname}?a=${f(estado.a)}&b=${f(estado.b)}`);
+    } catch (e) {
+      // o endereço fica com a divisão anterior; a página segue certa
+    }
+  }, 400);
 }
 
 function montarControles() {
@@ -382,10 +396,11 @@ function montarControles() {
     const bloco = el("div", { class: "carteira" });
     const h = el("h3");
     h.append(chave(COR[id]), document.createTextNode(NOME[id]));
-    bloco.append(h);
+    bloco.append(h, el("p", { class: "obs", id: `padrao_${id}` }));
     for (const k of CLASSES) {
       const linha = el("div", { class: "ctrl" });
-      const faixa = el("input", { type: "range", id: `r_${id}_${k}`, min: "0", max: "100", step: "1" });
+      const faixa = el("input", { type: "range", id: `r_${id}_${k}`, min: "0", max: "100", step: "1",
+        "aria-label": `${NOME[id]}, ${ROTULO[k]}` });
       const num = el("input", { type: "number", id: `n_${id}_${k}`, min: "0", max: "100", step: "1",
         inputmode: "numeric", "aria-label": `${NOME[id]}, ${ROTULO[k]}, em %` });
       const muda = (valor) => {
@@ -414,9 +429,10 @@ function atualizar() {
     const p = document.getElementById(`soma_${id}`);
     p.textContent = s === 100 ? "Total: 100%" : `A soma da carteira ${id.toUpperCase()} está em ${s}%. Ajuste para 100%.`;
     p.className = s === 100 ? "soma" : "soma erro";
+    document.getElementById(`padrao_${id}`).textContent = ehPadrao(id) ? ROTULO_PADRAO[id] : "";
   }
-  gravarUrl();
   desenhar();
+  gravarUrl();
 }
 
 function desenhar() {
@@ -443,7 +459,8 @@ function legenda(id, ativas) {
   div.textContent = "";
   for (const s of ativas) {
     const item = el("span");
-    item.append(chave(COR[s]), document.createTextNode(`${NOME[s]}: ${descreve(estado[s])}`));
+    const rotulo = ehPadrao(s) ? ` (${ROTULO_PADRAO[s]})` : "";
+    item.append(chave(COR[s]), document.createTextNode(`${NOME[s]}${rotulo}: ${descreve(estado[s])}`));
     div.append(item);
   }
 }
