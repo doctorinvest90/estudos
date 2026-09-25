@@ -2,10 +2,130 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Teste de estresse da carteira · Doctor Invest</title>
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;
+--cinza:#8A94A6;--cinza2:#5A6478;--verm:#A8443C;--linha:#E8E4DA;--tinta:#22303F;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:var(--tinta);
+font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+font-size:15px;line-height:1.55}
+header{background:var(--azul);color:var(--marfim);padding:26px 24px 22px}
+header .marca{font-size:11px;letter-spacing:.34em;color:var(--ouro);font-weight:700}
+header h1{font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:27px;margin:12px 0 6px;line-height:1.15}
+header p{margin:0;color:#AFBACB;font-size:14px;max-width:640px}
+.wrap{display:flex;gap:22px;padding:22px;align-items:flex-start;max-width:1240px;margin:0 auto}
+.painel{flex:0 0 330px;background:#fff;border:1px solid var(--linha);padding:18px 18px 20px}
+.res{flex:1;min-width:0}
+@media(max-width:900px){.wrap{flex-direction:column;padding:14px}.painel,.res{flex:none;width:100%}}
+h2{font-family:Georgia,serif;font-size:19px;color:var(--azul);margin:0 0 4px;font-weight:600}
+h3{display:flex;align-items:center;gap:8px;font-size:14px;margin:0 0 10px;color:var(--azul)}
+.sub{font-size:12.5px;color:var(--cinza2);margin:0 0 12px}
+.carteira{margin-bottom:18px}
+.ctrl{margin-bottom:10px}
+.ctrl label{display:block;font-size:12.5px;color:var(--cinza2);margin-bottom:2px}
+.par{display:flex;align-items:center;gap:8px}
+.par input[type=range]{flex:1;min-width:0;accent-color:var(--conf);margin:0}
+.par input[type=number]{width:58px;padding:4px 6px;border:1px solid var(--linha);font:inherit;font-size:14px;
+color:var(--azul);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.pc{font-size:13px;color:var(--cinza2)}
+.soma{font-size:12.5px;color:var(--cinza2);margin:4px 0 0}
+.soma.erro{color:var(--verm);font-weight:700}
+.chave{display:inline-block;width:16px;height:3px;border-radius:2px;flex:none}
+.avisos{background:var(--azul);color:#E4E0D6;padding:14px 18px;margin-bottom:16px;font-size:13.5px}
+.avisos p{margin:0 0 4px}.avisos p:last-child{margin:0}
+.bloco{background:#fff;border:1px solid var(--linha);padding:16px 18px;margin-bottom:16px}
+.legenda{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--cinza2);margin:0 0 8px}
+.legenda span{display:flex;align-items:center;gap:8px}
+.grafico{position:relative}
+.grafico svg{display:block;width:100%;height:auto}
+.grafico svg:focus{outline:2px solid var(--conf);outline-offset:2px}
+.dica{position:absolute;display:none;pointer-events:none;background:#fff;border:1px solid var(--linha);
+padding:8px 10px;font-size:12px;box-shadow:0 2px 8px rgba(13,27,42,.12);white-space:nowrap}
+.dica .data{color:var(--cinza2);margin-bottom:4px}
+.dica .lin{display:flex;align-items:center;gap:6px}
+.dica b{color:var(--tinta);font-variant-numeric:tabular-nums}
+.resumo{display:flex;gap:18px;flex-wrap:wrap}
+.resumo .item{flex:1 1 260px}
+.resumo dl{margin:0;font-size:13.5px}
+.resumo dt{color:var(--cinza2);font-size:12px}
+.resumo dd{margin:0 0 8px}
+.rolagem{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th{background:var(--azul);color:var(--marfim);font-weight:500;font-size:11px;padding:8px 7px;
+text-align:right;letter-spacing:.04em;white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:8px 7px;text-align:right;border-bottom:1px solid var(--linha);white-space:nowrap}
+td:first-child{text-align:left}
+.obs{display:block;font-size:11px;color:var(--cinza2);font-weight:400}
+.nota{font-size:11.5px;color:var(--cinza2);margin:8px 0 0}
+.falha{background:#fff;border:1px solid var(--verm);color:var(--verm);padding:16px 18px}
+footer{background:#F2F0EA;color:#5A616B;font-size:11px;line-height:1.5;padding:18px 24px;margin-top:8px}
+footer b{color:var(--azul)}
+</style>
 </head>
 <body>
+
+<header>
+  <div class="marca">DOCTOR INVEST</div>
+  <h1>Teste de estresse da carteira</h1>
+  <p>Como uma divisão entre exterior, renda fixa, ações e fundos imobiliários passou pelas crises desde 2000. Monte duas divisões e compare.</p>
+</header>
+
+<div class="wrap">
+  <div class="painel">
+    <h2>As duas carteiras</h2>
+    <p class="sub">Cada carteira precisa somar 100%. O endereço da página guarda a comparação: copie e envie.</p>
+    <div id="controles"></div>
+  </div>
+
+  <div class="res">
+    <div class="avisos" role="note">
+      <p>Rentabilidade passada não é garantia de rentabilidade futura.</p>
+      <p>Simulação com índices de mercado: não é uma carteira real e não inclui custos, taxas e impostos.</p>
+      <p>Material educativo. Não é recomendação de investimento.</p>
+    </div>
+    <div id="conteudo">
+      <div class="bloco">
+        <h2>Quanto R$ 100 viraram</h2>
+        <p class="sub">Escala logarítmica: a mesma distância vertical é a mesma variação percentual. As faixas cinza são as crises da tabela mais abaixo.</p>
+        <div class="legenda" id="leg1"></div>
+        <div class="grafico" id="g1"></div>
+      </div>
+      <div class="bloco">
+        <h2>Distância do pico</h2>
+        <p class="sub">Quanto cada carteira estava abaixo do próprio pico em cada dia: o tamanho do buraco de cada crise.</p>
+        <div class="legenda" id="leg2"></div>
+        <div class="grafico" id="g2"></div>
+      </div>
+      <div class="bloco">
+        <h2>Desde 2000</h2>
+        <div class="resumo" id="resumo"></div>
+      </div>
+      <div class="bloco">
+        <h2>Por período</h2>
+        <p class="sub">O resultado depende do período, e o dólar explica boa parte da diferença. Retorno e queda aparecem sempre juntos.</p>
+        <div class="rolagem"><table id="tabPeriodos"></table></div>
+      </div>
+      <div class="bloco">
+        <h2>Nas crises</h2>
+        <p class="sub">Queda do pico ao fundo dentro de cada janela.</p>
+        <div class="rolagem"><table id="tabCrises"></table></div>
+        <p class="nota" id="notaFii"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+<b>Aviso.</b> Rentabilidade passada não é garantia de rentabilidade futura. Simulação com índices de mercado: não é uma carteira real e não inclui custos, taxas e impostos. Material educativo. Não é recomendação de investimento.<br><br>
+<b>Como a conta é feita.</b> A carteira é rebalanceada no primeiro dia útil de cada mês e acompanhada dia a dia. Exterior: S&amp;P 500 com dividendos, convertido para reais pelo dólar do dia. Renda fixa: CDI. Ações: Ibovespa. Fundos imobiliários: IFIX, que começa em 30/12/2010; antes disso, o peso do IFIX é distribuído entre as outras classes na mesma proporção.<br><br>
+<b>Fontes.</b> <span id="fontes"></span>. Dados até <span id="ateData"></span>.<br><br>
+<b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA.
+</footer>
+
 <script>
 "use strict";
 /* calc:inicio */
@@ -200,6 +320,368 @@ function analisar(dados, w) {
   };
 }
 /* calc:fim */
+</script>
+<script>
+"use strict";
+// Desenho da página (DOM). Os números vêm do bloco de cálculo acima.
+const ROTULO = {
+  ext: "Exterior (S&P 500 em reais)",
+  rf: "Renda fixa (CDI)",
+  acoes: "Ações Brasil (Ibovespa)",
+  fii: "Fundos imobiliários (IFIX, desde 2011)",
+};
+const CURTO = { ext: "exterior", rf: "renda fixa", acoes: "ações", fii: "FII" };
+const PADRAO = { a: { ext: 25, rf: 25, acoes: 25, fii: 25 }, b: { ext: 0, rf: 100, acoes: 0, fii: 0 } };
+const COR = { a: "#2A6DB0", b: "#A8781C" };
+const NOME = { a: "Carteira A", b: "Carteira B" };
+const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+const SVGNS = "http://www.w3.org/2000/svg";
+const estado = { a: null, b: null };
+let DADOS = null, SEMANAS = null, REF = null;
+
+function pct(x, casas = 1) {
+  if (x === null || x === undefined || !Number.isFinite(x)) return "—";
+  const s = (Math.abs(x) * 100).toFixed(casas);
+  return (x < 0 && Number(s) !== 0 ? "−" : "") + s.replace(".", ",") + "%";
+}
+function reais(x) { return "R$ " + x.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function inteiro(x) { return Math.round(x).toLocaleString("pt-BR"); }
+function mesAno(iso) { return MESES[Number(iso.slice(5, 7)) - 1] + "/" + iso.slice(0, 4); }
+function dataBr(iso) { return iso.slice(8, 10) + "/" + iso.slice(5, 7) + "/" + iso.slice(0, 4); }
+function dolar(x) { return "R$ " + x.toFixed(2).replace(".", ","); }
+function meses(n) { return n === 1 ? "1 mês" : `${n} meses`; }
+function descreve(w) { return CLASSES.filter((k) => w[k] > 0).map((k) => `${w[k]}% ${CURTO[k]}`).join(" · "); }
+
+function el(tag, attrs = {}, texto) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (texto !== undefined) e.textContent = texto;
+  return e;
+}
+function svg(tag, attrs = {}) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+  return e;
+}
+function chave(cor) { const s = el("span", { class: "chave" }); s.style.background = cor; return s; }
+
+function lerUrl() {
+  const q = new URLSearchParams(location.search);
+  estado.a = lerDivisao(q.get("a")) || { ...PADRAO.a };
+  estado.b = lerDivisao(q.get("b")) || { ...PADRAO.b };
+}
+function gravarUrl() {
+  const f = (w) => CLASSES.map((k) => w[k]).join(",");
+  history.replaceState(null, "", `${location.pathname}?a=${f(estado.a)}&b=${f(estado.b)}`);
+}
+
+function montarControles() {
+  const cont = document.getElementById("controles");
+  cont.textContent = "";
+  for (const id of ["a", "b"]) {
+    const bloco = el("div", { class: "carteira" });
+    const h = el("h3");
+    h.append(chave(COR[id]), document.createTextNode(NOME[id]));
+    bloco.append(h);
+    for (const k of CLASSES) {
+      const linha = el("div", { class: "ctrl" });
+      const faixa = el("input", { type: "range", id: `r_${id}_${k}`, min: "0", max: "100", step: "1" });
+      const num = el("input", { type: "number", id: `n_${id}_${k}`, min: "0", max: "100", step: "1",
+        inputmode: "numeric", "aria-label": `${NOME[id]}, ${ROTULO[k]}, em %` });
+      const muda = (valor) => {
+        estado[id][k] = Math.max(0, Math.min(100, Math.round(Number(valor) || 0)));
+        atualizar();
+      };
+      faixa.addEventListener("input", () => muda(faixa.value));
+      num.addEventListener("change", () => muda(num.value));
+      const par = el("div", { class: "par" });
+      par.append(faixa, num, el("span", { class: "pc" }, "%"));
+      linha.append(el("label", { for: `r_${id}_${k}` }, ROTULO[k]), par);
+      bloco.append(linha);
+    }
+    bloco.append(el("p", { class: "soma", id: `soma_${id}`, "aria-live": "polite" }));
+    cont.append(bloco);
+  }
+}
+
+function atualizar() {
+  for (const id of ["a", "b"]) {
+    for (const k of CLASSES) {
+      document.getElementById(`r_${id}_${k}`).value = String(estado[id][k]);
+      document.getElementById(`n_${id}_${k}`).value = String(estado[id][k]);
+    }
+    const s = somaDivisao(estado[id]);
+    const p = document.getElementById(`soma_${id}`);
+    p.textContent = s === 100 ? "Total: 100%" : `A soma da carteira ${id.toUpperCase()} está em ${s}%. Ajuste para 100%.`;
+    p.className = s === 100 ? "soma" : "soma erro";
+  }
+  gravarUrl();
+  desenhar();
+}
+
+function desenhar() {
+  const r = {};
+  for (const id of ["a", "b"]) r[id] = somaDivisao(estado[id]) === 100 ? analisar(DADOS, estado[id]) : null;
+  const ativas = ["a", "b"].filter((id) => r[id]);
+  legenda("leg1", ativas);
+  legenda("leg2", ativas);
+  grafico(document.getElementById("g1"), ativas.map((id) => ({ id, valores: r[id].v })),
+    { log: true, formato: reais, titulo: "Quanto R$ 100 viraram" });
+  grafico(document.getElementById("g2"), ativas.map((id) => ({ id, valores: r[id].dd })),
+    { log: false, formato: (x) => pct(x), titulo: "Distância do pico" });
+  resumo(r);
+  tabelaPeriodos(r);
+  tabelaCrises(r);
+  const temFii = ativas.some((id) => estado[id].fii > 0);
+  document.getElementById("notaFii").textContent = temFii
+    ? "Antes de 2011 não existe índice de fundos imobiliários: nesse trecho, o peso do IFIX foi distribuído entre as outras classes na mesma proporção."
+    : "";
+}
+
+function legenda(id, ativas) {
+  const div = document.getElementById(id);
+  div.textContent = "";
+  for (const s of ativas) {
+    const item = el("span");
+    item.append(chave(COR[s]), document.createTextNode(`${NOME[s]}: ${descreve(estado[s])}`));
+    div.append(item);
+  }
+}
+
+function grafico(caixa, series, op) {
+  caixa.textContent = "";
+  if (!series.length) { caixa.append(el("p", { class: "sub" }, "Ajuste as carteiras para somar 100%.")); return; }
+  const datas = DADOS.datas, idx = SEMANAS;
+  const W = Math.max(280, caixa.clientWidth);
+  const estreito = W < 560;
+  const H = estreito ? 240 : 300;
+  const M = { e: estreito ? 50 : 62, d: 12, t: 12, b: 28 };
+  const t0 = Date.parse(datas[0]), t1 = Date.parse(datas[datas.length - 1]);
+  const X = (i) => M.e + ((Date.parse(datas[i]) - t0) / (t1 - t0)) * (W - M.e - M.d);
+
+  let lo = Infinity, hi = -Infinity;
+  for (const serie of series) for (const i of idx) {
+    const v = serie.valores[i];
+    if (v !== null) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+  }
+  let Y, marcas = [];
+  if (op.log) {
+    const faixa = Math.max(Math.log(hi) - Math.log(lo), 0.1);
+    const a = Math.log(lo) - 0.04 * faixa, b = Math.log(hi) + 0.04 * faixa;
+    Y = (v) => M.t + ((b - Math.log(v)) / (b - a)) * (H - M.t - M.b);
+    for (let e = Math.floor(a / Math.LN10); e <= Math.ceil(b / Math.LN10); e++)
+      for (const f of [1, 2, 5]) { const v = f * 10 ** e; if (Math.log(v) >= a && Math.log(v) <= b) marcas.push(v); }
+  } else {
+    const passo = lo < -0.3 ? 0.1 : 0.05;
+    const piso = Math.min(-passo, Math.floor(lo / passo + 1e-9) * passo);
+    Y = (v) => M.t + (v / piso) * (H - M.t - M.b);
+    for (let k = 0; k * passo <= -piso + 1e-9; k++) marcas.push(-k * passo);
+  }
+
+  const s = svg("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: "img", tabindex: "0",
+    "aria-label": `${op.titulo}. Use as setas para percorrer as datas.` });
+  s.style.touchAction = "pan-y";
+  for (const c of CRISES) {
+    const a = primeiroIndiceDesde(datas, c.ini), b = ultimoIndiceAte(datas, c.fim);
+    if (a === -1 || b < a) continue;
+    s.append(svg("rect", { x: X(a), y: M.t, width: Math.max(1, X(b) - X(a)), height: H - M.t - M.b,
+      fill: "#0D1B2A", "fill-opacity": 0.06 }));
+  }
+  for (const v of marcas) {
+    const y = Y(v);
+    s.append(svg("line", { x1: M.e, x2: W - M.d, y1: y, y2: y, stroke: "#E8E4DA", "stroke-width": 1 }));
+    const t = svg("text", { x: M.e - 6, y: y + 4, "text-anchor": "end", "font-size": estreito ? 10 : 11, fill: "#5A6478" });
+    t.textContent = op.log ? inteiro(v) : pct(v, 0);
+    s.append(t);
+  }
+  const anoIni = Number(datas[0].slice(0, 4)), anoFim = Number(datas[datas.length - 1].slice(0, 4));
+  const pa = estreito ? 5 : 2;
+  for (let ano = Math.ceil(anoIni / pa) * pa; ano <= anoFim; ano += pa) {
+    const i = primeiroIndiceDesde(datas, `${ano}-01-01`);
+    if (i === -1) continue;
+    const t = svg("text", { x: X(i), y: H - 8, "text-anchor": "middle", "font-size": estreito ? 10 : 11, fill: "#5A6478" });
+    t.textContent = String(ano);
+    s.append(t);
+  }
+  for (const serie of series) {
+    const pts = [];
+    for (const i of idx) if (serie.valores[i] !== null) pts.push([X(i), Y(serie.valores[i])]);
+    if (!pts.length) continue;
+    const d = pts.map(([x, y], j) => `${j ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`).join("");
+    if (!op.log) {
+      const base = Y(0).toFixed(1);
+      s.append(svg("path", { d: `${d}L${pts[pts.length - 1][0].toFixed(1)},${base}L${pts[0][0].toFixed(1)},${base}Z`,
+        fill: COR[serie.id], "fill-opacity": 0.1, stroke: "none" }));
+    }
+    s.append(svg("path", { d, fill: "none", stroke: COR[serie.id], "stroke-width": 2,
+      "stroke-linejoin": "round", "stroke-linecap": "round" }));
+  }
+
+  // Leitura: linha vertical + caixa com a data e os valores de A e de B (ponteiro ou setas).
+  const guia = svg("line", { y1: M.t, y2: H - M.b, stroke: "#5A6478", "stroke-width": 1, visibility: "hidden" });
+  s.append(guia);
+  const pontos = series.map((serie) => {
+    const c = svg("circle", { r: 4, fill: COR[serie.id], stroke: "#fff", "stroke-width": 2, visibility: "hidden" });
+    s.append(c);
+    return c;
+  });
+  caixa.append(s);
+  const dica = el("div", { class: "dica", role: "status" });
+  caixa.append(dica);
+  let atual = null;
+  const mostrar = (k) => {
+    atual = Math.max(0, Math.min(idx.length - 1, k));
+    const i = idx[atual], x = X(i);
+    guia.setAttribute("x1", x);
+    guia.setAttribute("x2", x);
+    guia.setAttribute("visibility", "visible");
+    dica.textContent = "";
+    dica.append(el("div", { class: "data" }, dataBr(datas[i])));
+    series.forEach((serie, j) => {
+      const v = serie.valores[i];
+      if (v === null) pontos[j].setAttribute("visibility", "hidden");
+      else {
+        pontos[j].setAttribute("cx", x);
+        pontos[j].setAttribute("cy", Y(v));
+        pontos[j].setAttribute("visibility", "visible");
+      }
+      const lin = el("div", { class: "lin" });
+      lin.append(chave(COR[serie.id]), el("b", {}, v === null ? "—" : op.formato(v)), el("span", {}, NOME[serie.id]));
+      dica.append(lin);
+    });
+    dica.style.display = "block";
+    const escala = caixa.clientWidth / W;
+    const larg = dica.offsetWidth;
+    let esq = x * escala + 12;
+    if (esq + larg > caixa.clientWidth) esq = x * escala - larg - 12;
+    dica.style.left = `${Math.max(0, esq)}px`;
+    dica.style.top = `${M.t}px`;
+  };
+  const esconder = () => {
+    guia.setAttribute("visibility", "hidden");
+    pontos.forEach((p) => p.setAttribute("visibility", "hidden"));
+    dica.style.display = "none";
+  };
+  const maisProximo = (clientX) => {
+    const r = s.getBoundingClientRect();
+    const xv = ((clientX - r.left) / r.width) * W;
+    let a = 0, b = idx.length - 1;
+    while (a < b) { const meio = (a + b) >> 1; if (X(idx[meio]) < xv) a = meio + 1; else b = meio; }
+    return a > 0 && xv - X(idx[a - 1]) < X(idx[a]) - xv ? a - 1 : a;
+  };
+  s.addEventListener("pointermove", (ev) => mostrar(maisProximo(ev.clientX)));
+  s.addEventListener("pointerdown", (ev) => mostrar(maisProximo(ev.clientX)));
+  s.addEventListener("pointerleave", esconder);
+  s.addEventListener("focus", () => mostrar(atual === null ? idx.length - 1 : atual));
+  s.addEventListener("blur", esconder);
+  s.addEventListener("keydown", (ev) => {
+    if (ev.key !== "ArrowLeft" && ev.key !== "ArrowRight") return;
+    ev.preventDefault();
+    const passo = ev.shiftKey ? 52 : 4;
+    mostrar((atual === null ? idx.length - 1 : atual) + (ev.key === "ArrowRight" ? passo : -passo));
+  });
+}
+
+function resumo(r) {
+  const div = document.getElementById("resumo");
+  div.textContent = "";
+  for (const id of ["a", "b"]) {
+    const item = el("div", { class: "item" });
+    const h = el("h3");
+    h.append(chave(COR[id]), document.createTextNode(NOME[id]));
+    item.append(h);
+    const x = r[id];
+    if (!x) {
+      item.append(el("p", { class: "sub" }, "Ajuste a carteira para somar 100%."));
+      div.append(item);
+      continue;
+    }
+    const i0 = x.v.findIndex((y) => y !== null);
+    if (i0 > 0) item.append(el("p", { class: "obs" }, `Começa em ${mesAno(DADOS.datas[i0])}: antes disso não há dado de todas as classes com peso.`));
+    const mq = x.maiorQueda;
+    const dl = el("dl");
+    const par = (t, d) => dl.append(el("dt", {}, t), el("dd", {}, d));
+    par("Maior queda", mq.fundo ? `${pct(mq.queda)} (do pico em ${mesAno(mq.pico)} ao fundo em ${mesAno(mq.fundo)})` : "nenhuma");
+    if (mq.fundo) par("Recuperação", mq.rec.data ? `${meses(mq.rec.meses)} depois do fundo (${mesAno(mq.rec.data)})` : "ainda não recuperou");
+    par("Pior sequência de 12 meses", x.pior12 ? `${pct(x.pior12.r)} (de ${mesAno(x.pior12.ini)} a ${mesAno(x.pior12.fim)})` : "—");
+    item.append(dl);
+    div.append(item);
+  }
+}
+
+function tabelaPeriodos(r) {
+  const t = document.getElementById("tabPeriodos");
+  t.textContent = "";
+  const cab = el("tr");
+  for (const c of ["Período", "A · retorno ao ano", "A · maior queda", "B · retorno ao ano", "B · maior queda", "CDI ao ano"])
+    cab.append(el("th", { scope: "col" }, c));
+  const thead = el("thead");
+  thead.append(cab);
+  const tbody = el("tbody");
+  PERIODOS.forEach((per, j) => {
+    const tr = el("tr");
+    const ref = REF.periodos[j].est;
+    const td0 = el("td", {}, per.rotulo);
+    if (ref) td0.append(el("span", { class: "obs" }, `dólar de ${dolar(ref.dolarIni)} para ${dolar(ref.dolarFim)}`));
+    tr.append(td0);
+    for (const id of ["a", "b"]) {
+      if (!r[id]) { tr.append(el("td", {}, "—"), el("td", {}, "—")); continue; }
+      const est = r[id].periodos[j].est;
+      if (!est) { tr.append(el("td", {}, "sem dados"), el("td", {}, "sem dados")); continue; }
+      const tdR = el("td", {}, pct(est.retornoAA));
+      if (est.parcial) tdR.append(el("span", { class: "obs" }, `desde ${mesAno(est.inicio)}`));
+      tr.append(tdR, el("td", {}, pct(est.queda)));
+    }
+    tr.append(el("td", {}, ref ? pct(ref.cdiAA) : "—"));
+    tbody.append(tr);
+  });
+  t.append(thead, tbody);
+}
+
+function tabelaCrises(r) {
+  const t = document.getElementById("tabCrises");
+  t.textContent = "";
+  const cab = el("tr");
+  for (const c of ["Crise", "Carteira A", "Carteira B"]) cab.append(el("th", { scope: "col" }, c));
+  const thead = el("thead");
+  thead.append(cab);
+  const tbody = el("tbody");
+  CRISES.forEach((c, j) => {
+    const tr = el("tr");
+    const td0 = el("td", {}, c.rotulo);
+    td0.append(el("span", { class: "obs" }, `${mesAno(c.ini)} a ${mesAno(c.fim)}`));
+    tr.append(td0);
+    for (const id of ["a", "b"]) {
+      const q = r[id] ? r[id].crises[j].queda : undefined;
+      tr.append(el("td", {}, q === undefined ? "—" : q === null ? "sem dados" : pct(q)));
+    }
+    tbody.append(tr);
+  });
+  t.append(thead, tbody);
+}
+
+async function iniciar() {
+  try {
+    const resp = await fetch("dados.json", { cache: "no-cache" });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    DADOS = await resp.json();
+  } catch (e) {
+    const c = document.getElementById("conteudo");
+    c.textContent = "";
+    c.append(el("div", { class: "falha", role: "alert" }, "Não foi possível carregar os dados agora. Tente de novo em alguns minutos."));
+    return;
+  }
+  SEMANAS = indicesSemanais(DADOS.datas);
+  REF = analisar(DADOS, { ext: 0, rf: 100, acoes: 0, fii: 0 });
+  document.getElementById("fontes").textContent = Object.values(DADOS.fontes).join("; ");
+  document.getElementById("ateData").textContent = dataBr(DADOS.ultima_data);
+  lerUrl();
+  montarControles();
+  atualizar();
+  let espera;
+  window.addEventListener("resize", () => { clearTimeout(espera); espera = setTimeout(desenhar, 150); });
+}
+iniciar();
 </script>
 </body>
 </html>
