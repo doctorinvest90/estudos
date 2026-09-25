@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<title>Teste de estresse da carteira · Doctor Invest</title>
+</head>
+<body>
+<script>
+"use strict";
+/* calc:inicio */
+// Funções puras, sem DOM. O teste .test/estresse.test.mjs extrai este bloco.
+const CLASSES = ["ext", "rf", "acoes", "fii"];
+
+const PERIODOS = [
+  { id: "p1", rotulo: "2000–2002", ini: "2000-01-01", fim: "2002-12-31" },
+  { id: "p2", rotulo: "2003–2010", ini: "2003-01-01", fim: "2010-12-31" },
+  { id: "p3", rotulo: "2011–hoje", ini: "2011-01-01", fim: "9999-12-31" },
+  { id: "total", rotulo: "Desde 2000", ini: "0000-01-01", fim: "9999-12-31" },
+];
+
+const CRISES = [
+  { rotulo: "Eleição de 2002", ini: "2002-01-01", fim: "2002-12-31" },
+  { rotulo: "Crise global de 2008", ini: "2008-01-01", fim: "2009-06-30" },
+  { rotulo: "Recessão de 2015", ini: "2014-06-01", fim: "2016-06-30" },
+  { rotulo: "Covid", ini: "2020-01-01", fim: "2020-12-31" },
+  { rotulo: "Juros globais de 2022", ini: "2021-06-01", fim: "2022-12-31" },
+];
+
+// "50,20,15,15" (exterior, renda fixa, ações, FII) -> {ext, rf, acoes, fii}; null se o formato
+// estiver errado ou a soma não der 100.
+function lerDivisao(txt) {
+  if (typeof txt !== "string") return null;
+  const partes = txt.split(",").map((p) => p.trim());
+  if (partes.length !== 4 || partes.some((p) => !/^\d{1,3}$/.test(p))) return null;
+  const n = partes.map(Number);
+  if (n.some((x) => x > 100) || n.reduce((a, b) => a + b, 0) !== 100) return null;
+  return { ext: n[0], rf: n[1], acoes: n[2], fii: n[3] };
+}
+
+function somaDivisao(w) {
+  return CLASSES.reduce((s, k) => s + w[k], 0);
+}
+
+function primeiroIndiceDesde(datas, iso) {
+  for (let i = 0; i < datas.length; i++) if (datas[i] >= iso) return i;
+  return -1;
+}
+
+function ultimoIndiceAte(datas, iso) {
+  for (let i = datas.length - 1; i >= 0; i--) if (datas[i] <= iso) return i;
+  return -1;
+}
+
+// Pesos (frações) só nas classes com dado; a classe sem dado cede o peso às outras na mesma
+// proporção. null quando nada com peso tem dado (100% FII antes de 2011).
+function pesosEfetivos(w, disponivel) {
+  const base = CLASSES.reduce((s, k) => s + (disponivel[k] ? w[k] : 0), 0);
+  if (base === 0) return null;
+  const p = {};
+  for (const k of CLASSES) p[k] = disponivel[k] ? w[k] / base : 0;
+  return p;
+}
+
+// Valor diário (base 100), rebalanceado na primeira data de cada mês; null enquanto não existe.
+function simularCarteira(dados, w) {
+  const n = dados.datas.length;
+  const v = new Array(n).fill(null);
+  let cotas = null, valor = null, mes = null;
+  for (let i = 0; i < n; i++) {
+    if (cotas) {
+      valor = 0;
+      for (const k of CLASSES) if (cotas[k] > 0) valor += cotas[k] * dados[k][i];
+    }
+    const m = dados.datas[i].slice(0, 7);
+    if (m !== mes) {
+      mes = m;
+      const disp = {};
+      for (const k of CLASSES) disp[k] = dados[k][i] !== null && dados[k][i] !== undefined;
+      const p = pesosEfetivos(w, disp);
+      if (p) {
+        if (valor === null) valor = 100;
+        cotas = {};
+        for (const k of CLASSES) cotas[k] = p[k] > 0 ? (valor * p[k]) / dados[k][i] : 0;
+      }
+    }
+    v[i] = valor;
+  }
+  return v;
+}
+
+// Maior queda a partir do pico corrente em [i0, i1]; pico e fundo são índices (null sem queda).
+function maiorQueda(v, i0, i1) {
+  let pico = null, iPico = -1, res = { queda: 0, pico: null, fundo: null };
+  for (let i = i0; i <= i1; i++) {
+    if (v[i] === null) continue;
+    if (pico === null || v[i] > pico) { pico = v[i]; iPico = i; }
+    const q = v[i] / pico - 1;
+    if (q < res.queda) res = { queda: q, pico: iPico, fundo: i };
+  }
+  return res;
+}
+
+function anualizado(x0, x1, dias) {
+  return Math.pow(x1 / x0, 365.25 / dias) - 1;
+}
+
+// Números de um período. Base = fechamento anterior ao período (no primeiro, a primeira data).
+function estatPeriodo(dados, v, per) {
+  const d = dados.datas;
+  const i0 = primeiroIndiceDesde(d, per.ini), i1 = ultimoIndiceAte(d, per.fim);
+  if (i0 === -1 || i1 === -1 || i1 < i0) return null;
+  const ideal = i0 > 0 ? i0 - 1 : 0;
+  let ib = ideal;
+  while (ib <= i1 && v[ib] === null) ib++;
+  if (ib >= i1 || v[i1] === null) return null;
+  const dias = (Date.parse(d[i1]) - Date.parse(d[ib])) / 864e5;
+  return {
+    retornoAA: anualizado(v[ib], v[i1], dias),
+    queda: maiorQueda(v, ib, i1).queda,
+    cdiAA: anualizado(dados.rf[ib], dados.rf[i1], dias),
+    dolarIni: dados.usd[ib],
+    dolarFim: dados.usd[i1],
+    inicio: d[ib],
+    parcial: ib !== ideal,
+  };
+}
+
+function mesesEntre(a, b) {
+  return Math.round((Date.parse(b) - Date.parse(a)) / (864e5 * 30.4375));
+}
+
+// Depois da maior queda: primeira data depois do fundo de volta ao valor do pico.
+function recuperacao(v, datas, mq) {
+  if (mq.fundo === null) return null;
+  for (let i = mq.fundo + 1; i < v.length; i++) {
+    if (v[i] !== null && v[i] >= v[mq.pico]) return { data: datas[i], meses: mesesEntre(datas[mq.fundo], datas[i]) };
+  }
+  return { data: null, meses: null };
+}
+
+// Pior sequência de 12 meses: v(d) / v(última data <= d menos um ano) - 1.
+function pior12m(v, datas) {
+  let pior = null, j = 0;
+  for (let i = 0; i < v.length; i++) {
+    if (v[i] === null) continue;
+    const alvo = String(Number(datas[i].slice(0, 4)) - 1).padStart(4, "0") + datas[i].slice(4);
+    while (j + 1 < i && datas[j + 1] <= alvo) j++;
+    if (datas[j] > alvo || v[j] === null) continue;
+    const r = v[i] / v[j] - 1;
+    if (pior === null || r < pior.r) pior = { r, ini: datas[j], fim: datas[i] };
+  }
+  return pior;
+}
+
+function quedaNaCrise(v, datas, c) {
+  const i0 = primeiroIndiceDesde(datas, c.ini), i1 = ultimoIndiceAte(datas, c.fim);
+  if (i0 === -1 || i1 < i0) return null;
+  let a = i0;
+  while (a <= i1 && v[a] === null) a++;
+  return a > i1 ? null : maiorQueda(v, a, i1).queda;
+}
+
+function distanciaDoPico(v) {
+  let pico = null;
+  return v.map((x) => {
+    if (x === null) return null;
+    if (pico === null || x > pico) pico = x;
+    return x / pico - 1;
+  });
+}
+
+// Índice da última data de cada semana (segunda a domingo), para desenhar os gráficos.
+function indicesSemanais(datas) {
+  const semana = (iso) => Math.floor((Date.parse(iso) / 864e5 + 3) / 7);
+  const out = [];
+  for (let i = 0; i < datas.length; i++) {
+    if (i === datas.length - 1 || semana(datas[i + 1]) !== semana(datas[i])) out.push(i);
+  }
+  return out;
+}
+
+function analisar(dados, w) {
+  const v = simularCarteira(dados, w);
+  let i0 = 0;
+  while (i0 < v.length && v[i0] === null) i0++;
+  const mq = i0 < v.length ? maiorQueda(v, i0, v.length - 1) : { queda: 0, pico: null, fundo: null };
+  return {
+    v,
+    dd: distanciaDoPico(v),
+    periodos: PERIODOS.map((p) => ({ ...p, est: estatPeriodo(dados, v, p) })),
+    maiorQueda: {
+      queda: mq.queda,
+      pico: mq.pico === null ? null : dados.datas[mq.pico],
+      fundo: mq.fundo === null ? null : dados.datas[mq.fundo],
+      rec: recuperacao(v, dados.datas, mq),
+    },
+    pior12: pior12m(v, dados.datas),
+    crises: CRISES.map((c) => ({ ...c, queda: quedaNaCrise(v, dados.datas, c) })),
+  };
+}
+/* calc:fim */
+</script>
+</body>
+</html>
