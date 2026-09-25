@@ -215,7 +215,110 @@ def selftest():
     d = empacotar(cal2, series, "2022-01-05T12:00:00Z")
     assert d["ultima_data"] == "2021-12-31" and d["acoes"] == [100.0, 90.0] and d["fii"] == [None, 100.0]
 
+    # baixar: corpo que não se deixa ler (o Banco Central às vezes responde 200 vazio) conta
+    # como falha e tenta de novo; esgotadas as tentativas, o erro sobe com a URL.
+    respostas = [b"", b"[1]"]
+    assert baixar("x", ler=json.loads, abrir=lambda url: respostas.pop(0), espera=0) == [1]
+    assert respostas == []
+    try:
+        baixar("x", tentativas=2, ler=json.loads, abrir=lambda url: b"", espera=0)
+        raise AssertionError("deveria ter falhado")
+    except RuntimeError as e:
+        assert "falha ao baixar x" in str(e)
+
+
+# ---------------------------------------------------------------- rede
+
+def _abrir(url):
+    with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
+        return r.read()
+
+
+def baixar(url, tentativas=3, ler=None, abrir=_abrir, espera=3):
+    """Baixa e interpreta com `ler`. Resposta que não se deixa ler conta como falha de rede:
+    o Banco Central às vezes responde 200 com corpo vazio."""
+    for n in range(tentativas):
+        try:
+            corpo = abrir(url)
+            return ler(corpo) if ler else corpo
+        except Exception as e:  # rede ou conteúdo inválido: nova tentativa; a última propaga
+            if n == tentativas - 1:
+                raise RuntimeError(f"falha ao baixar {url}: {e}") from e
+            time.sleep(espera * (n + 1))
+
+
+def bcb(serie, inicio, fim):
+    """Série diária do SGS. O Banco Central aceita no máximo 10 anos por consulta."""
+    out, a = {}, inicio
+    while a <= fim:
+        b = min(dt.date(a.year + 9, 12, 31), fim)
+        url = (f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{serie}/dados?formato=json"
+               f"&dataInicial={a:%d/%m/%Y}&dataFinal={b:%d/%m/%Y}")
+        for row in baixar(url, ler=json.loads):
+            d, m, y = row["data"].split("/")
+            out[f"{y}-{m}-{d}"] = float(row["valor"])
+        a = b + dt.timedelta(days=1)
+    return out
+
+
+def b3(indice, ano_ini, ano_fim):
+    """Fechamentos diários oficiais de um índice da B3, ano a ano."""
+    out = {}
+    for ano in range(ano_ini, ano_fim + 1):
+        p = base64.b64encode(json.dumps({"index": indice, "language": "pt-br", "year": str(ano)}).encode()).decode()
+        url = f"https://sistemaswebb3-listados.b3.com.br/indexStatisticsProxy/IndexCall/GetDownloadPortfolioDay/{p}"
+        csv = baixar(url, ler=lambda b: base64.b64decode(b, validate=True).decode("latin-1"))
+        out.update(ler_csv_b3(csv, ano))
+    return out
+
+
+def yahoo(simbolo, inicio, fim):
+    """Fechamentos diários do Yahoo (a data vem do horário de abertura, em UTC)."""
+    p1 = int(dt.datetime(inicio.year, inicio.month, inicio.day, tzinfo=dt.timezone.utc).timestamp())
+    p2 = int(dt.datetime(fim.year, fim.month, fim.day, tzinfo=dt.timezone.utc).timestamp()) + 86400
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{simbolo}?interval=1d&period1={p1}&period2={p2}"
+    r = baixar(url, ler=lambda b: json.loads(b)["chart"]["result"][0])
+    fechamentos = r["indicators"]["quote"][0]["close"]
+    return {dt.datetime.fromtimestamp(t, dt.timezone.utc).strftime("%Y-%m-%d"): c
+            for t, c in zip(r["timestamp"], fechamentos) if c is not None}
+
+
+def baixar_tudo(hoje):
+    return {
+        "cdi": bcb(12, BAIXA_DESDE, hoje),
+        "usd": bcb(1, BAIXA_DESDE, hoje),
+        "ibov": b3("IBOV", BAIXA_DESDE.year, hoje.year),
+        "ifix": b3("IFIX", 2010, hoje.year),
+        "spx": yahoo("%5ESP500TR", BAIXA_DESDE, hoje),
+    }
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="Gera estresse/dados.json (teste de estresse da carteira).")
+    ap.add_argument("--out", default=str(Path(__file__).with_name("dados.json")))
+    ap.add_argument("--selftest", action="store_true")
+    args = ap.parse_args(argv)
+    if args.selftest:
+        selftest()
+        print("selftest ok")
+        return 0
+    hoje = dt.date.today()
+    brutos = baixar_tudo(hoje)
+    cal, series = montar(brutos)
+    erros = conferir(cal, series, brutos, hoje)
+    if erros:
+        print("Conferência falhou; dados.json não foi alterado:", file=sys.stderr)
+        for e in erros:
+            print("  - " + e, file=sys.stderr)
+        return 1
+    agora = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    dados = empacotar(cal, series, agora)
+    tmp = Path(args.out + ".tmp")
+    tmp.write_text(json.dumps(dados, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    os.replace(tmp, args.out)
+    print(f"ok: {len(cal)} datas, de {cal[0]} a {cal[-1]}")
+    return 0
+
 
 if __name__ == "__main__":
-    selftest()
-    print("selftest ok")
+    sys.exit(main())
