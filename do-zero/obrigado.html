@@ -31,6 +31,7 @@
 
   footer{background:var(--dark);color:rgba(247,245,240,.5);font-size:13px;text-align:center;padding:30px 22px;line-height:1.65}
 </style>
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1893562330686295');fbq('track','PageView');</script>
 </head>
 <body>
 
@@ -94,7 +95,7 @@ function ev(nome){
 // ?ja=1 = chegou pela saída de quem já assina (o ja_assinante já foi contado na página
 // anterior). Sem esta guarda o assinante antigo vira "lead" e infla a captação.
 if(qs.has("ja")){ document.getElementById("confirmar").hidden=true; }
-else { ev("lead"); }
+else { ev("lead"); if(live&&window.fbq) fbq("track","CompleteRegistration",{content_name:"estudo-do-zero"}); }
 document.querySelectorAll("[data-baixar]").forEach(function(a){
   a.addEventListener("click",function(){ev("download");});
 });
