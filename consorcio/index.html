@@ -148,13 +148,20 @@ footer b{color:var(--azul)}
       o dinheiro não tinha destino melhor. Nenhum desses é o cenário vendido no material comercial.</p>
     </div>
 
-    <div class="baixar">
-      <a class="btn" href="estudo.pdf" id="dl">Baixar o estudo completo (PDF, 17 páginas + errata)</a>
-      <a class="btn sec" href="base-de-dados.csv" id="dl-csv" download>Baixar a base de dados (CSV)</a>
+    <div id="muro">
+      <p><b>O estudo completo (PDF, 17 páginas + errata) e a base de dados vão para o seu e-mail.</b>
+      O PDF inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis objeções que um
+      leitor técnico levantaria; o CSV traz toda a série usada, incluindo as doze assembleias. Ele
+      abre na hora, e você passa a receber a newsletter.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <p class="nota">Já recebe a newsletter?
+        <a href="../obrigado.html?e=consorcio&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
     </div>
-    <p class="nota">O PDF inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis
-    objeções que um leitor técnico levantaria e o que cada uma faz com a conclusão. O CSV traz toda
-    a série usada, incluindo as doze assembleias, para conferência.</p>
+    
     <div class="errata" id="errata">
       <div class="rot">ERRATA · SETEMBRO DE 2026</div>
       <p>A versão de agosto comparou o consórcio com um financiamento a 11,50% ao ano sem somar a TR, e supôs que
@@ -237,8 +244,12 @@ function ev(nome){
   else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
 }
 ev("view");
-document.getElementById("dl").addEventListener("click",function(){ev("download");});
-document.getElementById("dl-csv").addEventListener("click",function(){ev("download");});
+// Muro do estudo: o formulário beehiiv redireciona para /obrigado.html, que roteia
+// por esta chave (mesma aba, mesma origem).
+try{sessionStorage.setItem("estudo_origem","consorcio");}catch(e){}
+document.querySelectorAll("[data-ja-assina]").forEach(function(a){
+  a.addEventListener("click",function(){ev("ja_assinante");});
+});
 
 // As duas portas propagam os UTM: sem isso a atribuição morre no primeiro clique
 // e o lead que sai da calculadora aparece como tráfego direto.

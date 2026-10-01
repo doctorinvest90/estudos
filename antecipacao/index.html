@@ -130,14 +130,18 @@ footer b{color:var(--azul)}
       orçamento, sem mexer na taxa, encurta para 23 — e continua rendendo depois que a dívida
       acaba.</li>
     </ol>
-    <p class="baixar">
-      <a href="estudo.pdf" id="dl">Baixar o estudo completo (PDF, 19 páginas)</a>
-      — inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis objeções mais
-      fortes que um leitor técnico faria, e a limitação de dado declarada na segunda página:
-      nenhum dos cinco operadores verificados publica tabela de preços.
-      <br><a href="base-de-dados.csv" id="dl-csv">Baixar a base de dados (CSV)</a>
-      — todos os números do documento saem dela.
-    </p>
+    <div class="baixar">
+      <p><b>O estudo completo (PDF, 19 páginas) e a base de dados vão para o seu e-mail</b> —
+      inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis objeções mais
+      fortes que um leitor técnico faria. Ele abre na hora, e você passa a receber a newsletter.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=antecipacao&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
+    </div>
   </div>
 </div>
 
@@ -233,7 +237,7 @@ fale com a <b>Doctor Invest</b>.
 <div class="faixa" style="padding-bottom:26px"><div class="bloco" id="captura">
   <h2>Leve esta simulação com você</h2><div class="hr"></div>
   <p class="sub">Gera um PDF de uma página com os seus números, a régua do Banco Central e a
-  trajetória de saída. O estudo completo continua livre acima — isto é só a sua simulação.</p>
+  trajetória de saída. Livre, sem cadastro — o estudo completo é o que vai por e-mail, lá em cima.</p>
   <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber a simulação"></iframe>
   <button id="btn-print" disabled>Gerar o PDF desta simulação</button>
   <p class="leg" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
@@ -516,8 +520,12 @@ function marcarSimulou(e){
   jaSimulou=true; ev("simulou");
 }
 ["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
-document.getElementById("dl").addEventListener("click",function(){ev("download");});
-document.getElementById("dl-csv").addEventListener("click",function(){ev("download");});
+// Muro do estudo: o formulário beehiiv redireciona para /obrigado.html, que roteia
+// por esta chave (mesma aba, mesma origem).
+try{sessionStorage.setItem("estudo_origem","antecipacao");}catch(e){}
+document.querySelectorAll("[data-ja-assina]").forEach(function(a){
+  a.addEventListener("click",function(){ev("ja_assinante");});
+});
 </script>
 
 <script>
@@ -526,7 +534,8 @@ var FF_ORIGIN="https://forms.fillout.com";
 // os três é o parâmetro `estudo`, e o `estudo-intake` roteia por ele o texto de
 // boas-vindas e o corpo da Note. Por isso a página manda só DOIS parâmetros:
 // campo novo no Fillout exigiria mexer no formulário que os outros dois usam.
-var FF_FORM="jMJQg14vTUus";
+// Desligado em 01/10/2026: a simulação ficou livre; o muro é o e-mail do estudo.
+var FF_FORM="";
 var btn=document.getElementById("btn-print");
 
 if(!FF_FORM){

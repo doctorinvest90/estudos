@@ -125,11 +125,18 @@ footer b{color:var(--conf)}
       <li><b>Na janela de dez anos, o rebalanceamento venceu nos três perfis</b>, com mais retorno
           e menos risco.</li>
     </ol>
-    <p style="margin-top:16px" id="linha-dl">
-      <a href="estudo.pdf" id="dl" style="color:var(--conf);font-weight:700">
-        Baixar o estudo completo (PDF, 18 páginas)</a>
-      — inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis limitações do método.
-    </p>
+    <div style="margin-top:16px" id="linha-dl">
+      <p><b>O estudo completo (PDF, 18 páginas) vai para o seu e-mail</b> — inclui a seção
+      <i>“Onde este estudo pode estar errado”</i>, com as seis limitações do método. Ele abre na
+      hora, e você passa a receber a newsletter.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=alocacao&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
+    </div>
   </div>
 </div>
 
@@ -219,14 +226,11 @@ footer b{color:var(--conf)}
 <div class="wrap"><div class="card" id="captura">
   <h3>Leve esta simulação com você</h3>
   <p class="hint">Gera um PDF de uma página com a carteira que você montou, os gráficos e os números
-     de risco. O estudo completo continua livre acima — isto é só a sua simulação.</p>
-  <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber a simulação"></iframe>
-  <button id="btn-print" disabled
+     de risco. Livre, sem cadastro — o estudo completo é o que vai por e-mail, lá em cima.</p>
+  <button id="btn-print"
     style="margin-top:14px;padding:11px 18px;background:var(--azul);color:var(--marfim);
-           border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45">
+           border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer">
     Gerar o PDF desta simulação</button>
-  <p class="nota" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
-     <b>Cmd+P</b> imprime esta página do mesmo jeito.</p>
 </div></div>
 
 <footer><div>
@@ -509,60 +513,12 @@ function marcarSimulou(e){
 </script>
 
 <script>
-var FF_ORIGIN="https://forms.fillout.com";
-var FF_FORM="jMJQg14vTUus";
-var ffEmbedId=String(Math.floor(Date.now()%1e9));
-
-function paramsSimulacao(){
-  // C e W são globais do simulador — mesmas chaves que compute.ts espera.
-  var pesos=C.map(function(c,i){return c[0]+":"+W[i];}).join("|");
-  var p=new URLSearchParams({
-    alocacao:pesos,
-    patrimonio:document.getElementById("ini").value,
-    aporte:document.getElementById("ap").value,
-    janela:document.getElementById("jan").value,
-    rebal:document.querySelector("#tg .on").dataset.v
-  });
-  ["utm_source","utm_medium","utm_campaign","utm_content","utm_term","fbclid","lp"]
-    .forEach(function(k){ if(u(k)) p.set(k,u(k)); });
-  // Sem estes três, o iframe carrega como página solta e não posta mensagem nenhuma
-  // (server.fillout.com/embed/v1: o handler do filho é montado por embed-type/dynamic-resize).
-  p.set("fillout-embed-id",ffEmbedId);
-  p.set("fillout-embed-type","standard");
-  p.set("fillout-embed-dynamic-resize","true");
-  return p;
-}
-
-// O src só é montado quando a captura entra em tela: assim o iframe carrega a
-// carteira que a pessoa realmente montou, não os pesos iniciais da página.
-new IntersectionObserver(function(es,obs){
-  if(!es.some(function(e){return e.isIntersecting;})) return;
-  document.getElementById("ff").src=FF_ORIGIN+"/t/"+FF_FORM+"?"+paramsSimulacao().toString();
-  obs.disconnect();
-},{threshold:.25}).observe(document.getElementById("captura"));
-
-function liberarImpressao(){
-  var b=document.getElementById("btn-print");
-  if(!b.disabled) return;
-  b.disabled=false; b.style.opacity="1";
-  document.getElementById("dica-print").style.display="none";
-  ev("lead");
-}
-
-// Buffer de diagnóstico: o embed do Fillout usa `type` em snake_case
-// (form_resized, check_scroll_up). O nome do evento de submissão fica gravado
-// aqui para conferência ao vivo, em vez de ser adivinhado.
-window.__ffMsgs=[];
-addEventListener("message",function(e){
-  if(e.origin!==FF_ORIGIN) return;
-  var d=e.data||{};
-  window.__ffMsgs.push(typeof d==="object"?d.type:String(d));
-  if(d.embedId && d.embedId!==ffEmbedId) return;
-  if(typeof d.type==="string" && /submi|complet|thank/i.test(d.type)) liberarImpressao();
-  // O iframe também cresce conforme a pessoa avança; acompanhar evita corte.
-  if(d.type==="form_resized" && d.size) document.getElementById("ff").style.height=d.size+"px";
+// Muro do estudo: o formulário beehiiv redireciona para /obrigado.html, que roteia
+// por esta chave (mesma aba, mesma origem).
+try{sessionStorage.setItem("estudo_origem","alocacao");}catch(e){}
+document.querySelectorAll("[data-ja-assina]").forEach(function(a){
+  a.addEventListener("click",function(){ev("ja_assinante");});
 });
-
 document.getElementById("btn-print").onclick=function(){ev("download");window.imprimirSimulacao();};
 </script>
 </body></html>

@@ -133,8 +133,8 @@ border:0;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45}
 <div id="captura"><div class="cx">
   <h2>Leve este diagnóstico com você</h2>
   <p class="sub">Gera um PDF de uma página com os quatro caminhos, o veredito e a tabela — com os
-  números da sua cota, não os do contrato de exemplo. O estudo completo e as duas ferramentas
-  continuam livres, sem cadastro.</p>
+  números da sua cota, não os do contrato de exemplo. As duas ferramentas são livres; o estudo
+  completo vai por e-mail, na página principal.</p>
   <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber o diagnóstico"></iframe>
   <button id="btn-print" disabled>Gerar o PDF deste diagnóstico</button>
   <p class="nota" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
@@ -519,7 +519,8 @@ var FF_ORIGIN="https://forms.fillout.com";
 // parâmetro `estudo`, montado em paramsCota() — e o `estudo-intake` roteia o
 // texto de boas-vindas e a Note por ele. Trocar este id sem ter os parâmetros
 // `estudo`/`dados` registrados no formulário faz a captura virar linha muda.
-var FF_FORM="jMJQg14vTUus";
+// Desligado em 01/10/2026: o diagnóstico ficou livre; o muro é o e-mail do estudo.
+var FF_FORM="";
 
 var btn=document.getElementById("btn-print");
 if(!FF_FORM){
