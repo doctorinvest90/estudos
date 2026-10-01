@@ -125,10 +125,10 @@ footer b{color:var(--conf)}
       <li><b>Na janela de dez anos, o rebalanceamento venceu nos três perfis</b>, com mais retorno
           e menos risco.</li>
     </ol>
-    <div style="margin-top:16px" id="linha-dl">
+    <div style="margin-top:16px" id="linha-dl" data-muro>
       <p><b>O estudo completo (PDF, 18 páginas) vai para o seu e-mail</b> — inclui a seção
-      <i>“Onde este estudo pode estar errado”</i>, com as seis limitações do método. Ele abre na
-      hora, e você passa a receber a newsletter.</p>
+      <i>“Onde este estudo pode estar errado”</i>, com as seis limitações do método. O mesmo e-mail
+      libera o PDF da sua simulação, lá embaixo. Abre na hora, e você passa a receber a newsletter.</p>
       <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
               class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
               style="width:100%;border:0;margin-top:8px"
@@ -226,7 +226,7 @@ footer b{color:var(--conf)}
 <div class="wrap"><div class="card" id="captura">
   <h3>Leve esta simulação com você</h3>
   <p class="hint">Gera um PDF de uma página com a carteira que você montou, os gráficos e os números
-     de risco. Livre, sem cadastro — o estudo completo é o que vai por e-mail, lá em cima.</p>
+     de risco. Libera com o mesmo e-mail do estudo, lá em cima — e os números que você montou ficam.</p>
   <button id="btn-print"
     style="margin-top:14px;padding:11px 18px;background:var(--azul);color:var(--marfim);
            border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer">
@@ -513,12 +513,7 @@ function marcarSimulou(e){
 </script>
 
 <script>
-// Muro do estudo: o formulário beehiiv redireciona para /obrigado.html, que roteia
-// por esta chave (mesma aba, mesma origem).
-try{sessionStorage.setItem("estudo_origem","alocacao");}catch(e){}
-document.querySelectorAll("[data-ja-assina]").forEach(function(a){
-  a.addEventListener("click",function(){ev("ja_assinante");});
-});
-document.getElementById("btn-print").onclick=function(){ev("download");window.imprimirSimulacao();};
+document.getElementById("btn-print").onclick=function(){window.imprimirSimulacao();};
 </script>
+<script src="../muro.js" data-estudo="alocacao"></script>
 </body></html>

@@ -135,6 +135,14 @@ border:0;font-family:inherit;font-size:14px;cursor:pointer;opacity:.45}
   <p class="sub">Gera um PDF de uma página com os quatro caminhos, o veredito e a tabela — com os
   números da sua cota, não os do contrato de exemplo. As duas ferramentas são livres; o estudo
   completo vai por e-mail, na página principal.</p>
+  <div data-muro style="margin:10px 0 6px">
+    <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+            class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+            style="width:100%;border:0" frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+    <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+    <p class="nota">Já recebe a newsletter?
+      <a href="../obrigado.html?e=consorcio&amp;ja=1" data-ja-assina>Libere aqui.</a></p>
+  </div>
   <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber o diagnóstico"></iframe>
   <button id="btn-print" disabled>Gerar o PDF deste diagnóstico</button>
   <p class="nota" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
@@ -530,7 +538,8 @@ if(!FF_FORM){
   document.getElementById("dica-print").style.display="none";
   document.querySelector("#captura .sub").textContent=
     "Gera um PDF de uma página com os quatro caminhos, o veredito e a tabela — com os números da "+
-    "sua cota, não os do contrato de exemplo.";
+    "sua cota. Libera com o e-mail da newsletter, que também traz o estudo completo — e os "+
+    "números que você digitou ficam.";
   btn.disabled=false;
 }else{
   var ffEmbedId=String(Math.floor(Date.now()%1e9));
@@ -586,7 +595,8 @@ if(!FF_FORM){
   });
 }
 
-btn.onclick=function(){ev("download");window.imprimirDiagnostico();};
+btn.onclick=function(){window.imprimirDiagnostico();};
 </script>
+<script src="../muro.js" data-estudo="consorcio"></script>
 </body>
 </html>

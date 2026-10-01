@@ -130,10 +130,11 @@ footer b{color:var(--azul)}
       orçamento, sem mexer na taxa, encurta para 23 — e continua rendendo depois que a dívida
       acaba.</li>
     </ol>
-    <div class="baixar">
+    <div class="baixar" data-muro>
       <p><b>O estudo completo (PDF, 19 páginas) e a base de dados vão para o seu e-mail</b> —
       inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis objeções mais
-      fortes que um leitor técnico faria. Ele abre na hora, e você passa a receber a newsletter.</p>
+      fortes que um leitor técnico faria. O mesmo e-mail libera o PDF da sua simulação.
+      Abre na hora, e você passa a receber a newsletter.</p>
       <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
               class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
               style="width:100%;border:0;margin-top:8px"
@@ -237,7 +238,7 @@ fale com a <b>Doctor Invest</b>.
 <div class="faixa" style="padding-bottom:26px"><div class="bloco" id="captura">
   <h2>Leve esta simulação com você</h2><div class="hr"></div>
   <p class="sub">Gera um PDF de uma página com os seus números, a régua do Banco Central e a
-  trajetória de saída. Livre, sem cadastro — o estudo completo é o que vai por e-mail, lá em cima.</p>
+  trajetória de saída. Libera com o mesmo e-mail do estudo, lá em cima — e os números que você informou ficam.</p>
   <iframe id="ff" style="width:100%;height:520px;border:0" title="Receber a simulação"></iframe>
   <button id="btn-print" disabled>Gerar o PDF desta simulação</button>
   <p class="leg" id="dica-print">Depois de enviar o formulário acima o botão libera. Se preferir,
@@ -520,12 +521,6 @@ function marcarSimulou(e){
   jaSimulou=true; ev("simulou");
 }
 ["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
-// Muro do estudo: o formulário beehiiv redireciona para /obrigado.html, que roteia
-// por esta chave (mesma aba, mesma origem).
-try{sessionStorage.setItem("estudo_origem","antecipacao");}catch(e){}
-document.querySelectorAll("[data-ja-assina]").forEach(function(a){
-  a.addEventListener("click",function(){ev("ja_assinante");});
-});
 </script>
 
 <script>
@@ -595,7 +590,8 @@ if(!FF_FORM){
     if(d.type==="form_resized" && d.size) document.getElementById("ff").style.height=d.size+"px";
   });
 }
-btn.onclick=function(){ev("download");window.imprimirSimulacao();};
+btn.onclick=function(){window.imprimirSimulacao();};
 </script>
+<script src="../muro.js" data-estudo="antecipacao"></script>
 </body>
 </html>

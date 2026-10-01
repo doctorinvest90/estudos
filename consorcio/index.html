@@ -148,7 +148,7 @@ footer b{color:var(--azul)}
       o dinheiro não tinha destino melhor. Nenhum desses é o cenário vendido no material comercial.</p>
     </div>
 
-    <div id="muro">
+    <div id="muro" data-muro>
       <p><b>O estudo completo (PDF, 17 páginas + errata) e a base de dados vão para o seu e-mail.</b>
       O PDF inclui a seção <i>“Onde este estudo pode estar errado”</i>, com as seis objeções que um
       leitor técnico levantaria; o CSV traz toda a série usada, incluindo as doze assembleias. Ele
@@ -244,12 +244,6 @@ function ev(nome){
   else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
 }
 ev("view");
-// Muro do estudo: o formulário beehiiv redireciona para /obrigado.html, que roteia
-// por esta chave (mesma aba, mesma origem).
-try{sessionStorage.setItem("estudo_origem","consorcio");}catch(e){}
-document.querySelectorAll("[data-ja-assina]").forEach(function(a){
-  a.addEventListener("click",function(){ev("ja_assinante");});
-});
 
 // As duas portas propagam os UTM: sem isso a atribuição morre no primeiro clique
 // e o lead que sai da calculadora aparece como tráfego direto.
@@ -262,5 +256,6 @@ document.querySelectorAll("[data-ja-assina]").forEach(function(a){
   if(s) a.href=a.getAttribute("href")+"?"+s;
 });
 </script>
+<script src="../muro.js" data-estudo="consorcio"></script>
 </body>
 </html>

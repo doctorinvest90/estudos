@@ -100,6 +100,15 @@ if(ESTUDOS[origem]){
   });
   document.getElementById("todos").hidden=false;
 }
+// O mesmo e-mail libera a impressão da simulação (muro.js lê esta chave). localStorage:
+// quem volta outro dia no mesmo navegador não paga de novo.
+try{localStorage.setItem("estudo_liberado","1");}catch(e){}
+var volta="";
+try{volta=sessionStorage.getItem("estudo_volta")||"";}catch(e){}
+if(volta && /^\/[a-z0-9\/._-]*$/i.test(volta)){
+  var vl=document.getElementById("volta");
+  vl.href=volta; vl.textContent="← Voltar e gerar o PDF da sua simulação (seus números ficaram)";
+}
 // Assinante antigo não recebe e-mail de confirmação.
 if(ja) document.getElementById("confirma").hidden=true;
 
