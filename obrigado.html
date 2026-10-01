@@ -71,7 +71,7 @@
 </footer>
 
 <script>
-// Um formulário beehiiv serve os três estudos; o redirect de sucesso é fixo, então a
+// Um formulário beehiiv serve os estudos com muro; o redirect de sucesso é fixo, então a
 // página de origem grava `estudo_origem` no sessionStorage (mesma aba, mesma origem) e
 // esta página roteia por ele. `?e=` cobre o link "já assino", que vem com a origem na URL.
 var ESTUDOS={
@@ -82,7 +82,9 @@ var ESTUDOS={
   consorcio:{t:"O consórcio que ninguém calcula",
     d:"Dezessete páginas mais a errata de setembro, doze assembleias reais e a seção que mostra onde este estudo pode estar errado."},
   antecipacao:{t:"Quanto a antecipação de plantões custa de verdade",
-    d:"Dezenove páginas, a régua do Banco Central e a seção que mostra onde este estudo pode estar errado."}
+    d:"Dezenove páginas, a régua do Banco Central e a seção que mostra onde este estudo pode estar errado."},
+  "carro-eletrico":{t:"A gasolina é a parte pequena: carro elétrico ou a combustão",
+    d:"Vinte páginas, nove pares de carros com a tabela FIPE mês a mês e a seção que mostra onde este estudo pode estar errado."}
 };
 var qs=new URLSearchParams(location.search);
 var origem=qs.get("e")||"";

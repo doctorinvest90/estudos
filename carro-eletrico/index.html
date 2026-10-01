@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carro elétrico ou a combustão: quem termina mais rico · Doctor Invest</title>
+<meta name="description" content="Estudo com a tabela FIPE de 2023 a 2026: quanto o carro elétrico economiza em energia e o que decide se ele compensa. Simulador aberto para o seu caso.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;
+--verm:#A8443C;--verde:#4F7A5B;--linha:#E8E4DA;--cinza:#6B7480}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);font-family:"DM Sans",sans-serif;color:#22303F}
+header{background:var(--azul);color:var(--marfim);padding:26px 30px 24px}
+header .marca{font-size:10px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{font-family:"Cormorant Garamond",serif;font-size:33px;margin:12px 0 6px;font-weight:600}
+header p{margin:0;color:#AFBACB;font-size:13.5px;max-width:680px;line-height:1.55}
+.wrap{display:flex;gap:26px;padding:26px 30px 40px;align-items:flex-start}
+.painel{flex:0 0 340px;background:#fff;border:1px solid var(--linha);padding:20px 20px 24px;
+  position:sticky;top:18px}
+.res{flex:1;min-width:0}
+h2{font-family:"Cormorant Garamond",serif;font-size:20px;margin:0 0 4px;color:var(--azul);font-weight:600}
+.hr{height:2px;width:34px;background:var(--ouro);margin:0 0 16px}
+label{display:block;font-size:11px;letter-spacing:.05em;color:var(--cinza);
+  text-transform:uppercase;font-weight:700;margin:12px 0 5px}
+.grupo{font-size:11px;letter-spacing:.18em;color:#8A7330;font-weight:700;margin:18px 0 0;
+  padding-top:12px;border-top:1px solid var(--linha)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.iu{display:flex;border:1px solid var(--linha);background:#fff}
+.iu input{flex:1;min-width:0;border:0;padding:7px 8px;text-align:right;font-family:inherit;
+  font-size:14px;color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
+.iu input:focus{outline:none;background:#FAF9F4}
+.iu span{padding:7px 8px;font-size:11px;color:var(--cinza);background:#FAF9F6;
+  border-left:1px solid var(--linha);white-space:nowrap;display:flex;align-items:center}
+.iu span.pre{border-left:0;border-right:1px solid var(--linha)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:60px;padding:8px 4px;border:1px solid var(--linha);background:#fff;
+  font-family:"DM Sans";font-size:12.5px;cursor:pointer;color:var(--cinza);transition:.15s}
+.seg button.on{background:var(--azul);color:#fff;border-color:var(--azul);font-weight:700}
+.presets button{display:block;width:100%;text-align:left;padding:9px 11px;margin-bottom:6px;
+  border:1px solid var(--linha);background:#fff;cursor:pointer;font-family:"DM Sans";
+  font-size:12.5px;color:var(--conf)}
+.presets button:hover{border-color:var(--ouro);background:#FAF8F3}
+.presets button.on{border-color:var(--azul);background:var(--azul);color:#fff}
+.nota{font-size:11.5px;color:var(--cinza);line-height:1.5;margin:10px 0 0}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.card{background:#fff;border-top:2.5px solid var(--ouro);padding:13px 14px 15px}
+.card .n{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:700;
+  color:var(--azul);line-height:1.05}
+.card .t{font-size:11px;color:var(--cinza);line-height:1.4;margin-top:5px}
+.card.alerta{border-top-color:var(--verm)} .card.alerta .n{color:var(--verm)}
+.card.bom{border-top-color:var(--verde)} .card.bom .n{color:var(--verde)}
+.bloco{background:#fff;border:1px solid var(--linha);padding:18px 20px 20px;margin-bottom:18px}
+.veredito{padding:15px 18px;margin-bottom:18px;font-size:14px;line-height:1.55;
+  background:#0D1B2A;color:#E4E0D6;border-left:4px solid var(--ouro)}
+.veredito b{color:var(--ouro)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:8px 7px;text-align:right;
+  font-size:10.5px;letter-spacing:.04em}
+th:first-child{text-align:left}
+td{padding:7px;text-align:right;border-bottom:1px solid var(--linha);font-variant-numeric:tabular-nums}
+td:first-child{text-align:left}
+tr.destaque td{background:#FAF8F3;font-weight:700}
+.leg{font-size:11px;color:#8A909B;margin:8px 0 0}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:"DM Sans",sans-serif}
+footer{background:#F2F0EA;padding:18px 30px 26px;font-size:11px;color:#5A616B;line-height:1.55}
+footer b{color:var(--azul)}
+.cta{background:var(--azul);color:#E4E0D6;padding:18px 20px;margin-bottom:18px;font-size:13.5px;line-height:1.55}
+.faixa{padding:26px 30px 0}
+.faixa .bloco{margin-bottom:0}
+.faixa ol{padding-left:18px;line-height:1.72;font-size:13.5px;margin:0}
+.faixa li{margin-bottom:9px}
+.faixa .baixar{margin:16px 0 0;font-size:13.5px;line-height:1.6}
+.faixa .baixar a{color:var(--conf);font-weight:700}
+#captura .sub{font-size:13px;color:var(--cinza);line-height:1.55;margin:0 0 14px}
+#btn-print{margin-top:4px;padding:11px 18px;background:var(--azul);color:var(--marfim);
+  border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer}
+#resumo-print{display:none}
+@media(max-width:900px){
+  .wrap{flex-direction:column;padding:18px 16px 30px;gap:18px}
+  .painel{flex:none;width:100%;position:static}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  header{padding:20px 16px} header h1{font-size:26px}
+  .faixa{padding:18px 16px 0}
+  footer{padding:16px}
+}
+@media print{
+  header p, .painel, #captura, .faixa, .cta{display:none}
+  #resumo-print{display:block;font-size:12px;line-height:1.6;margin-bottom:14px}
+  .wrap{display:block;padding:0 12px}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="marca">DOCTOR INVEST · SIMULADOR</div>
+  <h1>Carro elétrico ou a combustão: quem termina mais rico?</h1>
+  <p>Os dois compradores começam com o mesmo dinheiro. Quem gasta menos na compra investe a
+  diferença, cada um paga energia ou gasolina, seguro, IPVA e revisões, e no fim vende o carro.
+  Escolha um par, ponha a sua quilometragem e veja quem termina com mais patrimônio.</p>
+</header>
+
+<div class="faixa">
+  <div class="bloco">
+    <h2>O que o estudo achou</h2><div class="hr"></div>
+    <p class="leg" style="margin:0 0 14px">Nove pares de carros mais vendidos, com a tabela FIPE
+    mês a mês de 2023 a 2026, tarifas da ANEEL, gasolina da ANP e tudo corrigido pela inflação.</p>
+    <ol>
+      <li><b>A economia de energia é real, e cabe numa faixa estreita.</b> Rodando 15 mil km por ano
+      em São Paulo, com recarga em casa, ela fica entre R$ 433 e R$ 523 por mês. Na recarga rápida
+      da rua, entre R$ 234 e R$ 316.</li>
+      <li><b>Quem decide o resultado é o preço do carro.</b> Nos nove pares, a economia de energia
+      acumulada ficou entre R$ 14.880 e R$ 27.522. O resultado final foi de R$ 113.155 a menos a
+      R$ 52.636 a mais para quem comprou o elétrico.</li>
+      <li><b>O usado acompanha o preço do novo.</b> A BYD cortou 15% do preço de tabela do Yuan
+      Plus em 2023. Mesmo par, mesmos 30 meses de posse: quem comprou antes de o corte chegar à
+      FIPE terminou R$ 59 mil atrás de quem comprou um Compass. Quem comprou depois, R$ 4 mil à
+      frente.</li>
+      <li><b>Quem pagou ágio pelo elétrico perdeu, mesmo rodando muito.</b> O Yuan Plus comprado
+      em janeiro de 2023 só empataria com o Compass a 45 mil km por ano.</li>
+      <li><b>Quando o elétrico custa menos, ele vence em qualquer quilometragem.</b> O Dolphin
+      custou R$ 18.410 a menos que o T-Cross e deixou o dono R$ 44 mil mais rico.</li>
+      <li><b>A regra que sobra.</b> Em cinco anos, a 15 mil km por ano em São Paulo, a economia de
+      energia paga até uns R$ 27 mil de diferença de preço, se os dois carros perderem o mesmo
+      percentual ao ano. Em Brasília, onde o elétrico não paga IPVA, até R$ 58 mil.</li>
+    </ol>
+    <div class="baixar" data-muro>
+      <p><b>O estudo completo (PDF, 20 páginas) e a base de dados vão para o seu e-mail.</b> Ele
+      traz a seção <i>“Onde este estudo pode estar errado”</i>, com as seis objeções mais fortes
+      que um leitor técnico faria. O mesmo e-mail libera o PDF da sua simulação. Abre na hora, e
+      você passa a receber a newsletter.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=carro-eletrico&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="painel">
+  <h2>Seus números</h2><div class="hr"></div>
+  <div class="presets" id="presets">
+    <button data-p="yuan_plus_compass" class="on">Yuan Plus × Compass</button>
+    <button data-p="dolphin_tcross">Dolphin × T-Cross</button>
+    <button data-p="dolphin_mini_polo">Dolphin Mini × Polo</button>
+    <button data-p="seal_bmw_320i">Seal × BMW 320i</button>
+  </div>
+  <label>Cidade</label>
+  <div class="seg" id="praca"><button data-v="SP" class="on">São Paulo</button><button data-v="DF">Brasília</button></div>
+  <label>Desvalorização dos dois</label>
+  <div class="seg" id="cenario"><button data-v="S2" class="on">Mesmo % ao ano</button><button data-v="S1">Como no passado</button></div>
+  <p class="nota">"Como no passado": cada carro perde o mesmo que perdeu desde o ano-modelo 2024.
+  "Mesmo % ao ano": o elétrico passa a perder como o rival, o cenário a favor do elétrico.</p>
+
+  <div class="g2">
+    <div><label for="km">Km por ano</label><div class="iu"><input type="number" id="km" step="1000" min="0" value="15000"><span>km</span></div></div>
+    <div><label for="anos">Fica com o carro</label><div class="iu"><input type="number" id="anos" step="1" min="1" max="10" value="5"><span>anos</span></div></div>
+  </div>
+  <label for="ireal">Rendimento do dinheiro aplicado</label>
+  <div class="iu"><input type="number" id="ireal" step="0.5" value="6"><span>% ao ano acima da inflação</span></div>
+
+  <div class="grupo">ELÉTRICO</div>
+  <label for="p_ev">Preço</label><div class="iu"><span class="pre">R$</span><input type="number" id="p_ev" step="1000"></div>
+  <div class="g2">
+    <div><label for="kwh">Consumo</label><div class="iu"><input type="number" id="kwh" step="0.1"><span>kWh/100 km</span></div></div>
+    <div><label for="tar">Energia</label><div class="iu"><input type="number" id="tar" step="0.01"><span>R$/kWh</span></div></div>
+    <div><label for="d_ev">Perde por ano</label><div class="iu"><input type="number" id="d_ev" step="0.5"><span>%</span></div></div>
+    <div><label for="seg_ev">Seguro</label><div class="iu"><input type="number" id="seg_ev" step="0.1"><span>% do valor</span></div></div>
+    <div><label for="ipva_ev">IPVA</label><div class="iu"><input type="number" id="ipva_ev" step="0.5"><span>%</span></div></div>
+  </div>
+  <div class="grupo">COMBUSTÃO</div>
+  <label for="p_ice">Preço</label><div class="iu"><span class="pre">R$</span><input type="number" id="p_ice" step="1000"></div>
+  <div class="g2">
+    <div><label for="kml">Consumo</label><div class="iu"><input type="number" id="kml" step="0.1"><span>km/l</span></div></div>
+    <div><label for="gas">Gasolina</label><div class="iu"><input type="number" id="gas" step="0.01"><span>R$/l</span></div></div>
+    <div><label for="d_ice">Perde por ano</label><div class="iu"><input type="number" id="d_ice" step="0.5"><span>%</span></div></div>
+    <div><label for="seg_ice">Seguro</label><div class="iu"><input type="number" id="seg_ice" step="0.1"><span>% do valor</span></div></div>
+    <div><label for="ipva_ice">IPVA</label><div class="iu"><input type="number" id="ipva_ice" step="0.5"><span>%</span></div></div>
+  </div>
+  <p class="nota">Preços FIPE 0 km de outubro de 2026. Recarga rápida na rua custa cerca de
+  R$ 2,10/kWh em São Paulo. Revisões pelas tabelas oficiais de cada modelo.</p>
+</div>
+
+<div class="res">
+  <div id="resumo-print"><b>Os números que você informou.</b> <span id="resumo-txt"></span></div>
+  <div class="cards">
+    <div class="card" id="cDelta"><div class="n" id="k_delta">—</div><div class="t" id="k_delta_t">vantagem do elétrico no fim do prazo</div></div>
+    <div class="card"><div class="n" id="k_econ">—</div><div class="t">economia de energia por mês</div></div>
+    <div class="card"><div class="n" id="k_be">—</div><div class="t">o elétrico empata a partir de</div></div>
+    <div class="card"><div class="n" id="k_agio">—</div><div class="t">quanto a mais vale pagar pelo elétrico, se os dois perderem o mesmo %</div></div>
+  </div>
+  <div class="veredito" id="leitura"></div>
+  <div class="bloco">
+    <h2>A vantagem conforme a quilometragem</h2><div class="hr"></div>
+    <svg id="graf" viewBox="0 0 700 280" preserveAspectRatio="xMidYMid meet"></svg>
+    <p class="leg">Acima da linha do zero, o elétrico termina com mais patrimônio. O ponto azul é a sua quilometragem.</p>
+  </div>
+  <div class="bloco">
+    <h2>De onde vem a diferença</h2><div class="hr"></div>
+    <table id="tab"></table>
+    <p class="leg">Cada custo levado ao fim do prazo com o rendimento que o dinheiro teria, em reais
+    de hoje. Positivo favorece o elétrico.</p>
+  </div>
+  <div class="cta">
+    O simulador entrega a régua, não o veredito. Três números respondem o seu caso: o preço que
+    você vai pagar em cada carro, quantos quilômetros você roda e quanto o modelo elétrico pode
+    perder se o fabricante baixar o preço do novo. Para fazer essa conta com apoio, fale com a
+    <b>Doctor Invest</b>.
+  </div>
+</div>
+</div>
+
+<div class="faixa" style="padding-bottom:26px"><div class="bloco" id="captura">
+  <h2>Leve esta simulação com você</h2><div class="hr"></div>
+  <p class="sub">Gera um PDF de uma página com os seus números, o gráfico e a tabela. Libera com
+  o mesmo e-mail do estudo, lá em cima, e os números que você informou ficam.</p>
+  <button id="btn-print">Gerar o PDF desta simulação</button>
+</div></div>
+
+<footer>
+<b>Aviso importante.</b> Material informativo e educacional. Não constitui recomendação de
+investimento nem de compra de veículo, nem consultoria individualizada, nos termos da
+regulamentação da CVM. Os resultados decorrem de simulação com premissas declaradas. O valor de
+revenda segue a tabela FIPE, que não é preço de venda. Rentabilidade passada não garante
+rentabilidade futura. As marcas e modelos têm finalidade ilustrativa e analítica. Antes de
+decidir, avalie seus objetivos e sua situação financeira, preferencialmente com apoio de
+profissional habilitado.
+<br><br>
+<b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · outubro de 2026 · premissas: FIPE 0 km
+de outubro de 2026, tarifa e gasolina de setembro de 2026 mantidas em termos reais, dinheiro
+rendendo IPCA + 6% ao ano.
+</footer>
+
+<script id="dados" type="application/json">{"yuan_plus_compass": {"ev": {"P0": 234852.0, "kwh_km": 0.15555555555555556, "seg": 0.041, "d_S1": 0.1751759544292496, "d_S2": 0.14761182104241433, "rev": {"intervalo": 20000, "precos": [393, 1278, 393, 1278, 758]}}, "ice": {"P0": 197623.0, "kml": 10.9, "seg": 0.034, "d": 0.14761182104241433, "rev": {"intervalo": 12000, "precos": [945, 1063, 911, 1097, 1762]}}, "praca": {"SP": {"tarifa": 1.0346686129847626, "gas": 6.312, "ipva_ev": 0.04, "ipva_ice": 0.04}, "DF": {"tarifa": 1.116660420340976, "gas": 6.662, "ipva_ev": 0.0, "ipva_ice": 0.03}}}, "dolphin_tcross": {"ev": {"P0": 147055.0, "kwh_km": 0.11666666666666665, "seg": 0.041, "d_S1": 0.098790362565081, "d_S2": 0.1123341636217916, "rev": {"intervalo": 20000, "precos": [393, 1292, 393, 1292, 758]}}, "ice": {"P0": 176947.0, "kml": 12.8, "seg": 0.034, "d": 0.1123341636217916, "rev": {"intervalo": 10000, "precos": [906.37, 1008.38, 897.98, 1980.19, 897.98]}}, "praca": {"SP": {"tarifa": 1.0346686129847626, "gas": 6.312, "ipva_ev": 0.04, "ipva_ice": 0.04}, "DF": {"tarifa": 1.116660420340976, "gas": 6.662, "ipva_ev": 0.0, "ipva_ice": 0.03}}}, "dolphin_mini_polo": {"ev": {"P0": 120987.0, "kwh_km": 0.11388888888888887, "seg": 0.041, "d_S1": 0.07337756463494127, "d_S2": 0.08740254890510568, "rev": {"intervalo": 20000, "precos": [361, 1225, 361, 1225, 684]}}, "ice": {"P0": 125972.0, "kml": 13.6, "seg": 0.034, "d": 0.08740254890510568, "rev": {"intervalo": 10000, "precos": [906.37, 1008.38, 897.98, 1855.44, 897.98]}}, "praca": {"SP": {"tarifa": 1.0346686129847626, "gas": 6.312, "ipva_ev": 0.04, "ipva_ice": 0.04}, "DF": {"tarifa": 1.1166604203409758, "gas": 6.662, "ipva_ev": 0.0, "ipva_ice": 0.03}}}, "seal_bmw_320i": {"ev": {"P0": 299673.0, "kwh_km": 0.17222222222222222, "seg": 0.041, "d_S1": 0.1399858874512634, "d_S2": 0.10047446296196916, "rev": {"intervalo": 20000, "precos": [381, 2136, 381, 2136, 1110]}}, "ice": {"P0": 388217.0, "kml": 11.5, "seg": 0.034, "d": 0.10047446296196916, "rev": {"intervalo": 20000, "precos": [381, 2136, 381, 2136, 1110]}}, "praca": {"SP": {"tarifa": 1.0346686129847626, "gas": 6.312, "ipva_ev": 0.04, "ipva_ice": 0.04}, "DF": {"tarifa": 1.116660420340976, "gas": 6.662, "ipva_ev": 0.0, "ipva_ice": 0.03}}}}</script>
+<script id="motor">
+(function () {
+  // Espelho de motor.simula_proj / agio_max. Paridade conferida por paridade.mjs.
+  function revisoes(intervalo, precos, kmAno, meses) {
+    const passo = kmAno <= 0 ? 12 : Math.min(12, 12 * intervalo / kmAno);
+    const out = []; let k = 1;
+    while (Math.round(k * passo) < meses) { out.push([Math.round(k * passo), precos[(k - 1) % precos.length]]); k++; }
+    return out;
+  }
+  // c = {P0, d, ckm, aliq, seg, rev:{intervalo, precos}}
+  function simula(c, C, meses, kmAno, iReal) {
+    const i = Math.pow(1 + iReal, 1 / 12) - 1;
+    const v = k => c.P0 * Math.pow(1 - c.d, k / 12);
+    const revs = revisoes(c.rev.intervalo, c.rev.precos, kmAno, meses);
+    let conta = C - c.P0;
+    const parc = { ipva: 0, seguro: 0, revisao: 0, energia: 0 };
+    for (let k = 0; k < meses; k++) {
+      const pag = {};
+      if (k % 12 === 0) { pag.ipva = c.aliq * v(k); pag.seguro = c.seg * v(k); }
+      for (const [mr, val] of revs) if (k === mr) pag.revisao = (pag.revisao || 0) + val;
+      for (const [nome, val] of Object.entries(pag)) { conta -= val; parc[nome] += val * Math.pow(1 + i, meses - k); }
+      conta *= 1 + i;
+      const e = kmAno / 12 * c.ckm;
+      conta -= e;
+      parc.energia += e * Math.pow(1 + i, meses - k - 1);
+    }
+    return { W: conta + v(meses), venda: v(meses), P0: c.P0, G: Math.pow(1 + i, meses), custos: parc };
+  }
+  function par(ev, ice, meses, kmAno, iReal) {
+    const C = Math.max(ev.P0, ice.P0);
+    const a = simula(ev, C, meses, kmAno, iReal), b = simula(ice, C, meses, kmAno, iReal);
+    return { ev: a, ice: b, delta: a.W - b.W };
+  }
+  function breakevenKm(fn, teto = 200000) {
+    if (fn(0) >= 0) return -1;
+    if (fn(teto) < 0) return Infinity;
+    let lo = 0, hi = teto;
+    for (let n = 0; n < 40; n++) { const mid = (lo + hi) / 2; if (fn(mid) < 0) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
+  function agioMax(ev, ice, meses, kmAno, iReal) {
+    const Pi = ice.P0, d = ice.d;
+    const vant = x => {
+      const C = Pi + Math.max(x, 0);
+      return simula(Object.assign({}, ev, { P0: Pi + x, d }), C, meses, kmAno, iReal).W
+           - simula(ice, C, meses, kmAno, iReal).W;
+    };
+    let lo = -Pi * 0.9, hi = Pi * 2;
+    for (let n = 0; n < 80; n++) { const mid = (lo + hi) / 2; if (vant(mid) > 0) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
+  globalThis.MOTOR = { revisoes, simula, par, breakevenKm, agioMax };
+})();
+</script>
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  var payload=JSON.stringify({
+    event:nome, page:"carro-eletrico",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+// "simulou" dispara uma vez, na primeira mexida em qualquer controle do painel.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou||!e.target.closest(".painel")) return;
+  if(e.type==="click"&&!e.target.closest("button")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+</script>
+<script>
+(function () {
+  var P = JSON.parse(document.getElementById("dados").textContent);
+  var M = globalThis.MOTOR;
+  var $ = function (id) { return document.getElementById(id); };
+  var par = "yuan_plus_compass", praca = "SP", cen = "S2";
+  function brl(v) { return (v < 0 ? "−" : "") + "R$ " + Math.round(Math.abs(v)).toLocaleString("pt-BR"); }
+  function fmtKm(v) {
+    return !isFinite(v) || v > 150000 ? "mais de 150 mil km" : v < 0 ? "qualquer km" :
+      Math.round(v / 1000).toLocaleString("pt-BR") + " mil km/ano";
+  }
+  // O campo mostra o valor arredondado; enquanto o leitor não mexe nele, a conta usa o
+  // valor exato do estudo, para o simulador reproduzir o PDF na tela.
+  var exato = {};
+  function num(id) {
+    var e = exato[id];
+    if (e && $(id).value === e.txt) return e.v;
+    return parseFloat($(id).value) || 0;
+  }
+  function poe(id, v, casas) {
+    var txt = casas == null ? String(v) : v.toFixed(casas);
+    $(id).value = txt; exato[id] = { v: v, txt: txt };
+  }
+  function carregar() {
+    var p = P[par], q = p.praca[praca];
+    poe("p_ev", p.ev.P0); poe("p_ice", p.ice.P0);
+    poe("kwh", p.ev.kwh_km * 100, 1); poe("tar", q.tarifa, 2);
+    poe("kml", p.ice.kml); poe("gas", q.gas, 2);
+    poe("d_ev", p.ev["d_" + cen] * 100, 1); poe("d_ice", p.ice.d * 100, 1);
+    poe("seg_ev", p.ev.seg * 100, 1); poe("seg_ice", p.ice.seg * 100, 1);
+    poe("ipva_ev", q.ipva_ev * 100, 1); poe("ipva_ice", q.ipva_ice * 100, 1);
+    calcular();
+  }
+  function carros() {
+    var p = P[par];
+    return [
+      { P0: num("p_ev"), d: num("d_ev") / 100, ckm: num("kwh") / 100 * num("tar"),
+        aliq: num("ipva_ev") / 100, seg: num("seg_ev") / 100, rev: p.ev.rev },
+      { P0: num("p_ice"), d: num("d_ice") / 100, ckm: num("gas") / num("kml"),
+        aliq: num("ipva_ice") / 100, seg: num("seg_ice") / 100, rev: p.ice.rev }
+    ];
+  }
+  var ultimo = null;
+  function calcular() {
+    var c = carros(), ev = c[0], ice = c[1];
+    var meses = Math.round(num("anos") * 12), km = num("km"), ir = num("ireal") / 100;
+    var r = M.par(ev, ice, meses, km, ir);
+    var be = M.breakevenKm(function (k) { return M.par(ev, ice, meses, k, ir).delta; });
+    var agio = M.agioMax(ev, ice, meses, km, ir);
+    var econ = (ice.ckm - ev.ckm) * km / 12, dif = ev.P0 - ice.P0;
+    $("k_delta").textContent = brl(r.delta);
+    $("cDelta").className = "card " + (r.delta >= 0 ? "bom" : "alerta");
+    $("k_delta_t").textContent = r.delta >= 0 ? "o elétrico termina com mais patrimônio" : "o combustão termina com mais patrimônio";
+    $("k_econ").textContent = brl(econ);
+    $("k_be").textContent = fmtKm(be);
+    $("k_agio").textContent = brl(agio);
+    $("leitura").innerHTML = "A " + km.toLocaleString("pt-BR") + " km por ano, a energia economiza <b>" + brl(econ) +
+      "</b> por mês. O elétrico custa <b>" + brl(Math.abs(dif)) + "</b> " + (dif >= 0 ? "a mais" : "a menos") +
+      " que o rival. Se os dois perdessem o mesmo percentual ao ano, a economia de " + num("anos") +
+      " anos pagaria até <b>" + brl(agio) + "</b> de diferença de preço. " +
+      (dif <= 0 ? "O elétrico já sai mais barato, e a economia de energia soma a favor dele." :
+        dif > agio ? "A diferença de preço é maior do que a economia consegue pagar." :
+        "A economia paga a diferença de preço; o resultado passa a depender de quanto cada carro vai perder de valor.");
+    function cc(x, k) { return x.custos[k]; }
+    var linhas = [
+      ["Custo de ter o carro (preço, desvalorização e capital)", (r.ice.P0 * r.ice.G - r.ice.venda) - (r.ev.P0 * r.ev.G - r.ev.venda)],
+      ["Energia × gasolina", cc(r.ice, "energia") - cc(r.ev, "energia")],
+      ["Seguro", cc(r.ice, "seguro") - cc(r.ev, "seguro")],
+      ["IPVA", cc(r.ice, "ipva") - cc(r.ev, "ipva")],
+      ["Revisões", cc(r.ice, "revisao") - cc(r.ev, "revisao")]
+    ];
+    $("tab").innerHTML = "<tr><th>Componente</th><th>Vantagem do elétrico</th></tr>" +
+      linhas.map(function (l) { return "<tr><td>" + l[0] + "</td><td>" + brl(l[1]) + "</td></tr>"; }).join("") +
+      '<tr class="destaque"><td>Resultado</td><td>' + brl(r.delta) + "</td></tr>";
+    grafico(ev, ice, meses, ir, km);
+    ultimo = { r: r, econ: econ, be: be, agio: agio, km: km, meses: meses, ev: ev, ice: ice };
+  }
+  function grafico(ev, ice, meses, ir, km) {
+    var kms = []; for (var k = 0; k <= 40000; k += 2000) kms.push(k);
+    var ys = kms.map(function (k) { return M.par(ev, ice, meses, k, ir).delta; });
+    var W = 700, H = 280, L = 104, R = 14, T = 12, B = 34;
+    var lo = Math.min.apply(null, [0].concat(ys)), hi = Math.max.apply(null, [0].concat(ys)), span = (hi - lo) || 1;
+    function x(k) { return L + (W - L - R) * k / 40000; }
+    function y(v) { return T + (H - T - B) * (hi - v) / span; }
+    var pts = kms.map(function (k, j) { return x(k).toFixed(1) + "," + y(ys[j]).toFixed(1); }).join(" ");
+    var g = '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(0) + '" y2="' + y(0) + '" stroke="#0D1B2A" stroke-width="1"/>';
+    for (var kk = 0; kk <= 40000; kk += 10000)
+      g += '<text x="' + x(kk) + '" y="' + (H - 12) + '" font-size="14" fill="#6B7480" text-anchor="middle">' + kk / 1000 + ' mil km</text>';
+    [lo, (lo + hi) / 2, hi].forEach(function (v) {
+      g += '<text x="' + (L - 6) + '" y="' + (y(v) + 4) + '" font-size="14" fill="#6B7480" text-anchor="end">' + brl(v) + "</text>";
+    });
+    g += '<polyline points="' + pts + '" fill="none" stroke="#C9A84C" stroke-width="2.6"/>';
+    var yk = M.par(ev, ice, meses, km, ir).delta;
+    g += '<circle cx="' + x(Math.min(km, 40000)) + '" cy="' + y(yk) + '" r="5" fill="#1B3A5C"/>';
+    $("graf").innerHTML = g;
+  }
+  // Resumo impresso: o que a pessoa informou, para o PDF não sair sem contexto.
+  window.imprimirSimulacao = function () {
+    var u0 = ultimo, nome = document.querySelector("#presets .on").textContent;
+    $("resumo-txt").textContent = [
+      nome + " · " + (praca === "SP" ? "São Paulo" : "Brasília"),
+      u0.km.toLocaleString("pt-BR") + " km por ano · " + u0.meses / 12 + " anos",
+      "Preços: " + brl(u0.ev.P0) + " (elétrico) e " + brl(u0.ice.P0) + " (combustão)",
+      "Perda de valor ao ano: " + (u0.ev.d * 100).toFixed(1) + "% e " + (u0.ice.d * 100).toFixed(1) + "%",
+      "Economia de energia: " + brl(u0.econ) + " por mês",
+      "Resultado: " + brl(u0.r.delta) + " para o elétrico"
+    ].join(" · ");
+    window.print();
+  };
+  document.querySelectorAll("#presets button").forEach(function (b) {
+    b.onclick = function () {
+      document.querySelectorAll("#presets button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on"); par = b.dataset.p; carregar();
+    };
+  });
+  [["praca", function (v) { praca = v; }], ["cenario", function (v) { cen = v; }]].forEach(function (pr) {
+    document.querySelectorAll("#" + pr[0] + " button").forEach(function (b) {
+      b.onclick = function () {
+        document.querySelectorAll("#" + pr[0] + " button").forEach(function (x) { x.classList.remove("on"); });
+        b.classList.add("on"); pr[1](b.dataset.v); carregar();
+      };
+    });
+  });
+  document.querySelectorAll(".painel input").forEach(function (i) { i.addEventListener("input", calcular); });
+  $("btn-print").onclick = function () { window.imprimirSimulacao(); };
+  carregar();
+})();
+</script>
+<script src="../muro.js" data-estudo="carro-eletrico"></script>
+</body>
+</html>
