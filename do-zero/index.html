@@ -176,13 +176,19 @@ tr.fim td{background:#FAF8F3;font-weight:700}
   análises que escrevo duas vezes por semana para médicos.</p>
   <!-- Formulário beehiiv próprio deste estudo. Redirect de sucesso → /do-zero/obrigado.html
        com remove_email_from_redirect_url = true (e-mail na URL vaza pro histórico e Referer).
-       Altura 190: o beehiiv usa o mesmo espaço pra responder ("já é assinante") e, desde
-       03/10, mostra a caixa de aceite obrigatória (dupla confirmação desligada no form).
+       Altura 130, não 70: o beehiiv usa o mesmo espaço pra responder ("já é assinante").
+       Desde 03/10 o form tem a dupla confirmação desligada (sem ela o beehiiv não redireciona
+       e o inscrito fica pending sem o estudo). O aceite é o clique, com o aviso abaixo: a caixa
+       de consentimento do beehiiv sai em inglês ("I agree to the .") e ignora texto próprio.
        Form "Estudo — Como eu começaria do zero hoje (landing)", criado 2026-09-12. -->
   <iframe src="https://subscribe-forms.beehiiv.com/99880025-6c96-4996-8006-e14513cd9b84"
-          class="beehiiv-embed" data-test-id="beehiiv-embed" height="190"
+          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
           frameborder="0" scrolling="no" title="Receber o estudo por e-mail"></iframe>
   <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada. Não remover
+       sem religar a dupla confirmação no form 99880025. -->
+  <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+  carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
   <!-- Saída para quem JÁ assina: o beehiiv não redireciona assinante existente. -->
   <p class="nota">Já recebe a newsletter?
   <a href="obrigado.html?ja=1" data-ja-assina>O estudo está aqui, sem precisar preencher de novo.</a></p>
