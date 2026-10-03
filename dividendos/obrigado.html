@@ -31,6 +31,7 @@
 
   footer{background:var(--dark);color:rgba(247,245,240,.5);font-size:13px;text-align:center;padding:30px 22px;line-height:1.65}
 </style>
+<script src="/pixel.js"></script>
 </head>
 <body>
 
@@ -95,7 +96,7 @@ function ev(nome){
 // ?ja=1 = chegou pela saída de quem já assina (o ja_assinante já foi contado na página
 // anterior). Sem esta guarda o assinante antigo vira "lead" e infla a captação.
 if(qs.has("ja")){ document.getElementById("confirmar").hidden=true; }
-else { ev("lead"); }
+else { ev("lead"); fbq("track","CompleteRegistration",{content_name:"estudo-dividendos"}); }
 document.querySelectorAll("[data-baixar]").forEach(function(a){
   a.addEventListener("click",function(){ev("download");});
 });
