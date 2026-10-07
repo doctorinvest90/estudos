@@ -60,9 +60,35 @@ footer{padding:14px 18px 28px;max-width:1240px;margin:0 auto;font-size:11px;colo
 @media print{#receber,.ir{display:none}}
 </style><script src="/pixel.js"></script>
 </head><body>
-<header><div class="marca">DOCTOR INVEST · MONITOR DE DIVIDENDOS</div>
+<header><div class="marca">DOCTOR INVEST · ESTUDO + MONITOR DE DIVIDENDOS</div>
 <h1>Quanto a Lei 15.270 cobra de você — e onde colocar o próximo real</h1>
-<p>Imposto mínimo, retenção de 10% e o break-even da LCI, calculados para a sua PJ e a sua carteira. Motor idêntico ao do estudo. Nada é enviado ou guardado.</p></header>
+<p>O estudo completo em PDF chega no seu e-mail logo abaixo. Mais para baixo, o simulador calcula imposto mínimo, retenção de 10% e o break-even da LCI para a sua PJ e a sua carteira, com o mesmo motor do estudo. Os números que você digita no simulador não são enviados nem guardados.</p></header>
+
+<div id="receber"><div class="bloco">
+  <h2>Receber o estudo completo</h2><div class="hr"></div>
+  <p class="sub">Treze páginas com os dois mecanismos da lei lado a lado, a conta dos três perfis, a curva da renda
+  fixa, PGBL e holding, a segunda janela de dez anos e a seção sobre onde o próprio estudo pode estar errado.
+  Deixe o e-mail e o estudo abre na sequência, com a base de dados e o motor de cálculo. Você passa a receber
+  também as análises que escrevo duas vezes por semana para médicos.</p>
+  <!-- Formulário beehiiv próprio deste estudo. Redirect de sucesso → /dividendos/obrigado.html
+       com remove_email_from_redirect_url = true (e-mail na URL vaza pro histórico e Referer).
+       Altura 130, não 70: o beehiiv usa o mesmo espaço pra responder ("já é assinante").
+       Form "Estudo — Monitor de dividendos (landing)", criado 2026-09-17. -->
+  <iframe src="https://subscribe-forms.beehiiv.com/e8629a4f-3af6-429b-a03e-35484935acee"
+          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+          frameborder="0" scrolling="no" title="Receber o estudo por e-mail"></iframe>
+  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+  <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  <script src="/beehiiv-sucesso.js" data-destino="/dividendos/obrigado.html"></script>
+  <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
+       Não remover sem religar a dupla confirmação. -->
+  <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+  carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+  <!-- Saída para quem JÁ assina: o beehiiv não redireciona assinante existente. -->
+  <p class="nota">Já recebe a newsletter?
+  <a href="obrigado.html?ja=1" data-ja-assina>O estudo está aqui, sem precisar preencher de novo.</a></p>
+  <p class="nota">Sem custo. Um e-mail por edição, duas vezes por semana, e o descadastro fica em todo rodapé.</p>
+</div></div>
 
 <div class="faixa"><div class="bloco" id="achados">
   <h2>O que o estudo achou</h2><div class="hr"></div>
@@ -150,32 +176,6 @@ footer{padding:14px 18px 28px;max-width:1240px;margin:0 auto;font-size:11px;colo
   </div>
 </div>
 </div>
-<div id="receber"><div class="bloco">
-  <h2>Receber o estudo completo</h2><div class="hr"></div>
-  <p class="sub">Treze páginas com os dois mecanismos da lei lado a lado, a conta dos três perfis, a curva da renda
-  fixa, PGBL e holding, a segunda janela de dez anos e a seção sobre onde o próprio estudo pode estar errado.
-  Deixe o e-mail e o estudo abre na sequência, com a base de dados e o motor de cálculo. Você passa a receber
-  também as análises que escrevo duas vezes por semana para médicos.</p>
-  <!-- Formulário beehiiv próprio deste estudo. Redirect de sucesso → /dividendos/obrigado.html
-       com remove_email_from_redirect_url = true (e-mail na URL vaza pro histórico e Referer).
-       Altura 130, não 70: o beehiiv usa o mesmo espaço pra responder ("já é assinante").
-       Form "Estudo — Monitor de dividendos (landing)", criado 2026-09-17. -->
-  <iframe src="https://subscribe-forms.beehiiv.com/e8629a4f-3af6-429b-a03e-35484935acee"
-          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
-          frameborder="0" scrolling="no" title="Receber o estudo por e-mail"></iframe>
-  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
-  <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
-  <script src="/beehiiv-sucesso.js" data-destino="/dividendos/obrigado.html"></script>
-  <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
-       Não remover sem religar a dupla confirmação. -->
-  <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
-  carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
-  <!-- Saída para quem JÁ assina: o beehiiv não redireciona assinante existente. -->
-  <p class="nota">Já recebe a newsletter?
-  <a href="obrigado.html?ja=1" data-ja-assina>O estudo está aqui, sem precisar preencher de novo.</a></p>
-  <p class="nota">Sem custo. Um e-mail por edição, duas vezes por semana, e o descadastro fica em todo rodapé.</p>
-</div></div>
-
 <footer><b>Aviso.</b> Material informativo e educacional. Não constitui recomendação de investimento, consultoria de valores mobiliários, tributária ou jurídica. Simulação com parâmetros públicos da Lei 15.270/2025 (retenção de 10% acima de R$ 50 mil/mês por PJ; imposto mínimo de 0% a 10% entre R$ 600 mil e R$ 1,2 milhão; créditos do IRPF e do IR retido), lucro presumido com presunção de 32%, tabela do IRPF vigente e teto do INSS de 2026. A lei ainda não teve sua primeira apuração anual; sua interpretação pode mudar. Desconsidera Simples Nacional, ganhos de capital e custos operacionais. Rentabilidade passada não garante rentabilidade futura. <b>Doctor Invest</b> · Hélio Cardoso de Barros, CGA · set/2026.</footer>
 
 <script>
