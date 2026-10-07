@@ -65,7 +65,8 @@ tr.fim td{background:#FAF8F3;font-weight:700}
 #receber{max-width:1240px;margin:0 auto;padding:0 18px 8px}
 #receber .bloco{border-top:3px solid var(--ouro)}
 #receber .sub{font-size:13.5px;color:#4A5563;margin:0 0 12px;max-width:760px}
-#receber iframe{width:100%;max-width:560px;border:0;display:block}
+/* embed.js do beehiiv injeta style="width:5000px" no iframe: sem !important ele passa da tela no celular e corta o botão */
+#receber iframe{width:100% !important;max-width:560px;border:0;display:block}
 #receber .nota{font-size:12px;color:#6B7480;margin:12px 0 0}
 @media(max-width:900px){.faixa{padding:12px 12px 0}#receber{padding:0 12px 8px}}
 /* grid 1fr não encolhe abaixo do min-content da tabela anual (8 colunas): no celular a página rolava de lado */
@@ -77,10 +78,39 @@ tr.fim td{background:#FAF8F3;font-weight:700}
 </head>
 <body>
 <header>
-  <div class="marca">DOCTOR INVEST · SIMULADOR</div>
+  <div class="marca">DOCTOR INVEST · ESTUDO + SIMULADOR</div>
   <h1>Como eu começaria do zero hoje</h1>
-  <p>Coloque os seus valores de plantão, a sua escala e o seu custo de vida. Tudo em reais de hoje, retorno real líquido, passo mensal — o mesmo motor do estudo. Em que ano a carteira passa a pagar a sua vida?</p>
+  <p>O estudo completo em PDF chega no seu e-mail logo abaixo. Mais para baixo, o simulador com o mesmo motor do estudo: coloque os seus valores de plantão, a sua escala e o seu custo de vida e veja em que ano a carteira passa a pagar a sua vida.</p>
 </header>
+
+<div id="receber"><div class="bloco">
+  <h2>Receber o estudo completo</h2><div class="hr"></div>
+  <p class="sub">Treze páginas com as premissas abertas, os quatro ritmos de saída comparados, as duas
+  premissas que derrubam a data (retorno e reajuste do plantão) e a seção sobre onde o próprio estudo
+  pode estar errado. Deixe o e-mail e o estudo abre na sequência. Você passa a receber também as
+  análises que escrevo duas vezes por semana para médicos.</p>
+  <!-- Formulário beehiiv próprio deste estudo. Redirect de sucesso → /do-zero/obrigado.html
+       com remove_email_from_redirect_url = true (e-mail na URL vaza pro histórico e Referer).
+       Altura 130, não 70: o beehiiv usa o mesmo espaço pra responder ("já é assinante").
+       Desde 03/10 o form tem a dupla confirmação desligada (sem ela o beehiiv não redireciona
+       e o inscrito fica pending sem o estudo). O aceite é o clique, com o aviso abaixo: a caixa
+       de consentimento do beehiiv sai em inglês ("I agree to the .") e ignora texto próprio.
+       Form "Estudo — Como eu começaria do zero hoje (landing)", criado 2026-09-12. -->
+  <iframe src="https://subscribe-forms.beehiiv.com/99880025-6c96-4996-8006-e14513cd9b84"
+          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+          frameborder="0" scrolling="no" title="Receber o estudo por e-mail"></iframe>
+  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+  <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+  <script src="../beehiiv-sucesso.js"></script>
+  <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada. Não remover
+       sem religar a dupla confirmação no form 99880025. -->
+  <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+  carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+  <!-- Saída para quem JÁ assina: o beehiiv não redireciona assinante existente. -->
+  <p class="nota">Já recebe a newsletter?
+  <a href="obrigado.html?ja=1" data-ja-assina>O estudo está aqui, sem precisar preencher de novo.</a></p>
+  <p class="nota">Sem custo. Um e-mail por edição, duas vezes por semana, e o descadastro fica em todo rodapé.</p>
+</div></div>
 
 <div class="faixa"><div class="bloco" id="achados">
   <h2>O que o estudo achou</h2><div class="hr"></div>
@@ -167,35 +197,6 @@ tr.fim td{background:#FAF8F3;font-weight:700}
     <table id="tab"></table>
   </div>
 </div>
-
-<div id="receber"><div class="bloco">
-  <h2>Receber o estudo completo</h2><div class="hr"></div>
-  <p class="sub">Treze páginas com as premissas abertas, os quatro ritmos de saída comparados, as duas
-  premissas que derrubam a data (retorno e reajuste do plantão) e a seção sobre onde o próprio estudo
-  pode estar errado. Deixe o e-mail e o estudo abre na sequência. Você passa a receber também as
-  análises que escrevo duas vezes por semana para médicos.</p>
-  <!-- Formulário beehiiv próprio deste estudo. Redirect de sucesso → /do-zero/obrigado.html
-       com remove_email_from_redirect_url = true (e-mail na URL vaza pro histórico e Referer).
-       Altura 130, não 70: o beehiiv usa o mesmo espaço pra responder ("já é assinante").
-       Desde 03/10 o form tem a dupla confirmação desligada (sem ela o beehiiv não redireciona
-       e o inscrito fica pending sem o estudo). O aceite é o clique, com o aviso abaixo: a caixa
-       de consentimento do beehiiv sai em inglês ("I agree to the .") e ignora texto próprio.
-       Form "Estudo — Como eu começaria do zero hoje (landing)", criado 2026-09-12. -->
-  <iframe src="https://subscribe-forms.beehiiv.com/99880025-6c96-4996-8006-e14513cd9b84"
-          class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
-          frameborder="0" scrolling="no" title="Receber o estudo por e-mail"></iframe>
-  <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
-  <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
-  <script src="../beehiiv-sucesso.js"></script>
-  <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada. Não remover
-       sem religar a dupla confirmação no form 99880025. -->
-  <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
-  carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
-  <!-- Saída para quem JÁ assina: o beehiiv não redireciona assinante existente. -->
-  <p class="nota">Já recebe a newsletter?
-  <a href="obrigado.html?ja=1" data-ja-assina>O estudo está aqui, sem precisar preencher de novo.</a></p>
-  <p class="nota">Sem custo. Um e-mail por edição, duas vezes por semana, e o descadastro fica em todo rodapé.</p>
-</div></div>
 
 <div class="disc"><b>Aviso importante.</b> Este simulador tem caráter exclusivamente informativo e educacional e não constitui recomendação de investimento nem consultoria individualizada, nos termos da regulamentação da CVM. Os resultados são projeções baseadas nas premissas informadas pelo usuário — em especial retorno real, custo de vida constante e correção do plantão pela inflação — e não refletem o desempenho de nenhum produto disponível ao público. Rentabilidade passada não garante rentabilidade futura. Investimentos envolvem risco de perda, inclusive do capital principal. <b>Doctor Invest</b> · Gestão de investimentos e consultoria financeira para médicos · Hélio Cardoso de Barros, CGA · Setembro de 2026.</div>
 
