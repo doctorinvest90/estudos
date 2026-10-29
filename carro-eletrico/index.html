@@ -26,6 +26,8 @@ label{display:block;font-size:11px;letter-spacing:.05em;color:var(--cinza);
 .grupo{font-size:11px;letter-spacing:.18em;color:#8A7330;font-weight:700;margin:18px 0 0;
   padding-top:12px;border-top:1px solid var(--linha)}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+/* grid 1fr não encolhe abaixo do min-content dos filhos: sem isto a página rola de lado no celular */
+.g2>div{min-width:0}
 .iu{display:flex;border:1px solid var(--linha);background:#fff}
 .iu input{flex:1;min-width:0;border:0;padding:7px 8px;text-align:right;font-family:inherit;
   font-size:14px;color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
@@ -77,6 +79,8 @@ footer b{color:var(--azul)}
 #btn-print{margin-top:4px;padding:11px 18px;background:var(--azul);color:var(--marfim);
   border:0;border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer}
 #resumo-print{display:none}
+/* embed.js do beehiiv injeta style="width:5000px" no iframe: sem !important ele passa da tela no celular e corta o botão */
+[data-muro] iframe{width:100% !important;border:0;display:block;margin-top:8px}
 @media(max-width:900px){
   .wrap{flex-direction:column;padding:18px 16px 30px;gap:18px}
   .painel{flex:none;width:100%;position:static}
@@ -92,6 +96,7 @@ footer b{color:var(--azul)}
   body{background:#fff}
 }
 </style>
+<script src="/pixel.js"></script>
 </head>
 <body>
 
@@ -134,9 +139,14 @@ footer b{color:var(--azul)}
       você passa a receber a newsletter.</p>
       <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
               class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
-              style="width:100%;border:0;margin-top:8px"
               frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
       <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <script src="/beehiiv-sucesso.js" data-destino="/obrigado.html"></script>
+      <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
+           Não remover sem religar a dupla confirmação. -->
+      <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+      carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
       <p style="font-size:13px">Já recebe a newsletter?
         <a href="../obrigado.html?e=carro-eletrico&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
     </div>
