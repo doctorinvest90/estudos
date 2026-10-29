@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Não é a CBS · Doctor Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--linha:#E3DFD4;
+      --texto:#22303F;--suave:#7A8290;--verde:#4F7A5B;--verm:#A8443C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:var(--texto);
+     font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--azul)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 60px}
+header{background:var(--azul);color:var(--marfim);padding:34px 0 30px;margin-bottom:26px}
+header .wrap{padding-bottom:0}
+.marca{font-size:11px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{color:var(--marfim);font-size:33px;line-height:1.15;margin:14px 0 8px}
+header p{color:#AFBACB;margin:0;max-width:700px;font-size:14.5px}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+.grid>*{min-width:0}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--linha);border-radius:3px;padding:20px 22px;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:4px}
+.card .hint{font-size:12.5px;color:var(--suave);margin:0 0 14px}
+.card .nota{font-size:11.8px;color:var(--suave);line-height:1.5;margin:12px 0 0}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0}
+.pbtn{padding:8px 4px;border:1px solid var(--linha);background:#fff;font-family:inherit;font-size:12.5px;
+  cursor:pointer;color:var(--conf);border-radius:2px}
+.pbtn:hover{border-color:var(--ouro)}
+.pbtn.on{background:var(--azul);color:var(--marfim);border-color:var(--azul)}
+.toggle{display:flex;margin:8px 0 4px;border:1px solid var(--linha);border-radius:2px;overflow:hidden}
+.toggle button{flex:1;padding:9px 4px;border:0;background:#fff;font-family:inherit;font-size:12.5px;cursor:pointer;color:var(--conf)}
+.toggle button+button{border-left:1px solid var(--linha)}
+.toggle button.on{background:var(--conf);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}
+.field{margin:9px 0}
+.field label,.lbl{display:block;font-size:12.5px;color:var(--conf);font-weight:500;margin:0 0 5px}
+.iunit{display:flex;align-items:stretch;border:1px solid var(--linha);border-radius:2px;overflow:hidden;background:#fff}
+.iunit input{width:100%;min-width:0;border:0;padding:8px;text-align:right;font-family:inherit;font-size:13.5px;
+  color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
+.iunit input:focus{outline:none;background:#FAF9F4}
+.iunit input:disabled{color:#B5BAC2}
+.iunit span{padding:8px 9px;font-size:11.5px;color:var(--suave);background:#FAF9F6;border-left:1px solid var(--linha);
+  white-space:nowrap;display:flex;align-items:center}
+.iunit span.pre{border-left:0;border-right:1px solid var(--linha)}
+input[type=range]{width:100%;accent-color:var(--conf);margin:8px 0 0}
+.sub{font-size:11px;letter-spacing:.18em;color:#8A7330;font-weight:700;margin:14px 0 2px}
+details summary{cursor:pointer;font-size:12.5px;color:var(--conf);font-weight:500;margin-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);border:1px solid var(--linha);margin-bottom:18px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;padding:16px 14px;min-width:0}
+.kpi .v{font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:700;color:var(--azul);line-height:1.08;word-break:break-word}
+.kpi .t{font-size:11px;color:var(--suave);margin-top:6px;line-height:1.35}
+.kpi.dark{background:var(--azul)} .kpi.dark .v{color:var(--ouro)} .kpi.dark .t{color:#9AA8BC}
+.leitura{background:#fff;border-left:3px solid var(--ouro);padding:16px 20px;margin-bottom:18px;font-size:14px}
+.leitura p{margin:0 0 .5em}.leitura p:last-child{margin:0}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:1px solid var(--linha)}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:9px 10px;text-align:right;font-size:12px}
+th:first-child,td:first-child{text-align:left}
+td{padding:8px 10px;text-align:right;border-bottom:1px solid #EFEBE2;font-variant-numeric:tabular-nums}
+td.m{color:var(--suave)}
+tr.tot td{background:#FAF8F3;border-top:1.5px solid var(--ouro);font-weight:700;color:var(--azul)}
+tr.liq td{font-weight:700;color:var(--conf)}
+.tabwrap{overflow-x:auto}
+svg text{font-family:"DM Sans",sans-serif}
+.leg{display:flex;gap:16px;font-size:12px;color:var(--suave);margin-top:6px;flex-wrap:wrap}
+.leg i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:6px}
+footer{border-top:1px solid var(--linha);margin-top:22px;padding-top:18px;font-size:11.2px;color:var(--suave);line-height:1.55}
+footer b{color:var(--conf)}
+
+/* Página do estudo e formulário compartilhado, antes do simulador aberto. */
+:root{--suave:#5D6775}
+h1,h2,h3{text-wrap:balance}
+#estudo{padding-bottom:8px}
+#estudo h2{font-size:24px}
+#estudo ul{padding-left:20px;max-width:70ch;line-height:1.7}
+#estudo li{margin:8px 0}
+[data-muro]{margin-top:22px}
+[data-muro] p{max-width:70ch}
+[data-muro] a{color:var(--conf)}
+/* embed.js injeta width:5000px: manter o formulário dentro da tela no celular. */
+[data-muro] iframe{width:100% !important;max-width:560px;border:0;display:block}
+#simulador-titulo{font-size:26px;margin:0 0 18px}
+.leitura{border-left:0;border-top:2px solid var(--ouro)}
+#captura{margin-top:20px}
+#btn-print{padding:12px 18px;background:var(--azul);color:var(--marfim);border:0;
+  border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer;max-width:100%}
+button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--conf);outline-offset:3px}
+#resumo-print{display:none}
+@media(max-width:640px){
+  .card{padding:18px 14px}
+  .grid2{gap:2px 8px}
+  .iunit span{padding:8px 6px}
+  .tabwrap table{font-size:11px;table-layout:fixed}
+  th,td{padding:8px 5px;overflow-wrap:anywhere}
+  th:first-child,td:first-child{width:42%}
+}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header{padding:12px 0;margin-bottom:14px}
+  header p,#estudo,#painel,#captura{display:none}
+  .wrap{padding:0;max-width:none}
+  .grid{display:block}
+  #resumo-print{display:block;margin-bottom:14px}
+  #resumo-print p{margin:5px 0 0}
+  .card,.kpis,.leitura{break-inside:avoid}
+  .card{padding:12px;margin-bottom:12px}
+  .tabwrap{overflow:visible}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .kpi{padding:10px}
+  .kpi .v{font-size:21px}
+  svg{display:block;width:100%;max-height:58mm}
+  footer{font-size:9px}
+}
+</style>
+<script src="/pixel.js"></script>
+</head><body>
+
+<header><div class="wrap">
+  <div class="marca">DOCTOR INVEST · SIMULADOR</div>
+  <h1>Não é a CBS</h1>
+  <p>Simples ou lucro presumido para a PJ médica em 2027 e 2033. Somei o imposto da empresa e o da pessoa física, com o IR mínimo da Lei 15.270, e otimizei o pró-labore de cada regime. Quem decide o regime é a folha, não a alíquota nova.</p>
+</div></header>
+
+<section class="wrap" id="estudo" aria-labelledby="conteudo-titulo">
+  <div class="card">
+    <h2 id="conteudo-titulo">O que tem dentro</h2>
+    <ul>
+      <li>Faixas de R$ 120 mil a R$ 4,8 milhões por ano, de R$ 20 mil em R$ 20 mil</li>
+      <li>Médico sozinho, clínica com equipe, um e dois sócios, com e sem equiparação hospitalar</li>
+      <li>A seção que mostra onde este estudo pode estar errado</li>
+    </ul>
+    <div style="margin-top:16px" id="receber" data-muro>
+      <p>O simulador está aberto, logo abaixo. O PDF de 14 páginas e a base de dados chegam por e-mail.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <script src="/beehiiv-sucesso.js" data-destino="/obrigado.html"></script>
+      <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
+           Não remover sem religar a dupla confirmação. -->
+      <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+      carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=simples-presumido&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
+    </div>
+  </div>
+</section>
+
+<main class="wrap" id="simulador" aria-labelledby="simulador-titulo">
+<h2 id="simulador-titulo">Simule a sua clínica</h2>
+<div id="resumo-print"><b>Os números que você informou.</b><p id="resumo-txt"></p></div>
+<div class="grid">
+<div id="painel">
+  <div class="card">
+    <h3>A clínica</h3>
+    <p class="hint">Comece por um dos casos do estudo e ajuste ao seu.</p>
+    <div class="presets" id="presets">
+      <button class="pbtn on" data-s="1" data-f="0" data-o="15">Médico sozinho</button>
+      <button class="pbtn" data-s="1" data-f="15" data-o="20">Clínica com equipe</button>
+      <button class="pbtn" data-s="2" data-f="0" data-o="15">2 sócios, sem equipe</button>
+      <button class="pbtn" data-s="2" data-f="15" data-o="20">2 sócios, com equipe</button>
+    </div>
+    <div class="field"><label for="fat">Faturamento por ano (o que os pacientes pagam)</label>
+      <div class="iunit"><span class="pre">R$</span><input type="number" id="fat" step="10000" min="120000" max="4800000" value="1200000"></div>
+      <input type="range" id="fat_r" min="120000" max="4800000" step="20000" value="1200000" aria-label="Faturamento por ano"></div>
+    <span class="lbl">Sócios médicos, com quotas iguais</span>
+    <div class="toggle" id="socios"><button data-v="1" class="on">1</button><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button></div>
+    <div class="grid2">
+      <div class="field"><label for="folha">Folha CLT</label>
+        <div class="iunit"><input type="number" id="folha" step="1" min="0" max="60" value="0"><span>% do fat.</span></div></div>
+      <div class="field"><label for="outros">Outros custos</label>
+        <div class="iunit"><input type="number" id="outros" step="1" min="0" max="80" value="15"><span>% do fat.</span></div></div>
+    </div>
+    <p class="nota">Folha CLT com 13º e férias, sem os encargos. Outros custos: aluguel, material, serviços, energia.</p>
+  </div>
+
+  <div class="card">
+    <h3>Regras</h3>
+    <span class="lbl">Ano</span>
+    <div class="toggle" id="janela"><button data-v="2027" class="on">2027 · CBS + ISS</button><button data-v="2033">2033 · CBS + IBS</button></div>
+    <span class="lbl" style="margin-top:12px">Equiparação hospitalar no presumido</span>
+    <div class="toggle" id="equip"><button data-v="0" class="on">Não (presunção 32%)</button><button data-v="1">Sim (8% e 12%)</button></div>
+    <div class="grid2">
+      <div class="field"><label for="iss">ISS da cidade</label>
+        <div class="iunit"><input type="number" id="iss" step="0.5" min="0" max="5" value="2"><span>%</span></div></div>
+      <div class="field"><label for="cred">Compras com crédito</label>
+        <div class="iunit"><input type="number" id="cred" step="10" min="0" max="100" value="50"><span>%</span></div></div>
+    </div>
+    <details><summary>Alíquotas da reforma</summary>
+      <div class="grid2">
+        <div class="field"><label for="cbs">CBS de referência</label>
+          <div class="iunit"><input type="number" id="cbs" step="0.1" min="0" max="40" value="11.3"><span>%</span></div></div>
+        <div class="field"><label for="ibs">IBS em 2033</label>
+          <div class="iunit"><input type="number" id="ibs" step="0.1" min="0" max="40" value="18.7"><span>%</span></div></div>
+      </div>
+      <p class="nota">Alíquotas cheias. A saúde paga 40% delas. Em 2027 a CBS cobrada é a referência menos 0,1
+        ponto, mais 0,1% de IBS de teste, e o ISS segue municipal. O IBS de 2033 não tem número oficial: 18,7% é a
+        projeção do Comitê Gestor.</p>
+    </details>
+    <p class="nota">Aluguel pago a pessoa física e serviço de quem está no Simples quase não geram crédito.
+      A equiparação exige sociedade empresária, normas da Anvisa e serviço que não seja consulta.</p>
+  </div>
+</div>
+
+<div>
+  <div class="kpis">
+    <div class="kpi dark"><div class="v" id="k_venc">—</div><div class="t" id="k_venc_t">—</div></div>
+    <div class="kpi"><div class="v" id="k_s">—</div><div class="t" id="k_s_t">Imposto total no Simples</div></div>
+    <div class="kpi"><div class="v" id="k_p">—</div><div class="t" id="k_p_t">Imposto total no presumido</div></div>
+    <div class="kpi"><div class="v" id="k_cbs">—</div><div class="t" id="k_cbs_t">CBS em que o vencedor mudaria</div></div>
+  </div>
+  <div class="leitura" id="leitura"></div>
+  <div class="card">
+    <h3>Imposto total conforme o faturamento</h3>
+    <p class="hint">Mesma clínica, mesmas regras; só o faturamento muda. Em % do que os pacientes pagam.</p>
+    <svg id="graf" viewBox="0 0 640 270" width="100%" role="img" aria-label="Imposto total por faturamento nos dois regimes"></svg>
+    <div class="leg"><span><i style="background:#1B3A5C"></i>Simples (melhor anexo)</span><span><i style="background:#C9A84C"></i>Lucro presumido</span></div>
+  </div>
+  <div class="card">
+    <h3>De onde vem a diferença</h3>
+    <p class="hint">Imposto por ano, somando os sócios. O líquido é o que chega ao CPF depois de tudo.</p>
+    <div class="tabwrap"><table id="tab"></table></div>
+  </div>
+</div>
+</div>
+
+<div class="card" id="captura">
+  <h2>Leve esta simulação com você</h2>
+  <p class="hint">Gera um PDF com os seus números, os resultados, o gráfico e a tabela. Libera com o mesmo e-mail do estudo, lá em cima, e os números que você informou ficam.</p>
+  <button id="btn-print" type="button">Gerar o PDF da minha simulação</button>
+</div>
+
+<footer><b>Aviso importante.</b> Este material tem caráter exclusivamente informativo e educacional e não constitui
+consultoria tributária, contábil ou jurídica, nem recomendação de investimento, nos termos da regulamentação
+da Comissão de Valores Mobiliários. Os cenários apresentados foram construídos para fins analíticos e não
+representam a situação de nenhuma clínica ou contribuinte específico. Os resultados decorrem de simulação
+com premissas declaradas e de normas vigentes em 29/10/2026, algumas ainda sujeitas a regulamentação, a
+resolução do Senado Federal ou a decisão judicial. A escolha de regime tributário deve ser feita com o
+contador responsável pela empresa, que conhece os números reais e pode confirmar a interpretação aplicável.
+<br><br>
+<b>Doctor Invest</b> · Gestão de investimentos e consultoria financeira para médicos ·
+Hélio Cardoso de Barros, CGA · outubro de 2026.</footer>
+</main>
+
+<script id="dados" type="application/json">{"SALARIO_MINIMO": 1621.0, "TETO_INSS": 8475.55, "INSS_SOCIO": 0.11, "CPP": 0.2, "RAT_TERCEIROS": 0.078, "FGTS": 0.08, "TABELA_IRPF": [[2428.8, 0, 0], [2826.65, 0.075, 182.16], [3751.05, 0.15, 394.16], [4664.68, 0.225, 675.49], [1e+300, 0.275, 908.73]], "JANELAS": {"2026": {"cbs": 0.0, "ibs": 0.0, "iss": 0.02, "pis_cofins": 0.0365, "anexos": {"III": [[180000.0, 0.06, 0, 0.075, 0.335], [360000.0, 0.112, 9360, 0.075, 0.32], [720000.0, 0.135, 17640, 0.075, 0.325], [1800000.0, 0.16, 35640, 0.075, 0.325], [3600000.0, 0.21, 125640, 0.075, 0.335], [4800000.0, 0.33, 648000, 0.5, 0]], "V": [[180000.0, 0.155, 0, 0.4, 0.14], [360000.0, 0.18, 4500, 0.38, 0.17], [720000.0, 0.195, 9900, 0.39, 0.19], [1800000.0, 0.205, 17100, 0.36, 0.21], [3600000.0, 0.23, 62100, 0.355, 0.235], [4800000.0, 0.305, 540000, 0.506, 0]]}}, "2027": {"cbs": 0.112, "ibs": 0.001, "iss": 0.02, "pis_cofins": 0.0, "anexos": {"III": [[180000.0, 0.06, 0, 0.075, 0.335], [360000.0, 0.112, 9360, 0.075, 0.32], [720000.0, 0.135, 17640, 0.075, 0.325], [1800000.0, 0.16, 35640, 0.075, 0.325], [3600000.0, 0.21, 125640, 0.075, 0.335], [4800000.0, 0.329, 648000, 0.5, 0]], "V": [[180000.0, 0.155, 0, 0.4, 0.14], [360000.0, 0.18, 4500, 0.38, 0.17], [720000.0, 0.195, 9900, 0.39, 0.19], [1800000.0, 0.205, 17100, 0.36, 0.21], [3600000.0, 0.23, 62100, 0.355, 0.235], [4800000.0, 0.304, 540000, 0.506, 0]]}}, "2033": {"cbs": 0.113, "ibs": 0.187, "iss": 0.0, "pis_cofins": 0.0, "anexos": {"III": [[180000.0, 0.06, 0, 0.075, 0.335], [360000.0, 0.112, 9360, 0.075, 0.32], [720000.0, 0.135, 17640, 0.075, 0.325], [1800000.0, 0.16, 35640, 0.075, 0.325], [3600000.0, 0.21, 125640, 0.075, 0.335], [4800000.0, 0.33, 648000, 0.5, 0]], "V": [[180000.0, 0.155, 0, 0.4, 0.14], [360000.0, 0.18, 4500, 0.38, 0.17], [720000.0, 0.195, 9900, 0.39, 0.19], [1800000.0, 0.205, 17100, 0.36, 0.21], [3600000.0, 0.23, 62100, 0.355, 0.235], [4800000.0, 0.305, 540000, 0.506, 0]]}}}, "SUBLIMITE": 3600000.0, "TETO_SIMPLES": 4800000.0, "FATOR_R": 0.28, "IRPJ": 0.15, "ADICIONAL": 0.1, "LIMITE_ADICIONAL": 240000, "CSLL": 0.09, "PRESUNCAO": {"false": [0.32, 0.32], "true": [0.08, 0.12]}, "CBS_REF": 0.113, "REDUCAO_SAUDE": 0.6, "ISS_SP": 0.02, "IRPFM_PISO": 600000, "TETO_CARGA": 0.34, "PERFIS": {"enxuto": {"folha": 0.0, "outros": 0.15}, "equipe": {"folha": 0.15, "outros": 0.2}}, "CREDITO_COMPRAS": 0.5, "EMPATE": 0.005}</script>
+<script id="motor">
+(function () {
+  // Espelho de motor.py (simples, presumido, melhor, vantagem, cbs_empate_caso).
+  // A ordem das operações é a mesma do Python; paridade conferida por paridade.mjs.
+  globalThis.MOTOR = function (D) {
+    const SM = D.SALARIO_MINIMO;
+    const inssSocio = pl => D.INSS_SOCIO * Math.min(pl, D.TETO_INSS);
+
+    function irpfMensal(rend) {
+      const base = rend - inssSocio(rend);
+      const f = D.TABELA_IRPF.find(f => base <= f[0]);
+      const imposto = Math.max(f[1] * base - f[2], 0);
+      let desconto;
+      if (rend <= 5000) desconto = 312.89;
+      else if (rend <= 7350) desconto = 978.62 - 0.133145 * rend;
+      else desconto = 0;
+      return Math.max(imposto - desconto, 0);
+    }
+
+    function irpfm(renda, irPago, aliqPj, div) {
+      if (renda <= D.IRPFM_PISO) return 0;
+      const aliq = Math.min(renda / 60000 - 10, 10) / 100;
+      const devido = Math.max(aliq * renda - irPago, 0);
+      if (div <= 0) return devido;
+      const redutor = div * Math.max(aliqPj + devido / div - D.TETO_CARGA, 0);
+      return Math.max(devido - redutor, 0);
+    }
+
+    const j = (c, k) => (c[k] !== null && c[k] !== undefined && ["cbs", "ibs", "iss"].includes(k))
+      ? c[k] : D.JANELAS[c.janela][k];
+
+    function custos(c) {
+      const p = D.PERFIS[c.perfil || "enxuto"];
+      const folha = (c.folha === null || c.folha === undefined ? p.folha : c.folha) * c.P;
+      const compras = (c.outros === null || c.outros === undefined ? p.outros : c.outros) * c.P;
+      return [folha, compras];
+    }
+
+    function fiscal(c) {
+      const cheia = j(c, "cbs") + j(c, "ibs");
+      return [cheia * (1 - D.REDUCAO_SAUDE), cheia];
+    }
+
+    function das(janela, anexo, rbt12, fora) {
+      const f = D.JANELAS[janela].anexos[anexo].find(f => rbt12 <= f[0]);
+      const total = rbt12 * f[1] - f[2];
+      return [total * (fora ? 1 - f[4] : 1), total * f[3]];
+    }
+
+    function pf(c, plMes, dividendos, aliqPj) {
+      const div = dividendos / c.socios;
+      const inss = 12 * inssSocio(plMes);
+      const irpf = 12 * irpfMensal(plMes);
+      const m = irpfm(12 * plMes + div, irpf, aliqPj, div);
+      const retido = 12 * (div / 12 > 50000 ? .10 * div / 12 : 0);
+      return [c.socios * inss, c.socios * irpf, c.socios * m, c.socios * retido];
+    }
+
+    function simples(c, plMes) {
+      const [folha, compras] = custos(c);
+      const pl = c.socios * 12 * plMes;
+      const fgts = D.FGTS * folha;
+      const [, tCheia] = fiscal(c);
+      let fora = 0;
+      const rb = c.P;
+      if (c.P > D.SUBLIMITE) {
+        if (c.janela !== "2033") fora = j(c, "iss") * c.P;
+        else {
+          const ibs = j(c, "ibs");
+          const tIbs = ibs * (1 - D.REDUCAO_SAUDE);
+          fora = c.P * tIbs / (1 + tIbs) - c.credito * compras * ibs / (1 + tCheia);
+        }
+      }
+      const fatorR = (folha + fgts + pl) / rb;
+      const anexo = fatorR >= D.FATOR_R ? "III" : "V";
+      const [d, irPj] = das(c.janela, anexo, rb, c.P > D.SUBLIMITE);
+      const lucro = c.P - d - fora - compras - folha - fgts - pl;
+      const aliqPj = irPj / (lucro + irPj);
+      const [inss, irpf, m, retido] = pf(c, plMes, lucro, aliqPj);
+      return { regime: "Simples", anexo, fator_r: fatorR, pl_mes: plMes, consumo: d - irPj + fora, ir_pj: irPj,
+               patronal: 0, inss, irpf, irpfm: m, retido, dividendos: lucro, pl, das: d, fora };
+    }
+
+    function presumido(c, plMes) {
+      const [folha, compras] = custos(c);
+      const pl = c.socios * 12 * plMes;
+      const fgts = D.FGTS * folha;
+      const [tIva, tCheia] = fiscal(c);
+      const rb = c.P / (1 + tIva);
+      const credito = c.credito * compras * tCheia / (1 + tCheia);
+      const iva = rb * tIva - credito;
+      const iss = (j(c, "iss") + j(c, "pis_cofins")) * rb;
+      const [pIr, pCs] = D.PRESUNCAO[String(!!c.equiparacao)];
+      const irpj = D.IRPJ * pIr * rb + D.ADICIONAL * Math.max(pIr * rb - D.LIMITE_ADICIONAL, 0);
+      const csll = D.CSLL * pCs * rb;
+      const patronal = D.CPP * pl + (D.CPP + D.RAT_TERCEIROS) * folha;
+      const lucroAntes = c.P - iva - iss - compras - folha - fgts - pl - patronal;
+      const dividendos = lucroAntes - irpj - csll;
+      const aliqPj = (irpj + csll) / lucroAntes;
+      const [inss, irpf, m, retido] = pf(c, plMes, dividendos, aliqPj);
+      return { regime: "Presumido", anexo: "", fator_r: null, pl_mes: plMes, consumo: iva + iss, ir_pj: irpj + csll,
+               patronal, inss, irpf, irpfm: m, retido, dividendos, pl, iva, iss };
+    }
+
+    function total(r) {
+      r.imposto = r.consumo + r.ir_pj + r.patronal + r.inss + r.irpf + r.irpfm;
+      r.liquido = r.dividendos + r.pl - r.inss - r.irpf - r.irpfm;
+      return r;
+    }
+
+    function melhor(c, regime) {
+      const f = regime === "Simples" ? simples : presumido;
+      const [folha] = custos(c);
+      const limiar = Math.max((D.FATOR_R * c.P - (1 + D.FGTS) * folha) / (12 * c.socios), SM);
+      const topo = Math.max(limiar * 1.3, 30000);
+      const n = Math.trunc((topo - SM) / 100);
+      let best = null;
+      const testa = pl => { const r = total(f(c, pl)); if (!best || r.liquido > best.liquido) best = r; };
+      for (let k = 0; k <= n; k++) testa(SM + 100 * k);
+      testa(limiar);
+      testa(limiar * 1.0005);
+      return best;
+    }
+
+    const vantagem = c => (melhor(c, "Simples").liquido - melhor(c, "Presumido").liquido) / c.P;
+
+    function cbsEmpate(c) {
+      const f = t => vantagem(Object.assign({}, c, { cbs: t }));
+      let lo = 0, hi = .6;
+      if ((f(lo) > 0) === (f(hi) > 0)) return null;
+      for (let i = 0; i < 40; i++) {
+        const mid = (lo + hi) / 2;
+        if ((f(mid) > 0) === (f(lo) > 0)) lo = mid; else hi = mid;
+      }
+      return (lo + hi) / 2;
+    }
+
+    return { melhor, vantagem, cbsEmpate, simples, presumido, total };
+  };
+})();
+</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById("dados").textContent);
+  const M = MOTOR(D);
+  const $ = id => document.getElementById(id);
+  const nf = (v, c = 0) => v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c });
+  const brl = v => "R$ " + nf(Math.round(v));
+  const mil = v => Math.abs(v) >= 1e6 ? "R$ " + nf(v / 1e6, 2) + " mi" : "R$ " + nf(Math.round(v / 1e3)) + " mil";
+  const pct = (v, c = 1) => nf(v * 100, c) + "%";
+  const num = (id, def) => { const v = parseFloat($(id).value); return isFinite(v) ? v : def; };
+  const estado = { socios: 1, janela: "2027", equip: false };
+
+  function toggle(id, chave, conv) {
+    $(id).addEventListener("click", e => {
+      const b = e.target.closest("button"); if (!b) return;
+      [...$(id).children].forEach(x => x.classList.toggle("on", x === b));
+      estado[chave] = conv(b.dataset.v); limpaPreset(); agenda();
+    });
+  }
+  function marca(id, v) { [...$(id).children].forEach(x => x.classList.toggle("on", x.dataset.v === String(v))); }
+  function limpaPreset() {
+    const s = estado.socios, f = num("folha", 0), o = num("outros", 0);
+    [...$("presets").children].forEach(b => b.classList.toggle("on",
+      +b.dataset.s === s && +b.dataset.f === f && +b.dataset.o === o));
+  }
+  toggle("socios", "socios", Number);
+  toggle("janela", "janela", String);
+  toggle("equip", "equip", v => v === "1");
+  $("presets").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    estado.socios = +b.dataset.s; marca("socios", estado.socios);
+    $("folha").value = b.dataset.f; $("outros").value = b.dataset.o;
+    limpaPreset(); agenda();
+  });
+  $("fat_r").addEventListener("input", () => { $("fat").value = $("fat_r").value; agenda(); });
+  $("fat").addEventListener("input", () => { $("fat_r").value = $("fat").value; agenda(); });
+  ["folha", "outros"].forEach(id => $(id).addEventListener("input", () => { limpaPreset(); agenda(); }));
+  ["iss", "cred", "cbs", "ibs"].forEach(id => $(id).addEventListener("input", agenda));
+
+  let t = null;
+  function agenda() { clearTimeout(t); t = setTimeout(calcula, 120); }
+
+  function caso(P) {
+    const ref = num("cbs", 11.3) / 100;
+    return {
+      P, socios: estado.socios, janela: estado.janela, equiparacao: estado.equip,
+      credito: Math.min(Math.max(num("cred", 50), 0), 100) / 100,
+      cbs: estado.janela === "2027" ? ref - .001 : ref,
+      ibs: estado.janela === "2033" ? num("ibs", 18.7) / 100 : null,
+      iss: estado.janela === "2027" ? num("iss", 2) / 100 : null,      // em 2033 o ISS já acabou
+      folha: Math.max(num("folha", 0), 0) / 100, outros: Math.max(num("outros", 0), 0) / 100,
+    };
+  }
+
+  function calcula() {
+    let P = num("fat", 1200000);
+    const aviso = [];
+    if (P > D.TETO_SIMPLES) { P = D.TETO_SIMPLES; aviso.push("O Simples só vai até R$ 4,8 milhões por ano; a conta usa esse teto."); }
+    if (P < 120000) { P = 120000; aviso.push("A conta começa em R$ 120 mil por ano."); }
+    $("iss").disabled = estado.janela === "2033";
+    const c = caso(P);
+    const s = M.melhor(c, "Simples"), p = M.melhor(c, "Presumido");
+    const v = (s.liquido - p.liquido) / P;
+    const emp = Math.abs(v) <= D.EMPATE;
+
+    $("k_venc").textContent = emp ? "Empate" : v > 0 ? "Simples · Anexo " + s.anexo : "Presumido";
+    $("k_venc_t").textContent = emp
+      ? "Diferença de " + mil(Math.abs(v * P)) + " por ano, menos de 0,5% do faturamento"
+      : "Deixa " + mil(Math.abs(v * P)) + " a mais por ano no bolso dos sócios";
+    $("k_s").textContent = pct(s.imposto / P);
+    $("k_s_t").textContent = "Imposto total no Simples: " + mil(s.imposto) + " por ano";
+    $("k_p").textContent = pct(p.imposto / P);
+    $("k_p_t").textContent = "Imposto total no presumido: " + mil(p.imposto) + " por ano";
+    const e = M.cbsEmpate(c);
+    $("k_cbs").textContent = e === null ? "—" : pct(e);
+    $("k_cbs_t").textContent = e === null
+      ? "Entre 0% e 60% de CBS cheia, o vencedor não muda"
+      : "CBS cheia em que o vencedor mudaria. Hoje: " + pct(c.cbs) + " cobrada em " + c.janela;
+
+    const L = [];
+    L.push("<p><b>Simples:</b> o melhor desenho é o Anexo " + s.anexo + ", com pró-labore de " + brl(s.pl_mes) +
+      " por mês por sócio" + (s.anexo === "III" ? ", o que leva o Fator R a " + pct(s.fator_r, 0) + "." : ", o mínimo.") +
+      " <b>Presumido:</b> pró-labore de " + brl(p.pl_mes) + " por mês por sócio; subir não compensa.</p>");
+    const w = v > 0 ? s : p;
+    if (w.retido > w.irpfm + 1)
+      L.push("<p>No regime que ganha, " + mil(w.retido) + " ficam retidos na fonte no ano (dividendo acima de R$ 50 mil " +
+        "por mês por sócio). Desse valor, " + mil(w.retido - w.irpfm) + " voltam só na declaração do ano seguinte.</p>");
+    if (P > D.SUBLIMITE)
+      L.push("<p>Acima de R$ 3,6 milhões, o " + (c.janela === "2027" ? "ISS" : "IBS") + " sai do DAS e é pago por fora.</p>");
+    if (c.equiparacao)
+      L.push("<p>A equiparação hospitalar exige sociedade empresária, normas da Anvisa e serviço que não seja consulta. " +
+        "A consulta simples fica em 32%.</p>");
+    if (c.janela === "2033")
+      L.push("<p>Em 2033 o ISS já não existe: o presumido paga CBS e IBS com a redução de 60% da saúde. O Simples de até " +
+        "R$ 3,6 milhões não muda.</p>");
+    aviso.forEach(a => L.push("<p><b>" + a + "</b></p>"));
+    $("leitura").innerHTML = L.join("");
+
+    $("resumo-txt").textContent = [
+      "Faturamento anual: " + brl(P),
+      "Sócios: " + c.socios,
+      "Folha CLT: " + pct(c.folha), "Outros custos: " + pct(c.outros),
+      "Ano: " + c.janela, "Equiparação hospitalar: " + (c.equiparacao ? "sim" : "não"),
+      "Compras com crédito: " + pct(c.credito),
+      "ISS: " + pct(c.iss === null ? D.JANELAS[c.janela].iss : c.iss),
+      "CBS de referência: " + pct(num("cbs", 11.3) / 100), "CBS cobrada: " + pct(c.cbs),
+      "IBS: " + pct(c.ibs === null ? D.JANELAS[c.janela].ibs : c.ibs)
+    ].join(" · ") + ". Pró-labore otimizado em cada regime.";
+
+    tabela(s, p, P);
+    grafico(P);
+  }
+
+  function tabela(s, p, P) {
+    const tr = (nome, a, b, cls) => `<tr${cls ? ` class="${cls}"` : ""}><td>${nome}</td>${[a, b].map(x =>
+      typeof x === "string" ? `<td class="m">${x}</td>` : `<td>${brl(x)}</td>`).join("")}</tr>`;
+    const d = x => x > .5 ? x : "—";
+    $("tab").innerHTML =
+      `<tr><th>Por ano</th><th>Simples · Anexo ${s.anexo}</th><th>Presumido</th></tr>` +
+      tr("Pró-labore por sócio, por mês", s.pl_mes, p.pl_mes) +
+      tr("DAS", s.das, "—") +
+      tr(P > D.SUBLIMITE ? "ISS ou IBS fora do DAS" : "ISS ou IBS fora do DAS (acima de R$ 3,6 mi)", d(s.fora), "—") +
+      tr("CBS + IBS, já descontado o crédito", "no DAS", p.iva) +
+      tr("ISS", "no DAS", d(p.iss)) +
+      tr("IRPJ + CSLL", "no DAS", p.ir_pj) +
+      tr("INSS patronal (pró-labore e folha)", "no DAS", p.patronal) +
+      tr("INSS dos sócios", s.inss, p.inss) +
+      tr("IRPF do pró-labore", d(s.irpf), d(p.irpf)) +
+      tr("IR mínimo (Lei 15.270)", d(s.irpfm), d(p.irpfm)) +
+      `<tr class="tot"><td>Imposto total</td><td>${brl(s.imposto)} · ${pct(s.imposto / P)}</td><td>${brl(p.imposto)} · ${pct(p.imposto / P)}</td></tr>` +
+      tr("Líquido no CPF dos sócios", s.liquido, p.liquido, "liq") +
+      tr("Retido na fonte no ano (volta na declaração)", d(s.retido), d(p.retido));
+  }
+
+  function grafico(P0) {
+    const W = 640, H = 270, l = 46, r = 14, tp = 12, b = 34;
+    const xs = []; for (let x = 120000; x <= 4800000; x += 60000) xs.push(x);
+    const ser = xs.map(x => { const c = caso(x); return [M.melhor(c, "Simples").imposto / x, M.melhor(c, "Presumido").imposto / x]; });
+    const c0 = caso(P0), y0 = [M.melhor(c0, "Simples").imposto / P0, M.melhor(c0, "Presumido").imposto / P0];
+    const todos = ser.flat().concat(y0);
+    const ymax = Math.ceil(Math.max(...todos) * 20) / 20, ymin = Math.max(0, Math.floor(Math.min(...todos) * 20) / 20);
+    const X = x => l + (x - 120000) / (4800000 - 120000) * (W - l - r);
+    const Y = y => tp + (ymax - y) / (ymax - ymin) * (H - tp - b);
+    let g = "";
+    for (let y = ymin; y <= ymax + 1e-9; y += .05)
+      g += `<line x1="${l}" x2="${W - r}" y1="${Y(y)}" y2="${Y(y)}" stroke="#ECE8DF"/><text x="${l - 6}" y="${Y(y) + 4}" font-size="11" fill="#7A8290" text-anchor="end">${nf(y * 100)}%</text>`;
+    for (const x of [1e6, 2e6, 3e6, 4e6])
+      g += `<text x="${X(x)}" y="${H - 12}" font-size="11" fill="#7A8290" text-anchor="middle">R$ ${nf(x / 1e6)} mi</text>`;
+    const linha = (k, cor) => `<polyline fill="none" stroke="${cor}" stroke-width="2.4" points="${ser.map((s, i) => X(xs[i]) + "," + Y(s[k])).join(" ")}"/>`;
+    g += linha(0, "#1B3A5C") + linha(1, "#C9A84C");
+    g += `<line x1="${X(P0)}" x2="${X(P0)}" y1="${tp}" y2="${H - b}" stroke="#0D1B2A" stroke-dasharray="3 3"/>`;
+    g += `<circle cx="${X(P0)}" cy="${Y(y0[0])}" r="4.5" fill="#1B3A5C"/><circle cx="${X(P0)}" cy="${Y(y0[1])}" r="4.5" fill="#C9A84C"/>`;
+    $("graf").innerHTML = g;
+  }
+
+  $("btn-print").onclick = function () { calcula(); window.print(); };
+  window.addEventListener("beforeprint", calcula);
+  calcula();
+})();
+</script>
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var live=/drheliobarros\.com\.br$/.test(location.hostname);
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e a redirect de formulario. Sem isto o evento de
+// conversao nasce sem fonte e todo lead parece trafego direto. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  if(!live) return;
+  var payload=JSON.stringify({
+    event:nome, page:"simples-presumido",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+// Conta a primeira interação com qualquer controle do simulador.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou||!e.target.closest("#painel input,#painel button")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+</script>
+
+<script src="../muro.js" data-estudo="simples-presumido"></script>
+</body></html>

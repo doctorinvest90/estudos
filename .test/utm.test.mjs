@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 const PAGES = ["alocacao/index.html", "consorcio/index.html", "consorcio/cota.html",
                "consorcio/simulador.html", "antecipacao/index.html", "maquininha/index.html",
                "maquininha/obrigado.html", "do-zero/index.html", "do-zero/obrigado.html",
-               "dividendos/index.html", "dividendos/obrigado.html"];
+               "dividendos/index.html", "dividendos/obrigado.html", "simples-presumido/index.html"];
 
 function loadHelper(html, search, store) {
   const src = readFileSync(new URL(`../${html}`, import.meta.url), "utf8");
