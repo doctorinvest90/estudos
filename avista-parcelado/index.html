@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>O desconto tem prazo de validade · Doctor Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--linha:#E3DFD4;
+      --texto:#22303F;--suave:#7A8290;--verde:#4F7A5B;--verm:#A8443C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:var(--texto);
+     font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--azul)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 60px}
+
+header{background:var(--azul);color:var(--marfim);padding:34px 0 30px;margin-bottom:26px}
+header .wrap{padding-bottom:0}
+.marca{font-size:11px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{color:var(--marfim);font-size:33px;line-height:1.15;margin:14px 0 8px}
+header p{color:#AFBACB;margin:0;max-width:660px;font-size:14.5px}
+
+.grid{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+.card{background:#fff;border:1px solid var(--linha);border-radius:3px;padding:20px 22px;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:4px}
+.card .hint{font-size:12.5px;color:var(--suave);margin:0 0 16px}
+.card .nota{font-size:11.8px;color:var(--suave);line-height:1.5;margin:14px 0 0}
+
+.presets{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0 4px}
+.pbtn{padding:8px 4px;border:1px solid var(--linha);background:#fff;
+  font-family:inherit;font-size:12.5px;cursor:pointer;color:var(--conf);border-radius:2px}
+.pbtn:hover{border-color:var(--ouro)}
+.pbtn.on{background:var(--azul);color:var(--marfim);border-color:var(--azul)}
+
+.toggle{display:flex;margin:6px 0 4px;border:1px solid var(--linha);border-radius:2px;overflow:hidden}
+.toggle button{flex:1;padding:9px 4px;border:0;background:#fff;font-family:inherit;font-size:12.5px;
+  cursor:pointer;color:var(--conf)}
+.toggle button.on{background:var(--conf);color:#fff}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}
+.field{margin:10px 0}
+.field label{display:block;font-size:12.5px;color:var(--conf);font-weight:500;margin:0 0 5px}
+.iunit{display:flex;align-items:stretch;border:1px solid var(--linha);border-radius:2px;overflow:hidden;background:#fff}
+.iunit input{width:100%;min-width:0;border:0;padding:8px 8px;text-align:right;font-family:inherit;
+  font-size:13.5px;color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
+.iunit input:focus{outline:none;background:#FAF9F4}
+.iunit span{padding:8px 9px;font-size:11.5px;color:var(--suave);background:#FAF9F6;
+  border-left:1px solid var(--linha);white-space:nowrap;display:flex;align-items:center}
+.iunit span.pre{border-left:0;border-right:1px solid var(--linha)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);
+  border:1px solid var(--linha);margin-bottom:18px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;padding:16px 14px;min-width:0}
+.kpi .v{font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:700;color:var(--azul);
+  line-height:1.08;letter-spacing:-.01em;word-break:break-word}
+.kpi .t{font-size:11px;color:var(--suave);margin-top:6px;line-height:1.35}
+.kpi.dark{background:var(--azul)}
+.kpi.dark .v{color:var(--ouro)}
+.kpi.dark .t{color:#9AA8BC}
+.v.pos{color:var(--verde)!important}
+.v.neg{color:var(--verm)!important}
+
+.leitura{background:#fff;border-left:3px solid var(--ouro);padding:16px 20px;margin-bottom:18px;font-size:14px}
+.leitura p{margin:0 0 .5em}.leitura p:last-child{margin:0}
+
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:1px solid var(--linha)}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:9px 10px;text-align:right;font-size:12px}
+th:first-child,td:first-child{text-align:left}
+td{padding:8px 10px;text-align:right;border-bottom:1px solid #EFEBE2;font-variant-numeric:tabular-nums}
+tr.tot td{background:#FAF8F3;border-top:1.5px solid var(--ouro);font-weight:700;color:var(--azul)}
+.tabwrap{overflow-x:auto}
+
+footer{border-top:1px solid var(--linha);margin-top:22px;padding-top:18px;font-size:11.2px;
+  color:var(--suave);line-height:1.55}
+footer b{color:var(--conf)}
+
+/* Página do estudo e formulário compartilhado, antes do simulador aberto. */
+:root{--suave:#5D6775}
+h1,h2,h3{text-wrap:balance}
+.grid>*{min-width:0}
+#estudo{padding-bottom:8px}
+#estudo h2{font-size:24px}
+#estudo ol{padding-left:22px;max-width:72ch;line-height:1.65}
+#estudo li{margin:9px 0}
+[data-muro]{margin-top:22px}
+[data-muro] p{max-width:70ch}
+[data-muro] a{color:var(--conf)}
+/* embed.js injeta width:5000px: manter o formulário dentro da tela no celular. */
+[data-muro] iframe{width:100% !important;max-width:560px;border:0;display:block}
+#simulador-titulo{font-size:26px;margin:0 0 18px}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--conf);outline-offset:3px}
+@media(max-width:640px){
+  .card{padding:18px 14px}
+  .grid2{gap:2px 8px}
+  .iunit span{padding:8px 6px}
+  .presets{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<script src="/pixel.js"></script>
+</head><body>
+
+<header><div class="wrap">
+  <div class="marca">DOCTOR INVEST · ESTUDO</div>
+  <h1>O desconto tem prazo de validade</h1>
+  <p>O desconto à vista só vence o parcelado sem juros quando supera o que o dinheiro renderia
+     enquanto as parcelas não vencem. Coloque a sua oferta e veja o desconto que empata — e quem
+     vence, em reais de hoje.</p>
+</div></header>
+
+<section class="wrap" id="estudo" aria-labelledby="conteudo-titulo">
+  <div class="card">
+    <h2 id="conteudo-titulo">O que o estudo encontrou</h2>
+    <ol>
+      <li><b>Parcelado sem juros é um empréstimo a juro zero</b>, que só vale se o dinheiro render. Com o CDI de 13,65%, o desconto que empata é 1,6% em 3×, 2,9% em 6×, 4,5% em 10× e 5,4% em 12×.</li>
+      <li><b>Quem decide é a Selic, não a inflação.</b> O empate de 10× foi de 0,7% em 2020 a 4,5% hoje. Em 2021, com a inflação em 10,1%, ele ficou em 1,5%.</li>
+      <li><b>Onde o dinheiro espera muda a resposta inteira.</b> Parado na conta corrente, qualquer desconto vence. Na poupança, o empate de 10× cai para 3,5%; no CDB, fica em 4,5%.</li>
+      <li><b>Nas contas do ano, a resposta muda de conta para conta.</b> No IPTU paulistano, parcelar vence enquanto o CDI de fevereiro estiver acima de 10,9%. No IPVA e no Cremesp, o desconto à vista vence. O IR em quotas sempre perde para a quota única, mas perde 0,7%, não os 3,7% que a tabela da Receita sugere.</li>
+      <li><b>O lojista pode dar mais desconto do que você precisa.</b> Vender em 12× custa a ele entre 9,3% e 12,6% do valor. Você empata com 5,4%.</li>
+      <li><b>Na maioria das compras, a diferença entre as formas de pagar é pequena.</b> A grande está no desconto negociado: em 10×, um desconto de 5% vence o parcelado por R$ 47 a cada R$ 10.000; um de 10%, por R$ 547.</li>
+    </ol>
+    <p class="nota">Números com o CDI de 04/11/2026. 20 anos de CDI (2006–2026); varejo, IPTU, IPVA, Cremesp, escola e IR.</p>
+    <div id="receber" data-muro>
+      <p>O simulador está aberto, logo abaixo. O PDF de 14 páginas e a base de dados chegam por e-mail.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <script src="/beehiiv-sucesso.js" data-destino="/obrigado.html"></script>
+      <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
+           Não remover sem religar a dupla confirmação. -->
+      <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+      carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=avista-parcelado&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
+    </div>
+  </div>
+</section>
+
+<main class="wrap" id="simulador" aria-labelledby="simulador-titulo">
+<h2 id="simulador-titulo">Simule a sua compra</h2>
+<div class="grid">
+
+<!-- CONTROLES -->
+<div id="painel">
+  <div class="card">
+    <h3>Casos do estudo</h3>
+    <p class="hint">Um ponto de partida. Depois, ajuste para a sua oferta.</p>
+    <div class="presets" id="presets">
+      <button class="pbtn on" data-p="v10">Loja 10×</button>
+      <button class="pbtn" data-p="v12">Loja 12×</button>
+      <button class="pbtn" data-p="iptu">IPTU SP</button>
+      <button class="pbtn" data-p="ipva">IPVA SP</button>
+      <button class="pbtn" data-p="crm">Cremesp</button>
+      <button class="pbtn" data-p="escola">Escola</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>A oferta</h3>
+    <div class="grid2">
+      <div class="field" style="grid-column:1/3">
+        <label for="valor">Preço cheio (o do parcelado)</label>
+        <div class="iunit"><span class="pre">R$</span><input type="number" id="valor" step="100" min="1" value="10000"></div>
+      </div>
+      <div class="field">
+        <label for="desconto">Desconto à vista</label>
+        <div class="iunit"><input type="number" id="desconto" step="0.1" min="0" max="50" value="5"><span>%</span></div>
+      </div>
+      <div class="field">
+        <label for="parcelas">Parcelas iguais</label>
+        <div class="iunit"><input type="number" id="parcelas" step="1" min="1" max="36" value="10"><span>×</span></div>
+      </div>
+      <div class="field" style="grid-column:1/3">
+        <label for="dias">1ª parcela vence em</label>
+        <div class="iunit"><input type="number" id="dias" step="1" min="0" max="90" value="30"><span>dias · 0 = no ato</span></div>
+      </div>
+    </div>
+    <p class="nota">No cartão, a 1ª parcela vem na próxima fatura: cerca de 10 dias se você compra
+       na véspera do fechamento, cerca de 40 se compra no dia seguinte.</p>
+  </div>
+
+  <div class="card">
+    <h3>Onde o dinheiro espera</h3>
+    <p class="hint">O que acontece com o dinheiro que você não gastou à vista.</p>
+    <div class="toggle" id="tg_ap">
+      <button data-v="cdb" class="on">CDB 100% CDI</button><button data-v="poup">Poupança</button><button data-v="conta">Conta corrente</button>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label for="cdi">CDI ao ano</label>
+        <div class="iunit"><input type="number" id="cdi" step="0.05" min="0" max="40" value="13.65"><span>%</span></div>
+      </div>
+      <div class="field">
+        <label for="pontos">Pontos / cashback</label>
+        <div class="iunit"><input type="number" id="pontos" step="0.1" min="0" max="10" value="0"><span>%</span></div>
+      </div>
+    </div>
+    <p class="nota">CDB de liquidez diária com IR regressivo e IOF, parcela a parcela. Poupança isenta,
+       rendendo <span id="poupTxt"></span> ao mês (depósitos de <span id="poupMes"></span>). Pontos: só se o
+       desconto à vista for no Pix e o parcelado for no cartão.</p>
+  </div>
+</div>
+
+<!-- RESULTADOS -->
+<div>
+  <div class="kpis">
+    <div class="kpi dark"><div class="v" id="k1">—</div><div class="t">Desconto à vista que empata com o parcelado</div></div>
+    <div class="kpi"><div class="v" id="k2">—</div><div class="t" id="k2t">Quem vence</div></div>
+    <div class="kpi"><div class="v" id="k3">—</div><div class="t">Custo do parcelado, em reais de hoje</div></div>
+    <div class="kpi"><div class="v" id="k4">—</div><div class="t" id="k4t">CDI em que a resposta vira</div></div>
+  </div>
+
+  <div class="leitura" id="leitura"></div>
+
+  <div class="tabwrap"><table id="tab"></table></div>
+</div>
+
+</div>
+
+<style>@media print{.voltar-indice{display:none}}</style>
+<p class="voltar-indice" style="text-align:center;margin:28px 16px 24px;font-size:14px;line-height:1.4"><a href="../" style="color:#1B3A5C;font-weight:600;text-decoration:none;border-bottom:1px solid #C9A84C;padding-bottom:2px">← Ver outros estudos</a></p>
+<footer>
+<b>Aviso.</b> Ferramenta educacional da Doctor Invest, que acompanha o estudo <i>O desconto tem prazo
+de validade</i>. Não é recomendação de investimento nem consultoria individualizada.
+A conta supõe que o dinheiro não gasto fica aplicado até o vencimento de cada parcela, com a taxa
+informada constante; rendimento passado ou projetado não é garantia de rendimento futuro. Regras de
+tributos e anuidades mudam a cada ano: confira sempre a regra vigente. O CDI inicial é o último
+publicado pelo Banco Central em <span id="dataCdi"></span>.
+<br><br><b>Doctor Invest</b> · Gestão de investimentos e consultoria financeira para médicos ·
+Hélio Cardoso de Barros, CGA
+</footer>
+</main>
+
+<script id="motor">
+// Espelho em JavaScript de motor.py. Qualquer mudança aqui exige rodar
+// `node paridade.mjs` antes de publicar.
+(function () {
+  var DIAS_MES = 30;
+  var FAIXAS_IR = [[180, 0.225], [360, 0.20], [720, 0.175], [Infinity, 0.15]];
+
+  function aliquotaIr(dias) {
+    for (var i = 0; i < FAIXAS_IR.length; i++) if (dias <= FAIXAS_IR[i][0]) return FAIXAS_IR[i][1];
+  }
+  function aliquotaIof(dias) {
+    if (dias >= 30) return 0;
+    return Math.floor((300 - 10 * dias) / 3) / 100;
+  }
+  // ap = {taxa_aa, tributada, mensal|null}
+  function taxaMes(ap) {
+    return ap.mensal != null ? ap.mensal : Math.pow(1 + ap.taxa_aa, 1 / 12) - 1;
+  }
+  function vp(t, ap) {
+    if (t <= 0) return 1;
+    var dias = Math.round(t * DIAS_MES);
+    var bruto = Math.pow(1 + taxaMes(ap), t) - 1;
+    var liq = ap.tributada ? bruto * (1 - aliquotaIof(dias)) * (1 - aliquotaIr(dias)) : bruto;
+    return 1 / (1 + liq);
+  }
+  function calendario(n, primeiraDias) {
+    var t0 = primeiraDias / DIAS_MES, c = [];
+    for (var k = 0; k < n; k++) c.push(t0 + k);
+    return c;
+  }
+  function custoParcelado(cal, ap) {
+    var s = 0;
+    for (var i = 0; i < cal.length; i++) s += vp(cal[i], ap);
+    return s / cal.length;
+  }
+  function descontoEmpate(cal, ap, pontos) {
+    return 1 - custoParcelado(cal, ap) + (pontos || 0);
+  }
+  function ganhoParcelar(desconto, cal, ap, valor, pontos) {
+    return valor * (descontoEmpate(cal, ap, pontos) - desconto);
+  }
+  function cdb(cdi) { return { taxa_aa: cdi, tributada: true, mensal: null }; }
+  function cdiDeEmpate(cal, desconto, pontos) {
+    var lo = 0, hi = 1;
+    for (var i = 0; i < 200; i++) {
+      var meio = (lo + hi) / 2;
+      if (descontoEmpate(cal, cdb(meio), pontos) < desconto) lo = meio; else hi = meio;
+    }
+    return (lo + hi) / 2;
+  }
+  globalThis.MOTOR = {
+    aliquotaIr: aliquotaIr, aliquotaIof: aliquotaIof, vp: vp, calendario: calendario,
+    custoParcelado: custoParcelado, descontoEmpate: descontoEmpate,
+    ganhoParcelar: ganhoParcelar, cdb: cdb, cdiDeEmpate: cdiDeEmpate,
+    CDI_HOJE: 0.1365, POUPANCA_MES: 0.0065345,
+    DATA_CDI: "04/11/2026", MES_POUPANCA: "novembro de 2026"
+  };
+})();
+</script>
+
+<script>
+(function () {
+  var M = globalThis.MOTOR;
+  var $ = function (id) { return document.getElementById(id); };
+  var ap = "cdb";
+  var PRESETS = {
+    v10:    { valor: 10000, desconto: 5, parcelas: 10, dias: 30 },
+    v12:    { valor: 10000, desconto: 5, parcelas: 12, dias: 30 },
+    iptu:   { valor: 10000, desconto: 3, parcelas: 10, dias: 0 },
+    ipva:   { valor: 10000, desconto: 3, parcelas: 5,  dias: 0 },
+    crm:    { valor: 948,   desconto: 3, parcelas: 5,  dias: 30 },
+    escola: { valor: 60000, desconto: 5, parcelas: 12, dias: 0 }
+  };
+
+  function num(v, casas) {
+    return v.toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas });
+  }
+  function brl(v) { return (v < 0 ? "−" : "") + "R$ " + num(Math.abs(v), Math.abs(v) < 100 ? 2 : 0); }
+  function pct(v, c) { return num(v * 100, c == null ? 2 : c) + "%"; }
+  function ler(id, def) { var x = parseFloat($(id).value); return isFinite(x) ? x : def; }
+
+  function aplicacao() {
+    if (ap === "conta") return { taxa_aa: 0, tributada: false, mensal: 0 };
+    if (ap === "poup") return { taxa_aa: Math.pow(1 + M.POUPANCA_MES, 12) - 1, tributada: false, mensal: M.POUPANCA_MES };
+    return M.cdb(ler("cdi", 13.65) / 100);
+  }
+
+  function calcular() {
+    var valor = Math.max(1, ler("valor", 10000));
+    var d = Math.max(0, ler("desconto", 0)) / 100;
+    var n = Math.max(1, Math.round(ler("parcelas", 10)));
+    var dias = Math.max(0, Math.round(ler("dias", 30)));
+    var p = Math.max(0, ler("pontos", 0)) / 100;
+    var a = aplicacao(), cal = M.calendario(n, dias);
+    var emp = M.descontoEmpate(cal, a, p);
+    var ganho = M.ganhoParcelar(d, cal, a, valor, p);
+    var margem = Math.abs(emp - d);
+
+    $("k1").textContent = pct(emp);
+    var k2 = $("k2");
+    k2.className = "v";
+    if (margem < 0.005) {
+      k2.textContent = "Quase empate";
+      $("k2t").textContent = "Diferença de " + brl(Math.abs(ganho)) + " — menos de meio ponto: decida pela conveniência";
+    } else if (ganho > 0) {
+      k2.textContent = "Parcele"; k2.classList.add("pos");
+      $("k2t").textContent = "Parcelar vence por " + brl(ganho) + " em reais de hoje";
+    } else {
+      k2.textContent = "Pague à vista"; k2.classList.add("neg");
+      $("k2t").textContent = "À vista vence por " + brl(-ganho) + " em reais de hoje";
+    }
+    $("k3").textContent = brl(valor * (M.custoParcelado(cal, a) - p));
+
+    var cv = M.cdiDeEmpate(cal, d, p);
+    if (cv < 0.0005) { $("k4").textContent = "—"; $("k4t").textContent = "Com esse desconto, parcelar vence com qualquer CDI"; }
+    else if (cv > 0.995) { $("k4").textContent = "—"; $("k4t").textContent = "Com esse desconto, à vista vence com qualquer CDI"; }
+    else { $("k4").textContent = pct(cv, 1); $("k4t").textContent = "À vista vence enquanto o CDI estiver abaixo disso (aplicando em CDB)"; }
+
+    var avista = valor * (1 - d);
+    $("leitura").innerHTML =
+      "<p><b>À vista:</b> você paga " + brl(avista) + " hoje. <b>Parcelado:</b> " + n + " × " +
+      brl(valor / n) + ", a primeira " + (dias === 0 ? "no ato" : "em " + dias + " dias") + ".</p>" +
+      "<p>Para pagar as parcelas, basta separar hoje " + brl(valor * M.custoParcelado(cal, a)) +
+      " — o resto sai do rendimento" + (ap === "conta" ? " (que, na conta corrente, é zero)" : "") + "." +
+      (p > 0 ? " Os pontos devolvem " + brl(valor * p) + "." : "") +
+      " O desconto que empata é " + pct(emp) + "; a oferta dá " + pct(d, 1) + ".</p>";
+
+    var h = "<tr><th>Parcela</th><th>Vence em</th><th>Valor</th><th>Separar hoje</th></tr>", tot = 0;
+    for (var k = 0; k < n; k++) {
+      var v = M.vp(cal[k], a) * valor / n; tot += v;
+      h += "<tr><td>" + (k + 1) + "ª</td><td>" + Math.round(cal[k] * 30) + " dias</td><td>" +
+           brl(valor / n) + "</td><td>" + brl(v) + "</td></tr>";
+    }
+    h += "<tr class='tot'><td>Total</td><td></td><td>" + brl(valor) + "</td><td>" + brl(tot) + "</td></tr>";
+    $("tab").innerHTML = h;
+  }
+
+  $("poupTxt").textContent = pct(M.POUPANCA_MES);
+  $("poupMes").textContent = M.MES_POUPANCA;
+  $("dataCdi").textContent = M.DATA_CDI;
+  $("cdi").value = (M.CDI_HOJE * 100).toFixed(2);
+  document.querySelectorAll("input").forEach(function (i) { i.addEventListener("input", function () {
+    document.querySelectorAll(".pbtn").forEach(function (b) { b.classList.remove("on"); });
+    calcular();
+  }); });
+  document.querySelectorAll(".pbtn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var pr = PRESETS[b.dataset.p];
+      $("valor").value = pr.valor; $("desconto").value = pr.desconto;
+      $("parcelas").value = pr.parcelas; $("dias").value = pr.dias;
+      document.querySelectorAll(".pbtn").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      calcular();
+    });
+  });
+  document.querySelectorAll("#tg_ap button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      ap = b.dataset.v;
+      document.querySelectorAll("#tg_ap button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      $("cdi").disabled = ap !== "cdb";
+      calcular();
+    });
+  });
+  calcular();
+})();
+</script>
+
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var live=/drheliobarros\.com\.br$/.test(location.hostname);
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e a redirect de formulario. Sem isto o evento de
+// conversao nasce sem fonte e todo lead parece trafego direto. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  if(!live) return;
+  var payload=JSON.stringify({
+    event:nome, page:"avista-parcelado",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+// Conta a primeira interação com qualquer controle do simulador.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou||!e.target.closest("#painel input,#painel button")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+</script>
+
+<script src="../muro.js" data-estudo="avista-parcelado"></script>
+</body></html>

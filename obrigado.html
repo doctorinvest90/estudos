@@ -45,6 +45,7 @@
       <a class="btn" id="pdf" href="#" download data-baixar>Baixar o estudo em PDF</a>
       <span class="sub" id="sub">Abre no navegador ou salva no seu aparelho.</span>
       <span class="extra"><a id="csv" href="#" download data-baixar>Baixar também a base de dados (CSV) →</a></span>
+      <span class="extra" id="csv2w" style="display:none"><a id="csv2" href="#" download data-baixar></a></span>
       <span class="extra"><a id="volta" href="#">← Voltar ao simulador</a></span>
     </div>
     <!-- Sem origem conhecida (outro aparelho, aba nova, storage bloqueado): mostra os três. -->
@@ -76,6 +77,9 @@
 // esta página roteia por ele. `?e=` cobre o link "já assino", que vem com a origem na URL.
 var ESTUDOS={
   bolao:{t:"Com quantos você divide: o bolão da Mega da Virada",d:"Doze páginas, 2.005 concursos e a seção que mostra onde este estudo pode estar errado."},
+  "avista-parcelado":{t:"O desconto tem prazo de validade — à vista ou parcelado sem juros",
+    d:"Catorze páginas, 20 anos de CDI e a seção que mostra onde este estudo pode estar errado.",
+    csv2:["serie-mensal.csv","Baixar a série mensal 2006–2026 (CSV) →"]},
   "simples-presumido":{t:"Não é a CBS — Simples ou lucro presumido para a PJ médica",d:"Catorze páginas, 8.460 cenários e a seção que mostra onde este estudo pode estar errado."},
   "plantoes-iphone":{t:"Quantos plantões custa um iPhone",d:"Doze páginas, o plantão líquido de clínico e anestesia de 2016 a 2026 e a seção que mostra onde este estudo pode estar errado."},
   aposentadoria:{t:"Calculadora de aposentadoria",d:"Volte à calculadora para gerar o PDF da sua conta.",sem:true},
@@ -100,6 +104,11 @@ if(ESTUDOS[origem]){
   document.getElementById("csv").href=origem+"/base-de-dados.csv";
   if(s.sem){ document.getElementById("pdf").hidden=true; document.getElementById("sub").hidden=true; document.getElementById("csv").parentNode.hidden=true; }
   document.getElementById("volta").href=origem+"/";
+  if(s.csv2){
+    var c2=document.getElementById("csv2");
+    c2.href=origem+"/"+s.csv2[0]; c2.textContent=s.csv2[1];
+    document.getElementById("csv2w").style.display="";
+  }
   document.getElementById("um").hidden=false;
 }else{
   var ul=document.getElementById("lista");

@@ -1,4 +1,5 @@
 [
+  {"slug": "avista-parcelado", "tipo": "Estudo", "titulo": "O desconto tem prazo de validade", "descricao": "O desconto à vista só vence o parcelado sem juros quando supera o que o dinheiro renderia enquanto as parcelas não vencem.", "lancamento": "2026-11-22"},
   {"slug": "bolao", "tipo": "Estudo quantitativo", "titulo": "Com quantos você divide", "descricao": "A conta do bolão da Mega da Virada com os 2.005 concursos que a Caixa publica desde 2009.", "lancamento": "2026-12-09"},
   {"slug": "simples-presumido", "tipo": "Simulador", "titulo": "Não é a CBS", "descricao": "Simples ou lucro presumido para a PJ médica em 2027 e 2033.", "lancamento": "2026-12-14"},
   {"slug": "carro-eletrico", "tipo": "Simulador", "titulo": "Carro elétrico ou a combustão: quem termina mais rico?", "descricao": "Estudo com a tabela FIPE de 2023 a 2026: quanto o carro elétrico economiza em energia e o que decide se ele compensa.", "lancamento": "2026-11-30"},
