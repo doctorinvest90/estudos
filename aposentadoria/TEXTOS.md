@@ -1,4 +1,6 @@
-# Calculadora da aposentadoria: textos para aprovação
+# Calculadora da aposentadoria: textos aprovados
+
+> **Aprovado pelo Hélio em 18/11/2026**, com os dois textos da resposta automática (seção 7). Mudar uma palavra pede nova aprovação.
 
 Tudo que o público ou um lead lê, transcrito do código. Marque o que mudar. Nada vai ao ar antes do seu ok.
 Os trechos entre `{chaves}` são números que a página calcula.
