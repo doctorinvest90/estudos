@@ -75,6 +75,7 @@
 // esta página roteia por ele. `?e=` cobre o link "já assino", que vem com a origem na URL.
 var ESTUDOS={
   "simples-presumido":{t:"Não é a CBS — Simples ou lucro presumido para a PJ médica",d:"Catorze páginas, 8.460 cenários e a seção que mostra onde este estudo pode estar errado."},
+  aposentadoria:{t:"Calculadora de aposentadoria",d:"Volte à calculadora para gerar o PDF da sua conta.",sem:true},
   alocacao:{t:"Estudo de alocação — 20 anos, Brasil e EUA (2006–2025)",
     d:"Dezoito páginas, oito classes de ativo e a seção que mostra onde este estudo pode estar errado."},
   consorcio:{t:"O consórcio que ninguém calcula",
@@ -92,11 +93,13 @@ if(ESTUDOS[origem]){
   document.getElementById("desc").textContent=s.t+". "+s.d;
   document.getElementById("pdf").href=origem+"/estudo.pdf";
   document.getElementById("csv").href=origem+"/base-de-dados.csv";
+  if(s.sem){ document.getElementById("pdf").hidden=true; document.getElementById("csv").parentNode.hidden=true; }
   document.getElementById("volta").href=origem+"/";
   document.getElementById("um").hidden=false;
 }else{
   var ul=document.getElementById("lista");
   Object.keys(ESTUDOS).forEach(function(k){
+    if(ESTUDOS[k].sem) return;
     var li=document.createElement("li"), a=document.createElement("a");
     a.href=k+"/estudo.pdf"; a.textContent=ESTUDOS[k].t+" (PDF)";
     a.setAttribute("download",""); a.setAttribute("data-baixar","");

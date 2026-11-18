@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quanto a tarifa atrasa sua aposentadoria · Doctor Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--linha:#E3DFD4;
+      --texto:#22303F;--suave:#5D6775;--verm:#A8443C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:var(--texto);
+     font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--azul);text-wrap:balance}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 60px}
+header{background:var(--azul);color:var(--marfim);padding:30px 0 26px;margin-bottom:22px}
+header .wrap{padding-bottom:0}
+.marca{font-size:11px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{color:var(--marfim);font-size:32px;line-height:1.15;margin:14px 0 8px}
+header p{color:#AFBACB;margin:0;font-size:14.5px}
+.card{background:#fff;border:1px solid var(--linha);border-radius:3px;padding:20px 18px;margin-bottom:18px}
+.card h2{font-size:22px;margin-bottom:6px}
+.hint{font-size:12.5px;color:var(--suave);margin:0 0 12px}
+.nota{font-size:12px;color:var(--suave);line-height:1.5;margin:12px 0 0}
+.field{margin:12px 0}
+.field label,.lbl{display:block;font-size:13px;color:var(--conf);font-weight:500;margin:0 0 5px}
+.iunit{display:flex;align-items:stretch;border:1px solid var(--linha);border-radius:2px;overflow:hidden;background:#fff}
+.iunit input{width:100%;min-width:0;border:0;padding:11px 10px;text-align:right;font-family:inherit;font-size:16px;
+  color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
+.iunit input:focus{outline:none;background:#FAF9F4}
+.iunit span{padding:0 10px;font-size:12px;color:var(--suave);background:#FAF9F6;border-left:1px solid var(--linha);
+  white-space:nowrap;display:flex;align-items:center}
+.iunit span.pre{border-left:0;border-right:1px solid var(--linha)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.onde{display:grid;gap:6px}
+.onde button{padding:11px 12px;border:1px solid var(--linha);background:#fff;font-family:inherit;font-size:14px;
+  cursor:pointer;color:var(--conf);border-radius:2px;text-align:left}
+.onde button.on{background:var(--conf);color:#fff;border-color:var(--conf)}
+#calcular{width:100%;margin-top:16px;padding:14px 18px;background:var(--azul);color:var(--marfim);border:0;border-radius:3px;
+  font-family:inherit;font-size:15px;font-weight:500;cursor:pointer}
+#erro{color:var(--verm);font-size:13.5px;margin:12px 0 0}
+button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--conf);outline-offset:3px}
+.idades{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--linha);border:1px solid var(--linha);margin:14px 0}
+.idade{background:#fff;padding:16px 12px;text-align:center}
+.idade .v{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:700;color:var(--azul);line-height:1.1}
+.idade .t{font-size:11.5px;color:var(--suave);margin-top:6px;line-height:1.35}
+.idade.bom .v{color:#8A7330}
+.manchete{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:700;color:var(--azul);line-height:1.2;margin:0 0 8px}
+.leitura{border-top:2px solid var(--ouro);background:#fff;padding:14px 16px;margin:14px 0;font-size:14px}
+.leitura p{margin:0 0 .5em}.leitura p:last-child{margin:0}
+.acoes{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.acoes a,.acoes button{display:block;text-align:center;padding:14px 16px;border-radius:3px;font-family:inherit;font-size:15px;
+  cursor:pointer;text-decoration:none;max-width:100%}
+.btn-p{background:var(--azul);color:var(--marfim);border:1px solid var(--azul);font-weight:500}
+.btn-s{background:transparent;color:var(--azul);border:1px solid var(--conf)}
+details summary{cursor:pointer;font-size:13px;color:var(--conf);font-weight:500;margin-top:12px}
+details ul{padding-left:20px;font-size:13px;line-height:1.6}
+[data-muro]{margin-top:22px}
+[data-muro] p{max-width:70ch}
+[data-muro] a{color:var(--conf)}
+/* embed.js injeta width:5000px: manter o formulário dentro da tela no celular. */
+[data-muro] iframe{width:100% !important;max-width:560px;border:0;display:block}
+.muro-destaque{outline:2px solid var(--ouro);outline-offset:6px;border-radius:4px;transition:outline-color .6s}
+#colega{font-size:13px}
+#colega a{color:var(--conf)}
+footer{border-top:1px solid var(--linha);margin-top:22px;padding-top:18px;font-size:11.5px;color:var(--suave);line-height:1.55}
+footer b{color:var(--conf)}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff}
+  header p,#form,.acoes,[data-muro],#colega,details summary{display:none}
+  details>*{display:block}
+  .card{border:0;padding:0}
+}
+</style>
+<script src="/pixel.js"></script>
+</head><body>
+
+<header><div class="wrap">
+  <div class="marca">DOCTOR INVEST · CALCULADORA</div>
+  <h1>Quanto a tarifa atrasa a sua aposentadoria</h1>
+  <p>Cinco números, um minuto. O resultado aparece na tela, sem cadastro.</p>
+</div></header>
+
+<main class="wrap">
+<section class="card" id="form" aria-labelledby="form-titulo">
+  <h2 id="form-titulo">Seus números</h2>
+  <p class="hint">Sem imóvel. Valores em dinheiro de hoje.</p>
+  <div class="duo">
+    <div class="field"><label for="idade">Sua idade hoje</label>
+      <div class="iunit"><input id="idade" type="text" inputmode="numeric" autocomplete="off" value="40"><span>anos</span></div></div>
+    <div class="field"><label for="idadeAlvo">Quer parar aos</label>
+      <div class="iunit"><input id="idadeAlvo" type="text" inputmode="numeric" autocomplete="off" value="60"><span>anos</span></div></div>
+  </div>
+  <div class="field"><label for="investido">Quanto você tem investido hoje (banco, corretora, previdência)</label>
+    <div class="iunit"><span class="pre">R$</span><input id="investido" type="text" inputmode="numeric" autocomplete="off" data-reais></div></div>
+  <div class="field"><label for="rendaMensal">Renda mensal que quer na aposentadoria</label>
+    <div class="iunit"><span class="pre">R$</span><input id="rendaMensal" type="text" inputmode="numeric" autocomplete="off" data-reais><span>/mês</span></div></div>
+  <div class="field"><label for="aporteMensal">Quanto você investe por mês hoje (0 se não investe)</label>
+    <div class="iunit"><span class="pre">R$</span><input id="aporteMensal" type="text" inputmode="numeric" autocomplete="off" data-reais><span>/mês</span></div></div>
+  <div class="field"><span class="lbl" id="onde-lbl">Onde está a maior parte?</span>
+    <div class="onde" id="onde" role="group" aria-labelledby="onde-lbl">
+      <button type="button" data-onde="fundos">Fundos ou previdência (banco ou corretora)</button>
+      <button type="button" data-onde="direto">Tesouro, CDB ou ações direto</button>
+      <button type="button" data-onde="naosei">Não sei</button>
+    </div></div>
+  <button id="calcular" type="button">Calcular</button>
+  <p id="erro" role="alert" hidden></p>
+</section>
+
+<section id="resultado" hidden aria-live="polite">
+  <div class="card">
+    <h2 class="manchete" id="manchete"></h2>
+    <p id="sub" style="margin:0"></p>
+    <div class="idades" id="idades"></div>
+    <div class="leitura" id="leitura"></div>
+    <p class="nota" id="nota-naosei" hidden>Você marcou "não sei": contamos como fundos, o caso mais comum.</p>
+
+    <details>
+      <summary>Como calculamos</summary>
+      <ul id="premissas"></ul>
+      <p class="nota" id="cautela">Simulação, não promessa de retorno. A conta deixa de fora IR, INSS e aluguéis. Rendimento passado não garante o futuro.</p>
+    </details>
+
+    <div class="acoes" id="acoes">
+      <a id="btn-whats" class="btn-s" href="#" target="_blank" rel="noopener"></a>
+      <button id="btn-print" class="btn-p" type="button" onclick="window.print()">Gerar minha conta em PDF</button>
+    </div>
+
+    <div id="receber" data-muro>
+      <p>A conta em PDF libera com o e-mail da newsletter. O e-mail não leva os seus números.</p>
+      <!-- Formulário próprio da calculadora: trocar o id abaixo quando o Hélio aprovar a cópia no beehiiv. -->
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber a minha conta em PDF"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <script src="/beehiiv-sucesso.js" data-destino="/obrigado.html"></script>
+      <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
+           Não remover sem religar a dupla confirmação. -->
+      <p class="nota">Ao se inscrever, você autoriza receber neste e-mail a sua conta e a
+      carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=aposentadoria&amp;ja=1" data-ja-assina>Sua conta está aqui.</a></p>
+    </div>
+  </div>
+  <p id="colega"><a id="btn-colega" href="#" target="_blank" rel="noopener">Mande a um colega</a></p>
+</section>
+
+<footer><b>Aviso importante.</b> Esta calculadora tem caráter exclusivamente informativo e educacional e não
+constitui recomendação de investimento, nos termos da regulamentação da Comissão de Valores Mobiliários.
+O resultado é uma simulação com premissas declaradas e não representa a situação de nenhum investidor específico.
+<br><br>
+<b>Doctor Invest</b> · Gestão de investimentos e consultoria financeira para médicos ·
+Hélio Cardoso de Barros, CGA.</footer>
+</main>
+
+<script src="config.js"></script>
+<script src="conta.js"></script>
+<script src="pagina.js"></script>
+<script>
+// Beacon de funil. Nenhum PII e nenhum valor sai daqui (§4.4): só página, UTM e categorias.
+var live=/drheliobarros\.com\.br$/.test(location.hostname);
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+// extra: só campos de categoria (onde, faixa), nunca valores.
+function ev(nome,extra){
+  if(!live) return;
+  var o={
+    event:nome, page:"aposentadoria",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  };
+  for(var k in (extra||{})) o[k]=extra[k];
+  var payload=JSON.stringify(o);
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("calc_view");
+
+(function(){
+  var C=window.CALC_CONFIG, P=window.Pagina, $=function(id){return document.getElementById(id);};
+  var onde="", faixaAtual="";
+  var URL_PAGINA="https://estudos.drheliobarros.com.br/aposentadoria/";
+
+  // máscara de milhar nos campos em reais: só dígitos, pontos de milhar
+  [].forEach.call(document.querySelectorAll("[data-reais]"),function(i){
+    i.addEventListener("input",function(){
+      var d=i.value.replace(/\D/g,"");
+      i.value=d?Number(d).toLocaleString("pt-BR"):"";
+    });
+  });
+  [].forEach.call(document.querySelectorAll("#onde button"),function(b){
+    b.addEventListener("click",function(){
+      onde=b.getAttribute("data-onde");
+      [].forEach.call(document.querySelectorAll("#onde button"),function(x){x.classList.toggle("on",x===b);});
+    });
+  });
+
+  function num(id){var v=$(id).value.trim();return v===""?NaN:Number(v);}
+  function pct(x){return (x*100).toFixed(2).replace(".",",")+"% a.a.";}
+  function anos(n){return n+(n===1?" ano":" anos");}
+  function idadeTxt(x){return x===null?"não atinge":"aos "+P.idade(x);}
+
+  function lerEntrada(){
+    return {idade:num("idade"),idadeAlvo:num("idadeAlvo"),investido:P.lerReais($("investido").value),
+      rendaMensal:P.lerReais($("rendaMensal").value),aporteMensal:P.lerReais($("aporteMensal").value),onde:onde};
+  }
+
+  function render(e,r,modo){
+    var d=P.anosDiferenca(r), idades=$("idades");
+    var manchete,sub="";
+    if(r.caso==="ja_atingiu"){
+      manchete="O que você tem já paga essa renda.";
+      sub="A pergunta agora é quanto a tarifa tira dela. Com a taxa de "+pct(r.taxaUsada)+", são cerca de "+P.brlExato(r.custoAnualTarifa)+" por ano.";
+      idades.hidden=true;
+    }else{
+      idades.hidden=false;
+      if(r.caso==="nunca"){
+        manchete="Com esse aporte, a conta não chega lá antes dos 100 anos.";
+        sub="Alvo: "+P.brlExato(r.alvo)+" ("+C.multiplo+" vezes a renda mensal). Veja abaixo quanto precisaria investir por mês.";
+      }else if(r.caso==="tarifa_baixa"){
+        manchete="Sua tarifa já é baixa.";
+        sub="A sua conta depende de quanto você investe por mês. Alvo: "+P.brlExato(r.alvo)+" ("+C.multiplo+" vezes a renda mensal).";
+      }else{
+        manchete="A tarifa custa "+anos(d)+" de trabalho.";
+        sub="Mantendo o aporte de hoje, você chega a "+P.brlExato(r.alvo)+" ("+C.multiplo+" vezes a renda mensal) em idades diferentes.";
+      }
+      idades.innerHTML=
+        '<div class="idade"><div class="v">'+idadeTxt(r.comTarifa.idadeAtinge)+'</div><div class="t">Com a tarifa de hoje</div></div>'+
+        '<div class="idade bom"><div class="v">'+idadeTxt(r.baixoCusto.idadeAtinge)+'</div><div class="t">Com custo baixo</div></div>';
+    }
+    $("manchete").textContent=manchete; $("sub").textContent=sub;
+
+    var l=$("leitura"); l.innerHTML="";
+    if(r.caso!=="ja_atingiu"){
+      var p=document.createElement("p");
+      p.textContent="Para parar aos "+e.idadeAlvo+", você precisaria investir "+P.brlExato(r.comTarifa.aporteNecessario)+
+        " por mês com a tarifa de hoje, ou "+P.brlExato(r.baixoCusto.aporteNecessario)+" por mês com custo baixo.";
+      l.appendChild(p); l.hidden=false;
+    }else l.hidden=true;
+    $("nota-naosei").hidden=!r.contouComoFundos;
+
+    var taxaFonte=e.onde==="direto"?C.taxas.direto:C.taxas.fundos;
+    $("premissas").innerHTML="";
+    [["Alvo: "+C.multiplo+" vezes a renda mensal, em dinheiro de hoje.",null],
+     ["Rendimento real antes das tarifas: "+pct(C.rReal.valor)+".",C.rReal],
+     ["Tarifa da sua opção: "+pct(r.taxaUsada)+".",taxaFonte],
+     ["Custo baixo: "+pct(C.taxas.baixoCusto.valor)+".",C.taxas.baixoCusto]].forEach(function(x){
+      var li=document.createElement("li");
+      li.textContent=x[0]+(x[1]?" Fonte: "+x[1].fonte+" ("+x[1].data+").":"");
+      $("premissas").appendChild(li);
+    });
+
+    // botões: o modo é lido a cada cálculo, não ao carregar a página
+    var w=$("btn-whats"), pdf=$("btn-print"), m=P.mensagemWhats(e,r,modo,C);
+    var baixa=r.caso==="tarifa_baixa", whatsPrincipal=modo==="pico"&&!baixa;
+    w.href="https://wa.me/"+m.numero+"?text="+encodeURIComponent(m.texto);
+    w.textContent=whatsPrincipal?"Quero o número exato da minha carteira":(modo==="pico"?"Quer conferir mesmo assim?":"Fale com a gente");
+    w.className=whatsPrincipal?"btn-p":"btn-s"; pdf.className=whatsPrincipal?"btn-s":"btn-p";
+    w.style.order=whatsPrincipal?0:1; pdf.style.order=whatsPrincipal?1:0;
+  }
+
+  $("calcular").addEventListener("click",function(){
+    var e=lerEntrada(), erro=Conta.valida(e), er=$("erro");
+    if(erro){ er.textContent=erro; er.hidden=false; $("resultado").hidden=true; return; }
+    er.hidden=true;
+    var r=Conta.simular(e,P.premissasDe(C)), modo=P.modoAgora(C,new Date());
+    faixaAtual=e.investido>=C.faixaPessoal?"≥500k":"<500k";
+    render(e,r,modo);
+    $("resultado").hidden=false;
+    $("resultado").scrollIntoView({behavior:"smooth",block:"start"});
+    ev("calc_resultado",{onde:e.onde,faixa:faixaAtual});
+  });
+
+  $("btn-whats").addEventListener("click",function(){
+    ev("calc_whatsapp",{faixa:faixaAtual}); fbq("track","Contact");
+  });
+  // capture, registrado antes do muro.js: conta o clique mesmo quando o muro o intercepta
+  document.addEventListener("click",function(x){ if(x.target.closest("#btn-print")) ev("calc_email"); },true);
+  $("btn-colega").href="https://wa.me/?text="+encodeURIComponent("Fiz uma conta sobre quanto a tarifa dos fundos atrasa a aposentadoria. Leva um minuto: "+URL_PAGINA);
+  $("btn-colega").addEventListener("click",function(){ ev("calc_colega"); });
+})();
+</script>
+<script src="../muro.js" data-estudo="aposentadoria"></script>
+</body></html>
