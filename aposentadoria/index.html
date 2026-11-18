@@ -10,6 +10,7 @@
 :root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--linha:#E3DFD4;
       --texto:#22303F;--suave:#5D6775;--verm:#A8443C}
 *{box-sizing:border-box}
+[hidden]{display:none !important}
 body{margin:0;background:var(--marfim);color:var(--texto);
      font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.55}
 h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--azul);text-wrap:balance}
@@ -194,8 +195,7 @@ ev("calc_view");
   // máscara de milhar nos campos em reais: só dígitos, pontos de milhar
   [].forEach.call(document.querySelectorAll("[data-reais]"),function(i){
     i.addEventListener("input",function(){
-      var d=i.value.replace(/\D/g,"");
-      i.value=d?Number(d).toLocaleString("pt-BR"):"";
+      i.value=P.mascaraReais(i.value);
     });
   });
   [].forEach.call(document.querySelectorAll("#onde button"),function(b){
@@ -221,7 +221,7 @@ ev("calc_view");
     if(r.caso==="ja_atingiu"){
       manchete="O que você tem já paga essa renda.";
       sub="A pergunta agora é quanto a tarifa tira dela. Com a taxa de "+pct(r.taxaUsada)+", são cerca de "+P.brlExato(r.custoAnualTarifa)+" por ano.";
-      idades.hidden=true;
+      idades.hidden=true; idades.innerHTML="";
     }else{
       idades.hidden=false;
       if(r.caso==="nunca"){
@@ -274,7 +274,7 @@ ev("calc_view");
     if(erro){ er.textContent=erro; er.hidden=false; $("resultado").hidden=true; return; }
     er.hidden=true;
     var r=Conta.simular(e,P.premissasDe(C)), modo=P.modoAgora(C,new Date());
-    faixaAtual=e.investido>=C.faixaPessoal?"≥500k":"<500k";
+    faixaAtual=P.faixaLabel(C,e.investido);
     render(e,r,modo);
     $("resultado").hidden=false;
     $("resultado").scrollIntoView({behavior:"smooth",block:"start"});
@@ -282,7 +282,7 @@ ev("calc_view");
   });
 
   $("btn-whats").addEventListener("click",function(){
-    ev("calc_whatsapp",{faixa:faixaAtual}); fbq("track","Contact");
+    ev("calc_whatsapp",{faixa:faixaAtual}); window.fbq&&fbq("track","Contact");
   });
   // capture, registrado antes do muro.js: conta o clique mesmo quando o muro o intercepta
   document.addEventListener("click",function(x){ if(x.target.closest("#btn-print")) ev("calc_email"); },true);

@@ -22,11 +22,25 @@
     };
   }
 
+  // Campo em reais inteiros: corta no primeiro virgula (centavos fora), mantem digitos, poe pontos de milhar.
+  function mascaraReais(s) {
+    var d = String(s == null ? "" : s).split(",")[0].replace(/\D/g, "");
+    return d ? Number(d).toLocaleString("pt-BR") : "";
+  }
+  function faixaLabel(cfg, investido) {
+    var k = Math.round(cfg.faixaPessoal / 1000) + "k";
+    return investido >= cfg.faixaPessoal ? "≥" + k : "<" + k;
+  }
+
   function virgula(n) { return String(n).replace(".", ","); }
   // R$ 800 mil, R$ 1,2 mi, R$ 500
   function brl(n) {
     if (n >= 1e6) return "R$ " + virgula(+(n / 1e6).toFixed(1)) + " mi";
-    if (n >= 1e3) return "R$ " + virgula(+(n / 1e3).toFixed(1)) + " mil";
+    if (n >= 1e3) {
+      var mil = Math.round(n / 100) / 10;
+      if (mil >= 1000) return "R$ " + virgula(+(n / 1e6).toFixed(1)) + " mi"; // 999.950 -> 1 mi, nunca "1000 mil"
+      return "R$ " + virgula(mil) + " mil";
+    }
     return "R$ " + Math.round(n);
   }
   function brlExato(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
@@ -59,7 +73,7 @@
     };
   }
 
-  var API = { lerReais: lerReais, modoAgora: modoAgora, premissasDe: premissasDe, mensagemWhats: mensagemWhats,
+  var API = { lerReais: lerReais, modoAgora: modoAgora, premissasDe: premissasDe, mensagemWhats: mensagemWhats, mascaraReais: mascaraReais, faixaLabel: faixaLabel,
     brl: brl, brlExato: brlExato, idade: idade, anosDiferenca: anosDiferenca, ONDE_TXT: ONDE_TXT };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   else root.Pagina = API;
