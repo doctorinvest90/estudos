@@ -57,38 +57,70 @@ def taxa(s):
         return None
 
 
+def mediana_pond(pares):
+    """Mediana ponderada: menor valor cujo peso acumulado alcanca metade do total."""
+    pares = sorted(pares)
+    tot, acc = sum(w for _, w in pares), 0.0
+    for v, w in pares:
+        acc += w
+        if acc >= tot / 2:
+            return v
+
+
+def informe_diario():
+    """Cotistas e PL por classe na ultima data do informe diario mais recente (soma das subclasses)."""
+    for m in [date.today().strftime("%Y%m")] + meses_anteriores(2):
+        try:
+            z = get(f"{CVM}/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_{m}.zip")
+        except urllib.error.HTTPError:
+            continue
+        ult = {}  # cnpj -> {data: [cotistas, pl]}
+        for r in rows(zip_csv(z, f"inf_diario_fi_{m}.csv")):
+            c = re.sub(r"\D", "", r["CNPJ_FUNDO_CLASSE"])
+            a = ult.setdefault(c, {}).setdefault(r["DT_COMPTC"], [0.0, 0.0])
+            a[0] += taxa(r["NR_COTST"]) or 0
+            a[1] += taxa(r["VL_PATRIM_LIQ"]) or 0
+        return m, {c: d[max(d)] for c, d in ult.items()}
+    raise SystemExit("informe diario indisponivel")
+
+
 def fundos_fi():
-    with tempfile.TemporaryDirectory() as _tmp:  # nada de bruto no repo
-        reg = get(f"{CVM}/FI/CAD/DADOS/registro_fundo_classe.zip")
-        adm = {r["ID_Registro_Fundo"]: r["Administrador"]
-               for r in rows(zip_csv(reg, "registro_fundo.csv"))}
-        alvo = {}  # cnpj -> administrador
-        for r in rows(zip_csv(reg, "registro_classe.csv")):
-            a = adm.get(r["ID_Registro_Fundo"], "")
-            if (r["Situacao"] == "Em Funcionamento Normal" and r["Classificacao"] in CLASSES
-                    and r["Publico_Alvo"] == "Público Geral" and BANCOS.search(a)):
-                alvo[r["CNPJ_Classe"]] = (a, r["Classificacao"])
-        # taxa mais recente por classe, so das laminas dos ultimos 12 meses (a lamina e o documento
-        # do fundo distribuido ao varejo; o extrato inclui fundos fechados e sem lamina, e puxa a mediana a ~0,1%)
-        melhor = {}  # cnpj -> (data, lamina, taxa)
-
-        def considera(cnpj, dt, t, lam):
-            cnpj = re.sub(r"\D", "", cnpj)
-            if cnpj in alvo and t is not None and 0 < t <= 10:
-                k = (dt, lam)
-                if cnpj not in melhor or k > melhor[cnpj][:2]:
-                    melhor[cnpj] = (dt, lam, t)
-
-        for m in meses_anteriores(12):
-            try:
-                z = get(f"{CVM}/FI/DOC/LAMINA/DADOS/lamina_fi_{m}.zip")
-            except urllib.error.HTTPError:
-                continue
-            for r in rows(zip_csv(z, f"lamina_fi_{m}.csv")):
-                considera(r["CNPJ_FUNDO_CLASSE"], r["DT_COMPTC"], taxa(r["TAXA_ADM"]), True)
-    t = [v[2] for v in melhor.values()]
-    por_classe = {k: sum(1 for c in melhor if alvo[c][1] == k) for k in CLASSES}
-    return statistics.median(t) / 100, len(alvo), len(t), sorted({v[0] for v in alvo.values()}), por_classe
+    reg = get(f"{CVM}/FI/CAD/DADOS/registro_fundo_classe.zip")
+    adm = {r["ID_Registro_Fundo"]: r["Administrador"]
+           for r in rows(zip_csv(reg, "registro_fundo.csv"))}
+    alvo = {}  # cnpj -> (administrador, classificacao)
+    for r in rows(zip_csv(reg, "registro_classe.csv")):
+        a = adm.get(r["ID_Registro_Fundo"], "")
+        if (r["Situacao"] == "Em Funcionamento Normal" and r["Classificacao"] in CLASSES
+                and r["Publico_Alvo"] == "Público Geral" and BANCOS.search(a)):
+            alvo[r["CNPJ_Classe"]] = (a, r["Classificacao"])
+    # So laminas (12 meses; documento do fundo vendido ao varejo). Linha mais recente por classe;
+    # TAXA_ADM e PR_PL_DESPESA (despesas/PL, custo total) vem da mesma linha.
+    melhor = {}  # cnpj -> (data, taxa_adm, despesa)
+    for m in meses_anteriores(12):
+        try:
+            z = get(f"{CVM}/FI/DOC/LAMINA/DADOS/lamina_fi_{m}.zip")
+        except urllib.error.HTTPError:
+            continue
+        for r in rows(zip_csv(z, f"lamina_fi_{m}.csv")):
+            c, t = re.sub(r"\D", "", r["CNPJ_FUNDO_CLASSE"]), taxa(r["TAXA_ADM"])
+            if c in alvo and t is not None and 0 < t <= 10 and (c not in melhor or r["DT_COMPTC"] >= melhor[c][0]):
+                melhor[c] = (r["DT_COMPTC"], t, taxa(r["PR_PL_DESPESA"]))
+    mes, inf = informe_diario()
+    sai = {"classes_alvo": len(alvo), "com_taxa": len(melhor), "informe": mes,
+           "com_informe": sum(1 for c in melhor if c in inf and inf[c][0] > 0),
+           "adm": sorted({v[0] for v in alvo.values()}),
+           "por_classe": {k: sum(1 for c in melhor if alvo[c][1] == k) for k in CLASSES}}
+    for nome, i in (("TAXA_ADM", 1), ("PR_PL_DESPESA", 2)):
+        base = {c: v for c, v in melhor.items() if v[i] is not None}
+        com = {c: v for c, v in base.items() if c in inf and inf[c][0] > 0}
+        sai[nome] = {
+            "n": len(base), "n_pond": len(com),
+            "mediana": statistics.median(v[i] for v in base.values()) / 100,
+            "por_cotista": mediana_pond([(v[i], inf[c][0]) for c, v in com.items()]) / 100,
+            "por_pl": mediana_pond([(v[i], inf[c][1]) for c, v in com.items()]) / 100,
+        }
+    return sai
 
 
 def fie():
@@ -102,9 +134,11 @@ def fie():
 if __name__ == "__main__":
     rr, n = r_real()
     print(f"rReal = {rr:.4f}  ({n} meses, CDI 4391 / IPCA 433, 2006-2025)")
-    med, n_cls, n_tx, nomes, por_classe = fundos_fi()
-    print(f"fundos (FI) = {med:.4f}  classes elegiveis={n_cls}  com taxa na lamina={n_tx}  por classe={por_classe}")
-    print("administradores casados:", len(nomes))
-    for a in nomes:
-        print("  ", a)
+    f = fundos_fi()
+    print(f"classes elegiveis={f['classes_alvo']}  com TAXA_ADM na lamina={f['com_taxa']}  por classe={f['por_classe']}")
+    print(f"informe diario {f['informe']}: {f['com_informe']} classes casadas por CNPJ_FUNDO_CLASSE (cotistas>0)")
+    for k in ("TAXA_ADM", "PR_PL_DESPESA"):
+        d = f[k]
+        print(f"{k}: n={d['n']} (ponderadas {d['n_pond']})  mediana={d['mediana']:.4f}  por cotistas={d['por_cotista']:.4f}  por PL={d['por_pl']:.4f}")
+    print("administradores casados:", *f["adm"], sep="\n   ")
     print("FIE: campos =", fie(), "-> sem taxa de administracao; fora da mediana")
