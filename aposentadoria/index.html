@@ -252,9 +252,9 @@ ev("calc_view");
     var taxaFonte=e.onde==="direto"?C.taxas.direto:C.taxas.fundos;
     $("premissas").innerHTML="";
     [["Alvo: "+C.multiplo+" vezes a renda mensal, em dinheiro de hoje.",null],
-     ["Rendimento real antes das tarifas: "+pct(C.rReal.valor)+".",C.rReal],
-     ["Tarifa da sua opção: "+pct(r.taxaUsada)+".",taxaFonte],
-     ["Custo baixo: "+pct(C.taxas.baixoCusto.valor)+".",C.taxas.baixoCusto]].forEach(function(x){
+     ["Rendimento real antes das tarifas: "+pct(C.rReal.valor),C.rReal],
+     ["Tarifa da sua opção: "+pct(r.taxaUsada),taxaFonte],
+     ["Custo baixo: "+pct(C.taxas.baixoCusto.valor),C.taxas.baixoCusto]].forEach(function(x){
       var li=document.createElement("li");
       li.textContent=x[0]+(x[1]?" Fonte: "+x[1].fonte+" ("+x[1].data+").":"");
       $("premissas").appendChild(li);

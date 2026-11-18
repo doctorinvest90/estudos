@@ -52,6 +52,7 @@ Os dois quadros de idade e a frase "Para parar aos..." aparecem em todos os caso
 
 **Normal** (exemplo do caso-base)
 - Manchete: A tarifa custa {n} ano(s) de trabalho. → *A tarifa custa 1 ano de trabalho.*
+- Exemplos da manchete: caso-base, *A tarifa custa 1 ano de trabalho.* Com aporte de R$ 8.000 e R$ 800 mil, 42 anos: *A tarifa custa 2 anos de trabalho.* (aos 75 contra aos 73).
 - Subtítulo: Mantendo o aporte de hoje, você chega a {alvo} (300 vezes a renda mensal) em idades diferentes. → *...chega a R$ 9.000.000 (300 vezes a renda mensal) em idades diferentes.*
 - Quadros: {aos 66} "Com a tarifa de hoje" | {aos 65} "Com custo baixo"
 - Leitura: Para parar aos {idade alvo}, você precisaria investir {R$} por mês com a tarifa de hoje, ou {R$} por mês com custo baixo. → *Para parar aos 60, você precisaria investir R$ 24.155 por mês com a tarifa de hoje, ou R$ 22.735 por mês com custo baixo.*
@@ -79,6 +80,7 @@ Título: Como calculamos
 - Alvo: 300 vezes a renda mensal, em dinheiro de hoje.
 - Rendimento real antes das tarifas: 4,46% a.a. Fonte: BCB/SGS: CDI (4391) e IPCA (433), 2006–2025 (2026-11).
 - Tarifa da sua opção: {0,65% se fundos ou "não sei"; 0,20% se direto}. Fonte, fundos: Dados abertos da CVM: mediana da taxa de administração paga pelo cotista típico de fundos de renda fixa e multimercado de varejo dos cinco maiores bancos (ponderada pelo número de cotistas; classes com taxa zero, ausente ou acima de 10% ficam de fora; previdência fora da medida: a CVM não publica a taxa) (2026-11). **[texto da fonte corrigido nesta versão]**
+- Cada linha termina com um único ponto (ex.: "Rendimento real antes das tarifas: 4,46% a.a. Fonte: ..."); o ponto duplo da primeira versão da página foi corrigido.
   Fonte, direto: Tesouro Direto: taxa de custódia da B3 (2026-11).
 - Custo baixo: 0,20% a.a. Fonte: Tesouro Direto: taxa de custódia da B3 (2026-11).
 - Texto fixo de cautela: Simulação, não promessa de retorno. A conta deixa de fora IR, INSS e aluguéis. Rendimento passado não garante o futuro.
@@ -164,3 +166,5 @@ Origem: `src/sofia/calc/autoresposta.ts`. Uma resposta por telefone, uma única 
 ## Guard CVM: justificativa dos sinais
 
 O guard acusa 11 ocorrências, todas de percentual: 4,46% (rendimento real), 0,65% e 0,20% (tarifas) e 10% (limite da medição). Falso positivo: são premissas medidas e declaradas com fonte e data, usadas como entrada da simulação, não projeção de rentabilidade de produto. A página diz "Simulação, não promessa de retorno" e o rodapé repete o caráter informativo. Nenhum trecho cita produto, banco, corretora ou retorno futuro prometido. Se quiser menos exposição, a sugestão é manter o 4,46% só dentro de "Como calculamos" (já é assim).
+
+Saída bruta do guard (rodado sobre este arquivo antes desta linha): `{"cvm_flags": ["46%", "65%", "10%", "20%", "20%", "65%", "46%", "65%", "20%", "10%", "46%", "20%", "46%", "65%", "20%", "10%", "46%"]}`
