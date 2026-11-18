@@ -23,7 +23,7 @@ Os trechos entre `{chaves}` são números que a página calcula.
 | Medida da tarifa dos fundos | Taxa | Atraso no caso-base | Aporte mensal necessário (tarifa × custo baixo) | Patrimônio aos 60 a menos que com custo baixo |
 |---|---|---|---|---|
 | Mediana simples das classes | 0,50% | 9 meses (65 anos e 9 meses × 65 anos) | R$ 23.677 × R$ 22.735 | R$ 223.070 |
-| Ponderada pelo número de cotistas (**em uso**, o cotista típico) | 0,65% | 1 ano e 2 meses (66 anos e 2 meses × 65 anos) | R$ 24.155 × R$ 22.735 | R$ 331.345 |
+| Ponderada pelo número de cotistas (**escolhida pelo Hélio em 18/11**, o cotista típico) | 0,65% | 1 ano e 2 meses (66 anos e 2 meses × 65 anos) | R$ 24.155 × R$ 22.735 | R$ 331.345 |
 | Ponderada pelo patrimônio líquido | 0,25% | 1 mês (65 anos e 1 mês × 65 anos) | R$ 22.891 × R$ 22.735 | R$ 37.793 |
 
 A ponderação por patrimônio dá peso às classes institucionais grandes, que cobram pouco; a por cotistas é a do médico de varejo. Quanto menor a taxa escolhida, menos a página tem a mostrar. Decida qual vale como premissa pública.
@@ -192,7 +192,7 @@ Origem: `src/sofia/calc/autoresposta.ts`. Uma resposta por telefone, uma única 
 
 - No pico, caso tarifa baixa: o botão fica secundário ("Quer conferir mesmo assim?"), mas a mensagem pronta ainda pede o Raio-X. Está coerente com o botão, mas confirme.
 - A diferença em patrimônio aos 60 (R$ 331 mil no caso-base) não está na página; só aqui.
-- A medida da tarifa dos fundos (tabela nos Números da conta): 0,50%, 0,65% ou 0,25%.
+- ~~A medida da tarifa dos fundos~~ — decidido em 18/11: 0,65% (cotista típico).
 
 ## Guard CVM: justificativa dos sinais
 
