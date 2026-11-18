@@ -43,3 +43,11 @@ assert.match(valida({ idade: 40, idadeAlvo: 60, investido: -1, rendaMensal: 1000
 assert.match(valida({ idade: 40, idadeAlvo: 60, investido: 0, rendaMensal: 0, aporteMensal: 0, onde: "fundos" }), /renda/i);
 assert.equal(valida({ idade: 40, idadeAlvo: 60, investido: 0, rendaMensal: 10000, aporteMensal: 0, onde: "fundos" }), null);
 console.log("conta ok");
+
+// NaN e entradas invalidas: valida tem de barrar antes de simular
+const base = { idade: 42, idadeAlvo: 60, investido: 800000, rendaMensal: 30000, aporteMensal: 15000, onde: "fundos" };
+assert.ok(typeof valida({ ...base, investido: NaN }) === "string");
+assert.ok(typeof valida({ ...base, aporteMensal: NaN }) === "string");
+assert.ok(typeof valida({ ...base, idade: 101, idadeAlvo: 105 }) === "string");
+assert.ok(typeof valida({ ...base, onde: "x" }) === "string");
+assert.ok(typeof valida({ ...base, investido: undefined }) === "string");

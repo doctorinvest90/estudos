@@ -8,7 +8,9 @@
 
   // taxa mensal real liquida
   function mensal(t, rReal) {
-    return Math.pow(1 + rReal - t, 1 / 12) - 1;
+    // base <= 0 (retorno liquido <= -100%) nao existe; piso minusculo evita NaN
+    var base = Math.max(1 + rReal - t, 1e-12);
+    return Math.pow(base, 1 / 12) - 1;
   }
 
   // (1+i)^n - 1 sobre i, com i ~ 0 tratado como n
@@ -42,11 +44,20 @@
     return Math.max(0, (alvo - e.investido * cresc) * i / (cresc - 1));
   }
 
+  var ONDE = { fundos: true, direto: true, naosei: true };
+
+  // Number.isFinite rejeita NaN/undefined; !(x >= 0) tambem pega NaN.
   function valida(e) {
+    var numericos = [e.idade, e.idadeAlvo, e.investido, e.rendaMensal, e.aporteMensal];
+    for (var k = 0; k < numericos.length; k++) {
+      if (!Number.isFinite(numericos[k])) return "Preencha todos os campos com números válidos.";
+    }
+    if (e.idade < 0 || e.idade > 100 || e.idadeAlvo > 100) return "A idade precisa estar entre 0 e 100 anos.";
     if (!(e.idadeAlvo > e.idade)) return "A idade para parar precisa ser maior que a idade atual.";
-    if (e.investido < 0) return "O valor investido não pode ser negativo.";
+    if (!(e.investido >= 0)) return "O valor investido não pode ser negativo.";
     if (!(e.rendaMensal > 0)) return "Informe a renda mensal que você quer manter na aposentadoria.";
-    if (e.aporteMensal < 0) return "O aporte mensal não pode ser negativo.";
+    if (!(e.aporteMensal >= 0)) return "O aporte mensal não pode ser negativo.";
+    if (!ONDE[e.onde]) return "Escolha onde o dinheiro está: fundos, direto ou não sei.";
     return null;
   }
 
