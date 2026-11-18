@@ -37,7 +37,7 @@ header p{color:#AFBACB;margin:0;font-size:14.5px}
 .onde{display:grid;gap:6px}
 .onde button{padding:11px 12px;border:1px solid var(--linha);background:#fff;font-family:inherit;font-size:14px;
   cursor:pointer;color:var(--conf);border-radius:2px;text-align:left}
-.onde button.on{background:var(--conf);color:#fff;border-color:var(--conf)}
+.onde button.on,.onde button[aria-pressed="true"]{background:var(--conf);color:#fff;border-color:var(--conf)}
 #calcular{width:100%;margin-top:16px;padding:14px 18px;background:var(--azul);color:var(--marfim);border:0;border-radius:3px;
   font-family:inherit;font-size:15px;font-weight:500;cursor:pointer}
 #erro{color:var(--verm);font-size:13.5px;margin:12px 0 0}
@@ -46,8 +46,10 @@ button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{o
 .idade{background:#fff;padding:16px 12px;text-align:center}
 .idade .v{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:700;color:var(--azul);line-height:1.1}
 .idade .t{font-size:11.5px;color:var(--suave);margin-top:6px;line-height:1.35}
+.idades.um{grid-template-columns:1fr}
 .idade.bom .v{color:#8A7330}
 .manchete{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:700;color:var(--azul);line-height:1.2;margin:0 0 8px}
+#resumo-print{display:none}
 .leitura{border-top:2px solid var(--ouro);background:#fff;padding:14px 16px;margin:14px 0;font-size:14px}
 .leitura p{margin:0 0 .5em}.leitura p:last-child{margin:0}
 .acoes{display:flex;flex-direction:column;gap:10px;margin-top:18px}
@@ -72,6 +74,7 @@ footer b{color:var(--conf)}
   body{background:#fff}
   header p,#form,.acoes,[data-muro],#colega,details summary{display:none}
   details>*{display:block}
+  #resumo-print{display:block;margin:0 0 14px;font-size:13px}
   .card{border:0;padding:0}
 }
 </style>
@@ -85,6 +88,7 @@ footer b{color:var(--conf)}
 </div></header>
 
 <main class="wrap">
+<div id="resumo-print"><b>Os números que você informou.</b><p id="resumo-txt" style="margin:5px 0 0"></p></div>
 <section class="card" id="form" aria-labelledby="form-titulo">
   <h2 id="form-titulo">Seus números</h2>
   <p class="hint">Sem imóvel. Valores em dinheiro de hoje.</p>
@@ -102,9 +106,9 @@ footer b{color:var(--conf)}
     <div class="iunit"><span class="pre">R$</span><input id="aporteMensal" type="text" inputmode="numeric" autocomplete="off" data-reais><span>/mês</span></div></div>
   <div class="field"><span class="lbl" id="onde-lbl">Onde está a maior parte?</span>
     <div class="onde" id="onde" role="group" aria-labelledby="onde-lbl">
-      <button type="button" data-onde="fundos">Fundos ou previdência (banco ou corretora)</button>
-      <button type="button" data-onde="direto">Tesouro, CDB ou ações direto</button>
-      <button type="button" data-onde="naosei">Não sei</button>
+      <button type="button" data-onde="fundos" aria-pressed="false">Fundos ou previdência (banco ou corretora)</button>
+      <button type="button" data-onde="direto" aria-pressed="false">Tesouro, CDB ou ações direto</button>
+      <button type="button" data-onde="naosei" aria-pressed="false">Não sei</button>
     </div></div>
   <button id="calcular" type="button">Calcular</button>
   <p id="erro" role="alert" hidden></p>
@@ -118,10 +122,11 @@ footer b{color:var(--conf)}
     <div class="leitura" id="leitura"></div>
     <p class="nota" id="nota-naosei" hidden>Você marcou "não sei": contamos como fundos, o caso mais comum.</p>
 
+    <p class="nota" id="cautela">Simulação, não promessa de retorno. A conta deixa de fora IR, INSS e aluguéis. Rendimento passado não garante o futuro.</p>
+
     <details>
       <summary>Como calculamos</summary>
       <ul id="premissas"></ul>
-      <p class="nota" id="cautela">Simulação, não promessa de retorno. A conta deixa de fora IR, INSS e aluguéis. Rendimento passado não garante o futuro.</p>
     </details>
 
     <div class="acoes" id="acoes">
@@ -141,8 +146,8 @@ footer b{color:var(--conf)}
       <script src="/beehiiv-sucesso.js" data-destino="/obrigado.html"></script>
       <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
            Não remover sem religar a dupla confirmação. -->
-      <p class="nota">Ao se inscrever, você autoriza receber neste e-mail a sua conta e a
-      carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+      <p class="nota">Ao se inscrever, você autoriza receber a carta sobre dinheiro para médico e libera
+      o PDF da conta que está nesta tela. Nenhum número seu vai por e-mail. Pode cancelar quando quiser.</p>
       <p style="font-size:13px">Já recebe a newsletter?
         <a href="../obrigado.html?e=aposentadoria&amp;ja=1" data-ja-assina>Sua conta está aqui.</a></p>
     </div>
@@ -190,7 +195,7 @@ ev("calc_view");
 (function(){
   var C=window.CALC_CONFIG, P=window.Pagina, $=function(id){return document.getElementById(id);};
   var onde="", faixaAtual="";
-  var URL_PAGINA="https://estudos.drheliobarros.com.br/aposentadoria/";
+  var URL_PAGINA="https://estudos.drheliobarros.com.br/aposentadoria/?utm_source=colega";
 
   // máscara de milhar nos campos em reais: só dígitos, pontos de milhar
   [].forEach.call(document.querySelectorAll("[data-reais]"),function(i){
@@ -201,14 +206,14 @@ ev("calc_view");
   [].forEach.call(document.querySelectorAll("#onde button"),function(b){
     b.addEventListener("click",function(){
       onde=b.getAttribute("data-onde");
-      [].forEach.call(document.querySelectorAll("#onde button"),function(x){x.classList.toggle("on",x===b);});
+      [].forEach.call(document.querySelectorAll("#onde button"),function(x){x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",x===b?"true":"false");});
     });
   });
 
   function num(id){var v=$(id).value.trim();return v===""?NaN:Number(v);}
   function pct(x){return (x*100).toFixed(2).replace(".",",")+"% a.a.";}
-  function anos(n){return n+(n===1?" ano":" anos");}
   function idadeTxt(x){return x===null?"não atinge":"aos "+P.idade(x);}
+  var resumoAtual="";
 
   function lerEntrada(){
     return {idade:num("idade"),idadeAlvo:num("idadeAlvo"),investido:P.lerReais($("investido").value),
@@ -216,7 +221,8 @@ ev("calc_view");
   }
 
   function render(e,r,modo){
-    var d=P.anosDiferenca(r), idades=$("idades");
+    var gm=P.mesesDiferenca(r), idades=$("idades");
+    var igual=Math.abs(r.taxaUsada-C.taxas.baixoCusto.valor)<1e-9;
     var manchete,sub="";
     if(r.caso==="ja_atingiu"){
       manchete="O que você tem já paga essa renda.";
@@ -225,18 +231,19 @@ ev("calc_view");
     }else{
       idades.hidden=false;
       if(r.caso==="nunca"){
-        manchete="Com esse aporte, a conta não chega lá antes dos 100 anos.";
+        manchete=r.baixoCusto.idadeAtinge!==null?"Com a tarifa de hoje, a conta não chega lá antes dos 100 anos.":"Com esse aporte, a conta não chega lá antes dos 100 anos.";
         sub="Alvo: "+P.brlExato(r.alvo)+" ("+C.multiplo+" vezes a renda mensal). Veja abaixo quanto precisaria investir por mês.";
       }else if(r.caso==="tarifa_baixa"){
         manchete="Sua tarifa já é baixa.";
         sub="A sua conta depende de quanto você investe por mês. Alvo: "+P.brlExato(r.alvo)+" ("+C.multiplo+" vezes a renda mensal).";
       }else{
-        manchete="A tarifa custa "+anos(d)+" de trabalho.";
+        manchete=gm>=1?"A tarifa custa "+P.anosMeses(gm)+" de trabalho.":"Com esse aporte, a tarifa quase não muda a data.";
         sub="Mantendo o aporte de hoje, você chega a "+P.brlExato(r.alvo)+" ("+C.multiplo+" vezes a renda mensal) em idades diferentes.";
       }
+      idades.className=igual?"idades um":"idades";
       idades.innerHTML=
         '<div class="idade"><div class="v">'+idadeTxt(r.comTarifa.idadeAtinge)+'</div><div class="t">Com a tarifa de hoje</div></div>'+
-        '<div class="idade bom"><div class="v">'+idadeTxt(r.baixoCusto.idadeAtinge)+'</div><div class="t">Com custo baixo</div></div>';
+        (igual?"":'<div class="idade bom"><div class="v">'+idadeTxt(r.baixoCusto.idadeAtinge)+'</div><div class="t">Com custo baixo (só a custódia, '+pct(C.taxas.baixoCusto.valor)+')</div></div>');
     }
     $("manchete").textContent=manchete; $("sub").textContent=sub;
 
@@ -244,7 +251,7 @@ ev("calc_view");
     if(r.caso!=="ja_atingiu"){
       var p=document.createElement("p");
       p.textContent="Para parar aos "+e.idadeAlvo+", você precisaria investir "+P.brlExato(r.comTarifa.aporteNecessario)+
-        " por mês com a tarifa de hoje, ou "+P.brlExato(r.baixoCusto.aporteNecessario)+" por mês com custo baixo.";
+        " por mês"+(igual?".":" com a tarifa de hoje, ou "+P.brlExato(r.baixoCusto.aporteNecessario)+" por mês com custo baixo.");
       l.appendChild(p); l.hidden=false;
     }else l.hidden=true;
     $("nota-naosei").hidden=!r.contouComoFundos;
@@ -260,6 +267,8 @@ ev("calc_view");
       $("premissas").appendChild(li);
     });
 
+    resumoAtual=P.resumoEntrada(e);
+
     // botões: o modo é lido a cada cálculo, não ao carregar a página
     var w=$("btn-whats"), pdf=$("btn-print"), m=P.mensagemWhats(e,r,modo,C);
     var baixa=r.caso==="tarifa_baixa", whatsPrincipal=modo==="pico"&&!baixa;
@@ -269,17 +278,31 @@ ev("calc_view");
     w.style.order=whatsPrincipal?0:1; pdf.style.order=whatsPrincipal?1:0;
   }
 
-  $("calcular").addEventListener("click",function(){
+  // auto: refaz o resultado na volta do obrigado (muro restaura os campos); sem rolagem e sem beacon
+  function calcular(auto){
     var e=lerEntrada(), erro=Conta.valida(e), er=$("erro");
-    if(erro){ er.textContent=erro; er.hidden=false; $("resultado").hidden=true; return; }
+    if(erro){ if(auto) return; er.textContent=erro; er.hidden=false; $("resultado").hidden=true; return; }
     er.hidden=true;
     var r=Conta.simular(e,P.premissasDe(C)), modo=P.modoAgora(C,new Date());
     faixaAtual=P.faixaLabel(C,e.investido);
     render(e,r,modo);
     $("resultado").hidden=false;
+    if(auto) return;
     $("resultado").scrollIntoView({behavior:"smooth",block:"start"});
     ev("calc_resultado",{onde:e.onde,faixa:faixaAtual});
+  }
+  $("calcular").addEventListener("click",function(){ calcular(false); });
+  // muro.js restaura o formulario no "load"; este timeout roda depois dele
+  function voltaDoMuro(){ setTimeout(function(){ if(onde) calcular(true); },0); }
+  if(document.readyState==="complete") voltaDoMuro(); else addEventListener("load",voltaDoMuro);
+
+  // PDF: números digitados no topo e "Como calculamos" aberto
+  var abriu=false, det=document.querySelector("#resultado details");
+  addEventListener("beforeprint",function(){
+    $("resumo-txt").textContent=resumoAtual;
+    abriu=!det.open; det.open=true;
   });
+  addEventListener("afterprint",function(){ if(abriu){ det.open=false; abriu=false; } });
 
   $("btn-whats").addEventListener("click",function(){
     ev("calc_whatsapp",{faixa:faixaAtual}); window.fbq&&fbq("track","Contact");

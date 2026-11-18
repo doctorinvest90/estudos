@@ -3,7 +3,7 @@
   // "1.200.000,50" -> 1200000.5. Vazio ou lixo -> NaN (Number("") seria 0).
   function lerReais(s) {
     var t = String(s == null ? "" : s).replace(/\s/g, "").replace(/R\$/g, "");
-    if (!/^\d[\d.]*(,\d+)?$/.test(t)) return NaN;
+    if (!/^\d[\d.]*(,\d*)?$/.test(t)) return NaN;
     return Number(t.replace(/\./g, "").replace(",", "."));
   }
 
@@ -49,26 +49,42 @@
     return "R$ " + Math.round(n);
   }
   function brlExato(n) { return "R$ " + Math.round(n).toLocaleString("pt-BR"); }
-  // idade inteira: 69,25 -> 69
-  function idade(x) { return x === null ? null : Math.floor(x); }
-  function anosDiferenca(r) {
-    return r.comTarifa.idadeAtinge === null || r.baixoCusto.idadeAtinge === null ? null : idade(r.comTarifa.idadeAtinge) - idade(r.baixoCusto.idadeAtinge);
+  // 13 -> "1 ano e 1 mês", 8 -> "8 meses", 36 -> "3 anos"
+  function anosMeses(meses) {
+    var a = Math.floor(meses / 12), m = meses % 12, p = [];
+    if (a) p.push(a + (a === 1 ? " ano" : " anos"));
+    if (m || !a) p.push(m + (m === 1 ? " mês" : " meses"));
+    return p.join(" e ");
+  }
+  // idade exata (em anos, vinda da conta mensal) -> meses inteiros
+  function meses(x) { return x === null ? null : Math.round(x * 12); }
+  // 66,17 -> "66 anos e 2 meses"; sem idade -> null
+  function idade(x) { return x === null ? null : anosMeses(meses(x)); }
+  // diferenca em meses entre as duas linhas, a partir das idades exatas
+  function mesesDiferenca(r) {
+    return r.comTarifa.idadeAtinge === null || r.baixoCusto.idadeAtinge === null ? null : meses(r.comTarifa.idadeAtinge) - meses(r.baixoCusto.idadeAtinge);
   }
 
   var ONDE_TXT = {
     fundos: "fundos ou previdência (banco ou corretora)",
     direto: "Tesouro, CDB ou ações direto",
-    naosei: "não sei (contamos como fundos)"
+    naosei: "fundos ou previdência (não sei ao certo)"
   };
+
+  // resumo do que a pessoa digitou: vai na mensagem do WhatsApp e no PDF
+  function resumoEntrada(e) {
+    return "tenho " + e.idade + " anos, quero parar aos " + e.idadeAlvo + ", " + brl(e.investido) + " investidos, quero " +
+      brl(e.rendaMensal) + "/mês, invisto " + brl(e.aporteMensal) + "/mês, a maior parte em " + ONDE_TXT[e.onde] + ".";
+  }
 
   function mensagemWhats(e, r, modo, cfg) {
     var pessoal = e.investido >= cfg.faixaPessoal;
     var ini = pessoal ? "Olá, Hélio! " : "Olá! ";
-    var resumo = "tenho " + e.idade + " anos, quero parar aos " + e.idadeAlvo + ", " + brl(e.investido) + " investidos, quero " +
-      brl(e.rendaMensal) + "/mês, invisto " + brl(e.aporteMensal) + "/mês, a maior parte em " + ONDE_TXT[e.onde] + ".";
+    var resumo = resumoEntrada(e);
     var res = "";
     if (r.caso === "ja_atingiu") res = "O que tenho já paga essa renda.";
     else if (r.caso === "nunca") res = "Pela conta, não chego lá antes dos 100 anos.";
+    else if (r.caso === "tarifa_baixa") res = "Pela conta, paro aos " + idade(r.comTarifa.idadeAtinge) + ".";
     else res = "Com a tarifa paro aos " + idade(r.comTarifa.idadeAtinge) + "; com custo baixo, aos " + idade(r.baixoCusto.idadeAtinge) + ".";
     var fim = modo === "pico" ? "Quero o Raio-X da minha carteira." : "Quero conversar sobre isso.";
     var codigo = modo === "pico" ? "(calc rx)" : "(calc)";
@@ -79,7 +95,7 @@
   }
 
   var API = { lerReais: lerReais, modoAgora: modoAgora, premissasDe: premissasDe, mensagemWhats: mensagemWhats, mascaraReais: mascaraReais, faixaLabel: faixaLabel,
-    brl: brl, brlExato: brlExato, idade: idade, anosDiferenca: anosDiferenca, ONDE_TXT: ONDE_TXT };
+    brl: brl, brlExato: brlExato, idade: idade, anosMeses: anosMeses, mesesDiferenca: mesesDiferenca, resumoEntrada: resumoEntrada, ONDE_TXT: ONDE_TXT };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   else root.Pagina = API;
 })(typeof window !== "undefined" ? window : this);

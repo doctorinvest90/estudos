@@ -73,7 +73,8 @@
     var caso = "normal";
     if (e.investido >= alvo) caso = "ja_atingiu";
     else if (comTarifa.idadeAtinge === null) caso = "nunca";
-    else if (anosDiferenca !== null && anosDiferenca < 1) caso = "tarifa_baixa";
+    // tarifa baixa e decidida pela taxa (a opcao "direto"), nunca pela diferenca de idade
+    else if (taxa - p.taxas.baixoCusto < 0.001) caso = "tarifa_baixa";
 
     return {
       alvo: alvo,

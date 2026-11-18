@@ -28,6 +28,10 @@ perto(r.comTarifa.idadeAtinge, 79.83, 0.01); perto(r.baixoCusto.idadeAtinge, 67.
 r = simular({ idade: 42, idadeAlvo: 60, investido: 800000, rendaMensal: 30000, aporteMensal: 15000, onde: "direto" }, P);
 assert.equal(r.caso, "tarifa_baixa");
 
+// fundos com diferenca menor que 1 ano continua "normal": tarifa_baixa vem da taxa, nao da diferenca
+r = simular({ idade: 42, idadeAlvo: 60, investido: 8950000, rendaMensal: 30000, aporteMensal: 0, onde: "fundos" }, P);
+assert.ok(r.anosDiferenca < 1); assert.equal(r.caso, "normal");
+
 // não sei = fundos, e avisa
 r = simular({ idade: 42, idadeAlvo: 60, investido: 800000, rendaMensal: 30000, aporteMensal: 15000, onde: "naosei" }, P);
 assert.equal(r.taxaUsada, 0.015); assert.equal(r.contouComoFundos, true);
@@ -44,7 +48,7 @@ assert.match(valida({ idade: 40, idadeAlvo: 60, investido: 0, rendaMensal: 0, ap
 assert.equal(valida({ idade: 40, idadeAlvo: 60, investido: 0, rendaMensal: 10000, aporteMensal: 0, onde: "fundos" }), null);
 
 // --- pagina.js (Task 3) ---
-const { lerReais, modoAgora, mensagemWhats, premissasDe, mascaraReais, brl, faixaLabel } = createRequire(import.meta.url)("./pagina.js");
+const { lerReais, modoAgora, mensagemWhats, premissasDe, mascaraReais, brl, faixaLabel, anosMeses, idade, mesesDiferenca } = createRequire(import.meta.url)("./pagina.js");
 assert.equal(lerReais("1.200.000,50"), 1200000.5); assert.equal(lerReais("800000"), 800000);
 assert.ok(Number.isNaN(lerReais(""))); assert.ok(Number.isNaN(lerReais("abc")));
 const cfg = { pico: { inicio: "2027-01-11", fim: "2027-01-31" }, raioXFechado: false, faixaPessoal: 500000, whats: { suporte: "5511", pessoal: "5531" } };
@@ -78,7 +82,6 @@ assert.equal(digita("800000"), "800.000"); assert.equal(lerReais(digita("800000"
 assert.equal(mascaraReais(",50"), ""); assert.equal(mascaraReais("abc"), "");
 assert.equal(brl(999950), "R$ 1 mi"); assert.equal(brl(999949), "R$ 999,9 mil"); assert.equal(brl(800000), "R$ 800 mil"); assert.equal(brl(1200000), "R$ 1,2 mi");
 assert.equal(faixaLabel(cfg, 500000), "≥500k"); assert.equal(faixaLabel(cfg, 499999), "<500k");
-console.log("conta ok");
 
 // NaN e entradas invalidas: valida tem de barrar antes de simular
 const base = { idade: 42, idadeAlvo: 60, investido: 800000, rendaMensal: 30000, aporteMensal: 15000, onde: "fundos" };
@@ -87,3 +90,14 @@ assert.ok(typeof valida({ ...base, aporteMensal: NaN }) === "string");
 assert.ok(typeof valida({ ...base, idade: 101, idadeAlvo: 105 }) === "string");
 assert.ok(typeof valida({ ...base, onde: "x" }) === "string");
 assert.ok(typeof valida({ ...base, investido: undefined }) === "string");
+
+// anos e meses
+assert.equal(anosMeses(13), "1 ano e 1 mês"); assert.equal(anosMeses(8), "8 meses"); assert.equal(anosMeses(36), "3 anos"); assert.equal(anosMeses(25), "2 anos e 1 mês");
+assert.equal(idade(66.17), "66 anos e 2 meses"); assert.equal(idade(64 + 11 / 12), "64 anos e 11 meses"); assert.equal(idade(null), null);
+r = simular(e, P); assert.equal(mesesDiferenca(r), Math.round(r.comTarifa.idadeAtinge * 12) - Math.round(r.baixoCusto.idadeAtinge * 12));
+// virgula final
+assert.equal(lerReais("800.000,"), 800000);
+// "não sei": nunca na voz do médico "contamos"
+m = mensagemWhats({ ...e, onde: "naosei" }, simular({ ...e, onde: "naosei" }, P), "fora", cfg);
+assert.ok(m.texto.includes("a maior parte em fundos ou previdência (não sei ao certo)")); assert.ok(!m.texto.includes("contamos"));
+console.log("conta ok");
