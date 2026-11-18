@@ -16,6 +16,16 @@ def get(url):
         return r.read()
 
 
+def get_mes(url):
+    """404 = mes ainda nao publicado (None); qualquer outro erro HTTP para a execucao."""
+    try:
+        return get(url)
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return None
+        raise SystemExit(f"HTTP {e.code} ao baixar {url}")
+
+
 def rows(raw):
     return csv.DictReader(io.StringIO(raw.decode("latin1")), delimiter=";")
 
@@ -70,9 +80,8 @@ def mediana_pond(pares):
 def informe_diario():
     """Cotistas e PL por classe na ultima data do informe diario mais recente (soma das subclasses)."""
     for m in [date.today().strftime("%Y%m")] + meses_anteriores(2):
-        try:
-            z = get(f"{CVM}/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_{m}.zip")
-        except urllib.error.HTTPError:
+        z = get_mes(f"{CVM}/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_{m}.zip")
+        if z is None:
             continue
         ult = {}  # cnpj -> {data: [cotistas, pl]}
         for r in rows(zip_csv(z, f"inf_diario_fi_{m}.csv")):
@@ -97,17 +106,20 @@ def fundos_fi():
     # So laminas (12 meses; documento do fundo vendido ao varejo). Linha mais recente por classe;
     # TAXA_ADM e PR_PL_DESPESA (despesas/PL, custo total) vem da mesma linha.
     melhor = {}  # cnpj -> (data, taxa_adm, despesa)
+    vistas = {}  # classe elegivel presente nas laminas -> teve alguma taxa valida (0 < t <= 10)?
     for m in meses_anteriores(12):
-        try:
-            z = get(f"{CVM}/FI/DOC/LAMINA/DADOS/lamina_fi_{m}.zip")
-        except urllib.error.HTTPError:
+        z = get_mes(f"{CVM}/FI/DOC/LAMINA/DADOS/lamina_fi_{m}.zip")
+        if z is None:
             continue
         for r in rows(zip_csv(z, f"lamina_fi_{m}.csv")):
             c, t = re.sub(r"\D", "", r["CNPJ_FUNDO_CLASSE"]), taxa(r["TAXA_ADM"])
+            if c in alvo:
+                vistas[c] = vistas.get(c, 0) or (t is not None and 0 < t <= 10)
             if c in alvo and t is not None and 0 < t <= 10 and (c not in melhor or r["DT_COMPTC"] >= melhor[c][0]):
                 melhor[c] = (r["DT_COMPTC"], t, taxa(r["PR_PL_DESPESA"]))
     mes, inf = informe_diario()
-    sai = {"classes_alvo": len(alvo), "com_taxa": len(melhor), "informe": mes,
+    sai = {"excluidas": sum(1 for ok in vistas.values() if not ok), "vistas": len(vistas),
+           "classes_alvo": len(alvo), "com_taxa": len(melhor), "informe": mes,
            "com_informe": sum(1 for c in melhor if c in inf and inf[c][0] > 0),
            "adm": sorted({v[0] for v in alvo.values()}),
            "por_classe": {k: sum(1 for c in melhor if alvo[c][1] == k) for k in CLASSES}}
@@ -136,6 +148,7 @@ if __name__ == "__main__":
     print(f"rReal = {rr:.4f}  ({n} meses, CDI 4391 / IPCA 433, 2006-2025)")
     f = fundos_fi()
     print(f"classes elegiveis={f['classes_alvo']}  com TAXA_ADM na lamina={f['com_taxa']}  por classe={f['por_classe']}")
+    print(f"classes de lamina sem taxa valida (zero, vazia ou >10%) excluidas: {f['excluidas']} de {f['vistas']}")
     print(f"informe diario {f['informe']}: {f['com_informe']} classes casadas por CNPJ_FUNDO_CLASSE (cotistas>0)")
     for k in ("TAXA_ADM", "PR_PL_DESPESA"):
         d = f[k]
