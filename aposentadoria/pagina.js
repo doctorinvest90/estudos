@@ -22,10 +22,15 @@
     };
   }
 
-  // Campo em reais inteiros: corta no primeiro virgula (centavos fora), mantem digitos, poe pontos de milhar.
+  // Mascara do campo em reais, aplicada a cada tecla: inteiro com pontos de milhar; se ha virgula,
+  // ela fica, com no maximo 2 digitos depois. Ponto digitado e separador de milhar, nunca decimal.
   function mascaraReais(s) {
-    var d = String(s == null ? "" : s).split(",")[0].replace(/\D/g, "");
-    return d ? Number(d).toLocaleString("pt-BR") : "";
+    var partes = String(s == null ? "" : s).split(",");
+    var d = partes[0].replace(/\D/g, "");
+    if (!d) return "";
+    var out = Number(d).toLocaleString("pt-BR");
+    if (partes.length > 1) out += "," + partes.slice(1).join("").replace(/\D/g, "").slice(0, 2);
+    return out;
   }
   function faixaLabel(cfg, investido) {
     var k = Math.round(cfg.faixaPessoal / 1000) + "k";

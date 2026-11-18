@@ -69,7 +69,12 @@ m = mensagemWhats(ed, simular(ed, P), "pico", cfg); assert.ok(m.texto.trimEnd().
 const en = { idade: 50, idadeAlvo: 60, investido: 0, rendaMensal: 50000, aporteMensal: 1000, onde: "fundos" };
 m = mensagemWhats(en, simular(en, P), "fora", cfg); assert.ok(!/NaN|null|undefined/.test(m.texto));
 
-assert.equal(mascaraReais("1.200.000,50"), "1.200.000"); assert.equal(mascaraReais("800000"), "800.000"); assert.equal(mascaraReais(""), "");
+assert.equal(mascaraReais("1.200.000,50"), "1.200.000,50"); assert.equal(mascaraReais("800000"), "800.000");
+assert.equal(mascaraReais("1200000,"), "1.200.000,"); assert.equal(mascaraReais("1200000,5"), "1.200.000,5"); assert.equal(mascaraReais("1200000,507"), "1.200.000,50");
+// digitacao tecla a tecla: o handler aplica a mascara ao valor atual do campo apos cada caractere
+const digita = (txt) => { let v = ""; for (const c of txt) v = mascaraReais(v + c); return v; };
+assert.equal(digita("1200000,50"), "1.200.000,50"); assert.equal(lerReais(digita("1200000,50")), 1200000.5);
+assert.equal(digita("800000"), "800.000"); assert.equal(lerReais(digita("800000")), 800000); assert.equal(mascaraReais(""), "");
 assert.equal(mascaraReais(",50"), ""); assert.equal(mascaraReais("abc"), "");
 assert.equal(brl(999950), "R$ 1 mi"); assert.equal(brl(999949), "R$ 999,9 mil"); assert.equal(brl(800000), "R$ 800 mil"); assert.equal(brl(1200000), "R$ 1,2 mi");
 assert.equal(faixaLabel(cfg, 500000), "≥500k"); assert.equal(faixaLabel(cfg, 499999), "<500k");
