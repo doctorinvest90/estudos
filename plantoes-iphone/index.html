@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quantos plantões custa um iPhone · Doctor Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--linha:#E3DFD4;
+      --texto:#22303F;--suave:#7A8290;--verde:#4F7A5B;--verm:#A8443C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:var(--texto);
+     font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--azul)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 60px}
+header{background:var(--azul);color:var(--marfim);padding:34px 0 30px;margin-bottom:26px}
+header .wrap{padding-bottom:0}
+.marca{font-size:11px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{color:var(--marfim);font-size:33px;line-height:1.15;margin:14px 0 8px}
+header p{color:#AFBACB;margin:0;max-width:720px;font-size:14.5px}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+.grid>*{min-width:0}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--linha);border-radius:3px;padding:20px 22px;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:4px}
+.card .hint{font-size:12.5px;color:var(--suave);margin:0 0 14px}
+.card .nota{font-size:11.8px;color:var(--suave);line-height:1.5;margin:12px 0 0}
+.presets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:4px 0}
+.presets.q{grid-template-columns:repeat(4,1fr)}
+.pbtn{padding:8px 4px;border:1px solid var(--linha);background:#fff;font-family:inherit;font-size:12.5px;
+  cursor:pointer;color:var(--conf);border-radius:2px}
+.pbtn:hover{border-color:var(--ouro)}
+.pbtn.on{background:var(--azul);color:var(--marfim);border-color:var(--azul)}
+.toggle{display:flex;margin:8px 0 4px;border:1px solid var(--linha);border-radius:2px;overflow:hidden}
+.toggle button{flex:1;padding:9px 4px;border:0;background:#fff;font-family:inherit;font-size:12.5px;cursor:pointer;color:var(--conf)}
+.toggle button+button{border-left:1px solid var(--linha)}
+.toggle button.on{background:var(--conf);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}
+.field{margin:9px 0}
+.field label,.lbl{display:block;font-size:12.5px;color:var(--conf);font-weight:500;margin:0 0 5px}
+.iunit{display:flex;align-items:stretch;border:1px solid var(--linha);border-radius:2px;overflow:hidden;background:#fff}
+.iunit input{width:100%;min-width:0;border:0;padding:8px;text-align:right;font-family:inherit;font-size:13.5px;
+  color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
+.iunit input:focus{outline:none;background:#FAF9F4}
+.iunit span{padding:8px 9px;font-size:11.5px;color:var(--suave);background:#FAF9F6;border-left:1px solid var(--linha);
+  white-space:nowrap;display:flex;align-items:center}
+.iunit span.pre{border-left:0;border-right:1px solid var(--linha)}
+details summary{cursor:pointer;font-size:12.5px;color:var(--conf);font-weight:500;margin-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);border:1px solid var(--linha);margin-bottom:18px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;padding:16px 14px;min-width:0}
+.kpi .v{font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:700;color:var(--azul);line-height:1.08;word-break:break-word}
+.kpi .t{font-size:11px;color:var(--suave);margin-top:6px;line-height:1.35}
+.kpi.dark{background:var(--azul)} .kpi.dark .v{color:var(--ouro)} .kpi.dark .t{color:#9AA8BC}
+.leitura{background:#fff;border-left:3px solid var(--ouro);padding:16px 20px;margin-bottom:18px;font-size:14px}
+.leitura p{margin:0 0 .5em}.leitura p:last-child{margin:0}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:1px solid var(--linha)}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:9px 10px;text-align:right;font-size:12px}
+th:first-child,td:first-child{text-align:left}
+td{padding:8px 10px;text-align:right;border-bottom:1px solid #EFEBE2;font-variant-numeric:tabular-nums}
+tr.alvo td{background:#FAF3DF;font-weight:700;color:var(--azul)}
+td.nao{color:var(--suave)}
+.tabwrap{overflow-x:auto}
+svg text{font-family:"DM Sans",sans-serif}
+footer{border-top:1px solid var(--linha);margin-top:22px;padding-top:18px;font-size:11.2px;color:var(--suave);line-height:1.55}
+footer b{color:var(--conf)}
+
+select{width:100%;border:1px solid var(--linha);border-radius:2px;padding:8px;font-family:inherit;font-size:13.5px;color:var(--azul);background:#fff}
+.barra{height:10px;background:#EFEBE2;border-radius:1px;overflow:hidden}
+.barra i{display:block;height:100%;background:var(--ouro)}
+td.barcell{width:40%}
+
+/* Página do estudo e formulário compartilhado, antes do simulador aberto. */
+:root{--suave:#5D6775}
+h1,h2,h3{text-wrap:balance}
+#estudo{padding-bottom:8px}
+#estudo h2{font-size:24px}
+#estudo ul{padding-left:20px;max-width:70ch;line-height:1.7}
+#estudo li{margin:8px 0}
+[data-muro]{margin-top:22px}
+[data-muro] p{max-width:70ch}
+[data-muro] a{color:var(--conf)}
+/* embed.js injeta width:5000px: manter o formulário dentro da tela no celular. */
+[data-muro] iframe{width:100% !important;max-width:560px;border:0;display:block}
+#simulador-titulo{font-size:26px;margin:0 0 18px}
+.leitura{border-left:0;border-top:2px solid var(--ouro)}
+#captura{margin-top:20px}
+#btn-print{padding:12px 18px;background:var(--azul);color:var(--marfim);border:0;
+  border-radius:3px;font-family:inherit;font-size:14px;cursor:pointer;max-width:100%}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--conf);outline-offset:3px}
+#resumo-print{display:none}
+@media(max-width:640px){
+  .card{padding:18px 14px}
+  .grid2{gap:2px 8px}
+  .iunit span{padding:8px 6px}
+  .tabwrap table{font-size:11px}
+  th,td{padding:8px 5px;overflow-wrap:anywhere}
+}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header{padding:12px 0;margin-bottom:14px}
+  header p,#estudo,#painel,#captura{display:none}
+  .wrap{padding:0;max-width:none}
+  .grid{display:block}
+  #resumo-print{display:block;margin-bottom:14px}
+  #resumo-print p{margin:5px 0 0}
+  .card,.kpis,.leitura{break-inside:avoid}
+  .card{padding:12px;margin-bottom:12px}
+  .tabwrap{overflow:visible}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .kpi{padding:10px}
+  .kpi .v{font-size:21px}
+  footer{font-size:9px}
+}
+</style>
+<script src="/pixel.js"></script>
+</head><body>
+
+<header><div class="wrap">
+  <div class="marca">DOCTOR INVEST · SIMULADOR</div>
+  <h1>Quantos plantões custa um iPhone</h1>
+  <p>Em novembro de 2016, o iPhone mais caro do Brasil custava seis plantões de 12 horas de um clínico. Em setembro
+    de 2026, custa dezoito. O plantão andou perto da inflação. Quem mudou de patamar foi o iPhone, e 2016 foi o ano
+    mais barato da série.</p>
+</div></header>
+
+<section class="wrap" id="estudo" aria-labelledby="conteudo-titulo">
+  <div class="card">
+    <h2 id="conteudo-titulo">O que tem dentro</h2>
+    <ul>
+      <li>iPhone 7 Plus × iPhone 18 Pro Max, preço oficial de lançamento, corrigido pelo IPCA</li>
+      <li>Clínico, anestesia e editais públicos, com o plantão líquido, o que cai na conta</li>
+      <li>Quanto o plantão teria de pagar para a conta voltar a 2016</li>
+      <li>A seção que mostra onde este estudo pode estar errado</li>
+    </ul>
+    <div style="margin-top:16px" id="receber" data-muro>
+      <p>O simulador está aberto, logo abaixo. O PDF de 12 páginas e a base de dados chegam por e-mail.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <script src="/beehiiv-sucesso.js" data-destino="/obrigado.html"></script>
+      <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
+           Não remover sem religar a dupla confirmação. -->
+      <p class="nota">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+      carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=plantoes-iphone&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
+    </div>
+  </div>
+</section>
+<main class="wrap" id="simulador" aria-labelledby="simulador-titulo">
+<h2 id="simulador-titulo">Simule o seu plantão</h2>
+<div id="resumo-print"><b>Os números que você informou.</b><p id="resumo-txt"></p></div>
+<div class="grid">
+<div id="painel">
+  <div class="card">
+    <h3>O seu plantão</h3>
+    <p class="hint">Valor de um plantão de 12 horas. Clínico e anestesia trazem o ponto médio das faixas do estudo, já líquidas; o edital traz o valor bruto publicado.</p>
+    <div class="presets" id="perfis"></div>
+    <div class="grid2">
+      <div class="field"><label for="p26">Plantão hoje</label>
+        <div class="iunit"><span class="pre">R$</span><input type="number" id="p26" step="50" min="100"></div></div>
+      <div class="field"><label for="p16">Plantão em 2016</label>
+        <div class="iunit"><span class="pre">R$</span><input type="number" id="p16" step="50" min="100"></div></div>
+    </div>
+    <div class="field"><label for="horas">Horas por plantão</label>
+      <div class="iunit"><input type="number" id="horas" step="1" min="1" max="24" value="12"><span>h</span></div></div>
+    <span class="lbl" style="margin-top:12px">O valor que você digitou é</span>
+    <div class="toggle" id="imp"></div>
+    <p class="nota">Líquido é o que cai na conta. Se você digitou o valor da nota, o simulador desconta o imposto de PJ no lucro presumido: IRPJ e CSLL sobre 32% da receita, PIS, Cofins e ISS. Pró-labore e adicional de IRPJ ficam fora. O mesmo imposto vale para 2016 e para hoje.</p>
+  </div>
+
+  <div class="card">
+    <h3>O iPhone</h3>
+    <div class="field"><label for="m26">Hoje</label><select id="m26"></select></div>
+    <div class="field" id="outro_box" style="display:none"><label for="outro">Outro preço</label>
+      <div class="iunit"><span class="pre">R$</span><input type="number" id="outro" step="100" min="100" value="15000"></div></div>
+    <div class="field"><label for="m16">Comparar com, em 2016</label><select id="m16"></select></div>
+    <p class="nota">Preço cheio de lançamento na Apple Store do Brasil. O iPhone 7 Plus começou a ser vendido em 11/11/2016; o 18 Pro Max, em 18/09/2026; o Duo, em 23/10/2026.</p>
+  </div>
+</div>
+
+<div>
+  <div class="kpis">
+    <div class="kpi dark"><div class="v" id="k_n">—</div><div class="t" id="k_n_t">—</div></div>
+    <div class="kpi"><div class="v" id="k_h">—</div><div class="t" id="k_h_t">—</div></div>
+    <div class="kpi"><div class="v" id="k_16">—</div><div class="t" id="k_16_t">—</div></div>
+    <div class="kpi"><div class="v" id="k_eq">—</div><div class="t" id="k_eq_t">—</div></div>
+  </div>
+  <div class="leitura" id="leitura"></div>
+  <div class="card">
+    <h3>A linha de 2026 no seu plantão</h3>
+    <p class="hint">Plantões para cada modelo, já descontado o imposto quando o valor é bruto.</p>
+    <div class="tabwrap"><table id="tab"></table></div>
+  </div>
+</div>
+</div>
+<div class="card" id="captura">
+  <h2>Leve esta simulação com você</h2>
+  <p class="hint">Gera um PDF com os seus números, os resultados e a tabela. Libera com o mesmo e-mail do estudo, lá em cima, e os números que você informou ficam.</p>
+  <button id="btn-print" type="button">Gerar o PDF da minha simulação</button>
+</div>
+<footer><b>Aviso importante.</b> Ferramenta educacional, com finalidade exclusivamente informativa. Não constitui
+recomendação de compra, de investimento nem consultoria individualizada. Os valores de plantão de partida são faixas
+informadas por médico e conferidas contra editais públicos; o seu pode ser diferente. Marcas e modelos têm finalidade
+ilustrativa. Estudo completo: <i>Quantos plantões custa um iPhone</i>, <b>Doctor Invest</b>, novembro de 2026 ·
+Hélio Cardoso de Barros, CGA.</footer>
+</main>
+
+<script id="dados" type="application/json">{"PERFIS": [{"nome": "Clínico", "p16": 800.0, "p26": 1250.0, "imp": 0}, {"nome": "Anestesia", "p16": 1350.0, "p26": 2250.0, "imp": 0}, {"nome": "Edital S. J. Rio Preto", "p16": 1166.0, "p26": 1772.35, "imp": 1}], "IMPOSTOS": [{"nome": "Líquido", "aliq": 0.0}, {"nome": "Bruto, ISS 2%", "aliq": 0.1333}, {"nome": "Bruto, ISS 5%", "aliq": 0.1633}], "MODELOS_2026": [{"nome": "iPhone 18 Pro Max 256 GB", "preco": 12999}, {"nome": "iPhone 18 Pro Max 512 GB", "preco": 14499}, {"nome": "iPhone 18 Pro Max 1 TB", "preco": 17499}, {"nome": "iPhone 18 Pro Max 2 TB", "preco": 21999}, {"nome": "iPhone Duo 256 GB", "preco": 21999}, {"nome": "iPhone Duo 512 GB", "preco": 23499}, {"nome": "iPhone Duo 1 TB", "preco": 26499}, {"nome": "iPhone Duo 2 TB", "preco": 30999}], "MODELOS_2016": [{"nome": "iPhone 7 Plus 32 GB", "preco": 4099.0}, {"nome": "iPhone 7 Plus 256 GB", "preco": 4899.0}], "PADRAO_26": 3, "PADRAO_16": 1, "IPCA_FATOR": 1.616279616795893, "REF_TXT": "setembro de 2026"}</script>
+<script id="motor">
+globalThis.MOTOR = function (D) {
+  return {
+    plantoes: function (preco, plantao, aliq) { return preco / (plantao * (1 - aliq)); },
+    equilibrio: function (precoNovo, precoVelho, plantaoVelho) { return precoNovo * plantaoVelho / precoVelho; },
+  };
+};
+</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById("dados").textContent);
+  var M = MOTOR(D);
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = function (v, c) { return v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); };
+  var brl = function (v) { return "R$ " + fmt(v, 0); };
+  var aliq = D.IMPOSTOS[0].aliq;
+
+  D.PERFIS.forEach(function (p, i) {
+    var b = document.createElement("button");
+    b.className = "pbtn" + (i === 0 ? " on" : "");
+    b.textContent = p.nome;
+    b.onclick = function () {
+      [].forEach.call($("perfis").children, function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      $("p26").value = p.p26; $("p16").value = p.p16; $("imp").children[p.imp].click();
+    };
+    $("perfis").appendChild(b);
+  });
+  D.IMPOSTOS.forEach(function (t, i) {
+    var b = document.createElement("button");
+    b.textContent = t.nome;
+    if (i === 0) b.className = "on";
+    b.onclick = function () {
+      [].forEach.call($("imp").children, function (x) { x.classList.remove("on"); });
+      b.classList.add("on"); aliq = t.aliq; calc();
+    };
+    $("imp").appendChild(b);
+  });
+  D.MODELOS_2026.forEach(function (m, i) {
+    var o = new Option(m.nome + " · " + brl(m.preco), i);
+    $("m26").add(o);
+  });
+  $("m26").add(new Option("Outro preço", "outro"));
+  D.MODELOS_2016.forEach(function (m, i) { $("m16").add(new Option(m.nome + " · " + brl(m.preco), i)); });
+  $("m26").value = String(D.PADRAO_26);
+  $("m16").value = String(D.PADRAO_16);
+  $("p26").value = D.PERFIS[0].p26; $("p16").value = D.PERFIS[0].p16;
+
+  function precoHoje() {
+    if ($("m26").value === "outro") return Math.max(+$("outro").value || 0, 1);
+    return D.MODELOS_2026[+$("m26").value].preco;
+  }
+  function nomeHoje() {
+    return $("m26").value === "outro" ? "o modelo escolhido" : D.MODELOS_2026[+$("m26").value].nome;
+  }
+
+  function calc() {
+    $("outro_box").style.display = $("m26").value === "outro" ? "" : "none";
+    var p26 = Math.max(+$("p26").value || 0, 1), p16 = Math.max(+$("p16").value || 0, 1);
+    var h = Math.max(+$("horas").value || 12, 1);
+    var preco = precoHoje(), m16 = D.MODELOS_2016[+$("m16").value];
+    var n26 = M.plantoes(preco, p26, aliq), n16 = M.plantoes(m16.preco, p16, aliq);
+    var eq = M.equilibrio(preco, m16.preco, p16);  // na mesma base que o usuário digitou
+    $("k_n").textContent = fmt(n26, 1);
+    $("k_n_t").textContent = "plantões para o " + nomeHoje();
+    $("k_h").textContent = fmt(n26 * h, 0) + " h";
+    $("k_h_t").textContent = "de plantão, com " + fmt(h, 0) + " horas por plantão";
+    $("k_16").textContent = fmt(n16, 1);
+    $("k_16_t").textContent = "plantões para o " + m16.nome + ", em 2016";
+    $("k_eq").textContent = brl(eq);
+    $("k_eq_t").textContent = "plantão de hoje que faria a conta voltar a 2016";
+    var x = n26 / n16;
+    var real16 = p16 * D.IPCA_FATOR;
+    $("leitura").innerHTML =
+      "<p>Hoje o " + nomeHoje() + " custa <b>" + fmt(x, 1) + " vezes</b> os plantões que o " + m16.nome +
+      " custava em 2016.</p><p>O seu plantão de 2016, corrigido pela inflação até " + D.REF_TXT + ", seria " +
+      brl(real16) + ". Você informou " + brl(p26) + ": " +
+      (p26 >= real16 ? "<b>" + fmt((p26 / real16 - 1) * 100, 1) + "% acima</b> da inflação." :
+        "<b>" + fmt((1 - p26 / real16) * 100, 1) + "% abaixo</b> da inflação.") + "</p>";
+    var maxN = 0, rows = D.MODELOS_2026.map(function (m) {
+      var n = M.plantoes(m.preco, p26, aliq); maxN = Math.max(maxN, n); return [m, n];
+    });
+    $("tab").innerHTML = "<tr><th>Modelo</th><th>Preço</th><th>Plantões</th><th></th></tr>" + rows.map(function (r) {
+      return "<tr><td>" + r[0].nome + "</td><td>" + brl(r[0].preco) + "</td><td>" + fmt(r[1], 1) +
+        "</td><td class=\"barcell\"><div class=\"barra\"><i style=\"width:" + (100 * r[1] / maxN) + "%\"></i></div></td></tr>";
+    }).join("");
+  }
+  ["p26", "p16", "horas", "m26", "m16", "outro"].forEach(function (id) { $(id).addEventListener("input", calc); });
+  calc();
+})();
+</script>
+<script>
+// Resumo impresso: o painel some no PDF, então os números que a pessoa informou vão por extenso.
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var txt = function (id) { var s = $(id); return s.options[s.selectedIndex].text; };
+  function resumo() {
+    var on = $("imp").querySelector(".on");
+    $("resumo-txt").textContent = "Plantão hoje: R$ " + $("p26").value + "; em 2016: R$ " + $("p16").value +
+      "; " + $("horas").value + " horas por plantão; valor " + (on ? on.textContent : "") + ". iPhone hoje: " +
+      ($("m26").value === "outro" ? "outro preço, R$ " + $("outro").value : txt("m26")) +
+      ". Comparado com, em 2016: " + txt("m16") + ".";
+  }
+  $("btn-print").onclick = function () { resumo(); window.print(); };
+  window.addEventListener("beforeprint", resumo);
+})();
+</script>
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var live=/drheliobarros\.com\.br$/.test(location.hostname);
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e a redirect de formulario. Sem isto o evento de
+// conversao nasce sem fonte e todo lead parece trafego direto. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  if(!live) return;
+  var payload=JSON.stringify({
+    event:nome, page:"plantoes-iphone",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+// Conta a primeira interação com qualquer controle do simulador.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou||!e.target.closest("#painel input,#painel button,#painel select")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+</script>
+
+<script src="../muro.js" data-estudo="plantoes-iphone"></script>
+</body></html>
