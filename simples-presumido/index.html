@@ -338,10 +338,11 @@ Hélio Cardoso de Barros, CGA · outubro de 2026.</footer>
       const pl = c.socios * 12 * plMes;
       const fgts = D.FGTS * folha;
       const [tIva, tCheia] = fiscal(c);
-      const rb = c.P / (1 + tIva);
+      const ded = j(c, "iss") + j(c, "pis_cofins");   // fora da base da CBS/IBS
+      const rb = c.P / (1 + tIva * (1 - ded));
       const credito = c.credito * compras * tCheia / (1 + tCheia);
-      const iva = rb * tIva - credito;
-      const iss = (j(c, "iss") + j(c, "pis_cofins")) * rb;
+      const iva = rb * (1 - ded) * tIva - credito;
+      const iss = ded * rb;
       const [pIr, pCs] = D.PRESUNCAO[String(!!c.equiparacao)];
       const irpj = D.IRPJ * pIr * rb + D.ADICIONAL * Math.max(pIr * rb - D.LIMITE_ADICIONAL, 0);
       const csll = D.CSLL * pCs * rb;

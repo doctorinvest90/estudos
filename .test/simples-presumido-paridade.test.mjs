@@ -67,9 +67,9 @@ console.log(`ok — ${defaults} defaults e ${presets} valores de preset dentro d
 
 // Calculado na fonte com python3 -c:
 // import motor as m; c=m.Caso(1.2e6); print(m.melhor(c,"Presumido")["imposto"], m.melhor(c,"Simples")["imposto"])
-// Python: 207983.80423953 e 245966.34135. A UI converte CBS 11,3% em 0.113 - 0.001.
+// Python: 207276.66428039 e 245966.34135 (base da CBS/IBS sem o ISS desde 18/11/2026). A UI converte CBS 11,3% em 0.113 - 0.001.
 const headline = { P: 1200000, socios: 1, folha: 0, outros: .15, janela: "2027",
   equiparacao: false, credito: .5, iss: .02, cbs: .112, ibs: .001 };
-assert.equal(Math.round(M.melhor(headline, "Presumido").imposto), 207984);
+assert.equal(Math.round(M.melhor(headline, "Presumido").imposto), 207277);
 assert.equal(Math.round(M.melhor(headline, "Simples").imposto), 245966);
-console.log("ok — referência: Presumido R$ 207984; Simples R$ 245966");
+console.log("ok — referência: Presumido R$ 207277; Simples R$ 245966");
