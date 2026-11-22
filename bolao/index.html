@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Com quantos você divide · Doctor Invest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--linha:#E3DFD4;
+      --texto:#22303F;--suave:#7A8290;--verde:#4F7A5B;--verm:#A8443C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:var(--texto);
+     font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;margin:0;color:var(--azul)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 60px}
+header{background:var(--azul);color:var(--marfim);padding:34px 0 30px;margin-bottom:26px}
+header .wrap{padding-bottom:0}
+.marca{font-size:11px;letter-spacing:.32em;color:var(--ouro);font-weight:700}
+header h1{color:var(--marfim);font-size:33px;line-height:1.15;margin:14px 0 8px}
+header p{color:#AFBACB;margin:0;max-width:720px;font-size:14.5px}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
+.grid>*{min-width:0}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--linha);border-radius:3px;padding:20px 22px;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:4px}
+.card .hint{font-size:12.5px;color:var(--suave);margin:0 0 14px}
+.card .nota{font-size:11.8px;color:var(--suave);line-height:1.5;margin:12px 0 0}
+.presets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:4px 0}
+.presets.q{grid-template-columns:repeat(4,1fr)}
+.pbtn{padding:8px 4px;border:1px solid var(--linha);background:#fff;font-family:inherit;font-size:12.5px;
+  cursor:pointer;color:var(--conf);border-radius:2px}
+.pbtn:hover{border-color:var(--ouro)}
+.pbtn.on{background:var(--azul);color:var(--marfim);border-color:var(--azul)}
+.toggle{display:flex;margin:8px 0 4px;border:1px solid var(--linha);border-radius:2px;overflow:hidden}
+.toggle button{flex:1;padding:9px 4px;border:0;background:#fff;font-family:inherit;font-size:12.5px;cursor:pointer;color:var(--conf)}
+.toggle button+button{border-left:1px solid var(--linha)}
+.toggle button.on{background:var(--conf);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}
+.field{margin:9px 0}
+.field label,.lbl{display:block;font-size:12.5px;color:var(--conf);font-weight:500;margin:0 0 5px}
+.iunit{display:flex;align-items:stretch;border:1px solid var(--linha);border-radius:2px;overflow:hidden;background:#fff}
+.iunit input{width:100%;min-width:0;border:0;padding:8px;text-align:right;font-family:inherit;font-size:13.5px;
+  color:var(--azul);background:transparent;font-variant-numeric:tabular-nums}
+.iunit input:focus{outline:none;background:#FAF9F4}
+.iunit span{padding:8px 9px;font-size:11.5px;color:var(--suave);background:#FAF9F6;border-left:1px solid var(--linha);
+  white-space:nowrap;display:flex;align-items:center}
+.iunit span.pre{border-left:0;border-right:1px solid var(--linha)}
+details summary{cursor:pointer;font-size:12.5px;color:var(--conf);font-weight:500;margin-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--linha);border:1px solid var(--linha);margin-bottom:18px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;padding:16px 14px;min-width:0}
+.kpi .v{font-family:"Cormorant Garamond",serif;font-size:25px;font-weight:700;color:var(--azul);line-height:1.08;word-break:break-word}
+.kpi .t{font-size:11px;color:var(--suave);margin-top:6px;line-height:1.35}
+.kpi.dark{background:var(--azul)} .kpi.dark .v{color:var(--ouro)} .kpi.dark .t{color:#9AA8BC}
+.leitura{background:#fff;border-left:3px solid var(--ouro);padding:16px 20px;margin-bottom:18px;font-size:14px}
+.leitura p{margin:0 0 .5em}.leitura p:last-child{margin:0}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border:1px solid var(--linha)}
+th{background:var(--azul);color:var(--marfim);font-weight:500;padding:9px 10px;text-align:right;font-size:12px}
+th:first-child,td:first-child{text-align:left}
+td{padding:8px 10px;text-align:right;border-bottom:1px solid #EFEBE2;font-variant-numeric:tabular-nums}
+tr.alvo td{background:#FAF3DF;font-weight:700;color:var(--azul)}
+td.nao{color:var(--suave)}
+.tabwrap{overflow-x:auto}
+svg text{font-family:"DM Sans",sans-serif}
+footer{border-top:1px solid var(--linha);margin-top:22px;padding-top:18px;font-size:11.2px;color:var(--suave);line-height:1.55}
+footer b{color:var(--conf)}
+
+/* Página do estudo e formulário compartilhado, antes do simulador aberto. */
+:root{--suave:#5D6775}
+h1,h2,h3{text-wrap:balance}
+#estudo{padding-bottom:8px}
+#estudo h2{font-size:24px}
+#estudo ul{padding-left:20px;max-width:70ch;line-height:1.7}
+#estudo li{margin:8px 0}
+[data-muro]{margin-top:22px}
+[data-muro] p{max-width:70ch}
+[data-muro] a{color:var(--conf)}
+/* embed.js injeta width:5000px: manter o formulário dentro da tela no celular. */
+[data-muro] iframe{width:100% !important;max-width:560px;border:0;display:block}
+#simulador-titulo{font-size:26px;margin:0 0 18px}
+.leitura{border-left:0;border-top:2px solid var(--ouro)}
+button:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--conf);outline-offset:3px}
+@media(max-width:640px){
+  .card{padding:18px 14px}
+  .grid2{gap:2px 8px}
+  .iunit span{padding:8px 6px}
+  .tabwrap table{font-size:11px;table-layout:fixed}
+  th,td{padding:8px 5px;overflow-wrap:anywhere}
+  th:first-child,td:first-child{width:30%}
+}
+</style>
+<script src="/pixel.js"></script>
+</head><body>
+
+<header><div class="wrap">
+  <div class="marca">DOCTOR INVEST · ESTUDO QUANTITATIVO</div>
+  <h1>Com quantos você divide</h1>
+  <p>Fiz a conta do bolão da Mega da Virada com os 2.005 concursos que a Caixa publica desde 2009. Aumentar a aposta não melhora o bilhete. O que muda é com quantos você divide: os desconhecidos que marcaram as mesmas dezenas e os colegas do seu bolão.</p>
+</div></header>
+
+<section class="wrap" id="estudo" aria-labelledby="conteudo-titulo">
+  <div class="card">
+    <h2 id="conteudo-titulo">O que o estudo encontrou</h2>
+    <ul>
+      <li><b>O bilhete da Virada não vale o preço.</b> Em 2025, o ano do recorde de R$ 1,09 bilhão, voltaram R$ 39,48 de cada R$ 100 apostados, já sem imposto.</li>
+      <li><b>O maior prêmio não é o melhor bilhete.</b> No concurso 3077, de outubro de 2026, com pote de R$ 324,9 milhões e 25 vezes menos dinheiro apostado, o bilhete valia 97,4% do preço no modelo do estudo. O da Virada 2025, 38,6%. Só 1 de 1.987 concursos comuns passou de 100%.</li>
+      <li><b>Não existe valor em que a chance melhore mais.</b> Cada R$ 6 compra a mesma chance. Cota pronta, com tarifa de até 35%, compra 26% menos.</li>
+      <li><b>O bolão tem um tamanho certo.</b> Prêmio por ganhador ÷ o valor que resolveria a sua vida. O valor esperado não muda; a chance sobe e o prêmio cai na mesma proporção.</li>
+    </ul>
+    <div style="margin-top:16px" id="receber" data-muro>
+      <p>O simulador está aberto, logo abaixo. O PDF de 12 páginas e a base com os 2.005 concursos chegam por e-mail.</p>
+      <iframe src="https://subscribe-forms.beehiiv.com/8ca27eaf-531e-4515-b543-c87be91ee692"
+              class="beehiiv-embed" data-test-id="beehiiv-embed" height="130"
+              style="width:100%;border:0;margin-top:8px"
+              frameborder="0" scrolling="no" title="Receber o estudo"></iframe>
+      <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
+      <script async src="https://subscribe-forms.beehiiv.com/attribution.js"></script>
+      <script src="/beehiiv-sucesso.js" data-destino="/obrigado.html"></script>
+      <!-- Aviso de consentimento: é o que autoriza a dupla confirmação desligada no form.
+           Não remover sem religar a dupla confirmação. -->
+      <p class="nota" style="font-size:12px;color:var(--suave)">Ao clicar em Receber o estudo, você autoriza receber neste e-mail o estudo e a
+      carta sobre dinheiro para médico. Pode cancelar quando quiser.</p>
+      <p style="font-size:13px">Já recebe a newsletter?
+        <a href="../obrigado.html?e=bolao&amp;ja=1" data-ja-assina>O estudo está aqui.</a></p>
+    </div>
+  </div>
+</section>
+
+
+<main class="wrap" id="simulador" aria-labelledby="simulador-titulo">
+<h2 id="simulador-titulo">O tamanho do seu bolão</h2>
+<div class="grid">
+<div id="painel">
+  <div class="card">
+    <h3>O seu bolão</h3>
+    <p class="hint">Seu número é o valor que mudaria a sua vida financeira.</p>
+    <span class="lbl">Seu número</span>
+    <div class="presets q" id="pnum">
+      <button class="pbtn" data-v="2000000">R$ 2 mi</button>
+      <button class="pbtn" data-v="5000000">R$ 5 mi</button>
+      <button class="pbtn on" data-v="10000000">R$ 10 mi</button>
+      <button class="pbtn" data-v="20000000">R$ 20 mi</button>
+    </div>
+    <div class="field"><div class="iunit"><span class="pre">R$</span><input type="number" id="num" aria-label="Seu número em reais" step="500000" min="100000" value="10000000"></div></div>
+    <details><summary>Não sabe o seu número?</summary>
+      <div class="grid2">
+        <div class="field"><label for="gm">Gasto por mês</label>
+          <div class="iunit"><span class="pre">R$</span><input type="number" id="gm" step="1000" min="0" value="40000"></div></div>
+        <div class="field"><label for="ret">Retirada por ano</label>
+          <div class="iunit"><input type="number" id="ret" step="0.5" min="0.5" max="15" value="4"><span>%</span></div></div>
+      </div>
+      <button class="pbtn" id="usar" style="width:100%">Usar <span id="usar_v">—</span></button>
+      <p class="nota">Conta de partida: gasto anual ÷ retirada. O número certo depende de patrimônio, renda e plano de cada pessoa.</p>
+    </details>
+    <div class="field" style="margin-top:14px"><label for="gasto">Quanto cada pessoa põe</label>
+      <div class="iunit"><span class="pre">R$</span><input type="number" id="gasto" step="50" min="7" value="600"></div></div>
+    <span class="lbl" style="margin-top:12px">Como o grupo aposta</span>
+    <div class="toggle" id="tar"><button data-v="0" class="on">Bolão no próprio volante</button><button data-v="1">Cota pronta (+35%)</button></div>
+    <p class="nota">Cotas de bolões organizados pela lotérica e as do portal têm tarifa de até 35%. O Bolão Caixa aceita de 2 a 100 cotas e dá recibo a cada participante; com poucas dezenas o limite é menor.</p>
+  </div>
+
+  <div class="card">
+    <h3>O concurso</h3>
+    <p class="hint">A Virada 2026 ainda não fechou. Comece pela de 2025 e ajuste.</p>
+    <div class="presets" id="pconc"></div>
+    <div class="grid2">
+      <div class="field"><label for="pote">Pote da sena</label>
+        <div class="iunit"><input type="number" id="pote" step="10" min="1"><span>R$ mi</span></div></div>
+      <div class="field"><label for="arrec">Total apostado</label>
+        <div class="iunit"><input type="number" id="arrec" step="10" min="1"><span>R$ mi</span></div></div>
+    </div>
+    <p class="nota">Prêmios líquidos de IR. A aposta simples custa R$ 6 e a chance da sena é de 1 em 50.063.860.</p>
+  </div>
+</div>
+
+<div>
+  <div class="kpis">
+    <div class="kpi dark"><div class="v" id="k_k">—</div><div class="t" id="k_k_t">—</div></div>
+    <div class="kpi"><div class="v" id="k_c">—</div><div class="t" id="k_c_t">—</div></div>
+    <div class="kpi"><div class="v" id="k_q">—</div><div class="t" id="k_q_t">—</div></div>
+    <div class="kpi"><div class="v" id="k_v">—</div><div class="t" id="k_v_t">—</div></div>
+  </div>
+  <div class="leitura" id="leitura"></div>
+  <div class="card">
+    <h3>A cota conforme o grupo cresce</h3>
+    <p class="hint">Mesmo gasto por pessoa. A chance sobe na mesma proporção em que a cota cai.</p>
+    <div class="tabwrap"><table id="tab"></table></div>
+  </div>
+  <div class="card">
+    <h3>A sua cota nas Viradas passadas</h3>
+    <p class="hint">O prêmio por ganhador varia muito. Valores em reais de hoje, com o grupo do tamanho indicado acima.</p>
+    <div class="tabwrap"><table id="hist"></table></div>
+  </div>
+</div>
+</div>
+
+<footer><b>Aviso importante.</b> Ferramenta educacional, com finalidade exclusivamente informativa. Não recomenda apostar
+e não constitui recomendação de investimento. Nenhum concurso desta base oferece retorno esperado que justifique apostar
+como forma de ganhar dinheiro. Cada sorteio é independente, e a aposta pode ser perdida por inteiro. Jogos de aposta são
+proibidos para menores de 18 anos. Tributação e aspectos jurídicos de bolões informais ficam fora da conta: consulte
+profissional habilitado. Estudo completo: <i>Com quantos você divide</i>, <b>Doctor Invest</b>, novembro de 2026 ·
+Hélio Cardoso de Barros, CGA.</footer>
+</main>
+
+<script id="dados" type="application/json">{"C6": 50063860, "PRECO": 6.0, "TARIFA": 0.35, "MAX_COTAS": 100, "PRESETS": [{"nome": "Virada 2025", "pote": 1091357286.54, "arrec": 3052431720.0, "menor": 0.17015334974170987}, {"nome": "Concurso 3077", "pote": 324898791.61, "arrec": 121798800.0, "menor": 0.509266224577969}, {"nome": "Concurso típico", "pote": 40700726.2, "arrec": 52863654.0, "menor": 0.4720339650198766}], "VIRADAS": [{"ano": 2018, "gan": 52, "p6_real": 8778199.861693885}, {"ano": 2019, "gan": 4, "p6_real": 110012166.02360305}, {"ano": 2020, "gan": 2, "p6_real": 225071748.49558616}, {"ano": 2021, "gan": 2, "p6_real": 237741390.52992433}, {"ano": 2022, "gan": 5, "p6_real": 128849129.76927644}, {"ano": 2023, "gan": 5, "p6_real": 133820257.81968962}, {"ano": 2024, "gan": 8, "p6_real": 86095825.24244885}, {"ano": 2025, "gan": 6, "p6_real": 188458132.87861964}]}</script>
+<script id="motor">
+(function () {
+  // Espelho de motor.py (g, valor_bilhete, grupo, bolao). Paridade conferida por paridade.mjs.
+  globalThis.MOTOR = function (D) {
+    const g = lam => lam <= 0 ? 1 : (1 - Math.exp(-lam)) / lam;
+    const lambda = (arrec, preco) => arrec / preco / D.C6;
+    const valorBilhete = (pote, lam, preco, menor) => (pote * g(lam) / D.C6 + menor) / preco;
+    const premio = (pote, lam) => pote * g(lam);
+    function grupo(k, gasto, premioG, tarifa, preco) {
+      const apostas = k * gasto / (preco * (1 + tarifa));
+      return { k, apostas, chance: apostas / D.C6, um_em: D.C6 / apostas, cota: premioG / k };
+    }
+    function bolao(numero, gasto, premioG, tarifa, preco) {
+      const k = Math.max(1, Math.min(Math.floor(premioG / numero + 1e-9), D.MAX_COTAS));
+      return Object.assign(grupo(k, gasto, premioG, tarifa, preco), { alcanca: premioG / k >= numero - 1e-6 });
+    }
+    return { g, lambda, valorBilhete, premio, grupo, bolao };
+  };
+})();
+</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById("dados").textContent);
+  const M = MOTOR(D);
+  const $ = id => document.getElementById(id);
+  const nf = (v, c = 0) => v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c });
+  const din = v => Math.abs(v) >= 1e6 ? "R$ " + nf(v / 1e6, v >= 1e8 ? 0 : 1) + " mi" : Math.abs(v) >= 1e3 ? "R$ " + nf(v / 1e3) + " mil" : "R$ " + nf(v);
+  const num = (id, def) => { const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : def; };
+  const estado = { tarifa: 0, menor: D.PRESETS[0].menor };
+
+  D.PRESETS.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.className = "pbtn" + (i === 0 ? " on" : "");
+    b.textContent = p.nome;
+    b.addEventListener("click", () => aplica(i));
+    $("pconc").appendChild(b);
+  });
+  function aplica(i) {
+    const p = D.PRESETS[i];
+    $("pote").value = Math.round(p.pote / 1e5) / 10;
+    $("arrec").value = Math.round(p.arrec / 1e5) / 10;
+    estado.menor = p.menor;
+    [...$("pconc").children].forEach((x, j) => x.classList.toggle("on", j === i));
+    agenda();
+  }
+  const limpaConc = () => [...$("pconc").children].forEach(x => x.classList.remove("on"));
+  const marcaNum = () => [...$("pnum").children].forEach(x => x.classList.toggle("on", +x.dataset.v === num("num", 0)));
+  $("pnum").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $("num").value = b.dataset.v; marcaNum(); agenda(); });
+  $("num").addEventListener("input", () => { marcaNum(); agenda(); });
+  $("gasto").addEventListener("input", agenda);
+  ["pote", "arrec"].forEach(id => $(id).addEventListener("input", () => { limpaConc(); agenda(); }));
+  ["gm", "ret"].forEach(id => $(id).addEventListener("input", sugestao));
+  $("usar").addEventListener("click", () => { $("num").value = Math.round(sugerido()); marcaNum(); agenda(); });
+  $("tar").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    [...$("tar").children].forEach(x => x.classList.toggle("on", x === b));
+    estado.tarifa = b.dataset.v === "1" ? D.TARIFA : 0; agenda();
+  });
+  const sugerido = () => num("gm", 40000) * 12 / (num("ret", 4) / 100);
+  function sugestao() { $("usar_v").textContent = din(sugerido()); }
+
+  let t = null;
+  function agenda() { clearTimeout(t); t = setTimeout(calcula, 100); }
+
+  function calcula() {
+    const pote = num("pote", 1) * 1e6, arrec = num("arrec", 1) * 1e6, numero = num("num", 1e7), gasto = num("gasto", 600);
+    const lam = M.lambda(arrec, D.PRECO);
+    const pm = M.premio(pote, lam);
+    const b = M.bolao(numero, gasto, pm, estado.tarifa, D.PRECO);
+    const so = M.grupo(1, gasto, pm, estado.tarifa, D.PRECO);
+    const vb = M.valorBilhete(pote, lam, D.PRECO, estado.menor) / (1 + estado.tarifa);
+
+    $("k_k").textContent = b.k === 1 ? "Sozinho" : b.k + " pessoas";
+    $("k_k_t").textContent = "Maior grupo cuja cota ainda chega a " + din(numero);
+    $("k_c").textContent = "1 em " + nf(b.um_em);
+    $("k_c_t").textContent = "Chance de cada pessoa, contra 1 em " + nf(so.um_em) + " sozinho";
+    $("k_q").textContent = din(b.cota);
+    $("k_q_t").textContent = "Cota de cada um, com prêmio esperado de " + din(pm) + " por ganhador";
+    $("k_v").textContent = nf(vb * 100, 1) + "%";
+    $("k_v_t").textContent = "Valor do bilhete: R$ 100 devolvem " + "R$ " + nf(vb * 100, 2) + " em média";
+
+    const L = [];
+    if (!b.alcanca)
+      L.push("<p><b>Nem sozinho o prêmio esperado chega ao seu número.</b> Neste concurso, um ganhador leva em média " + din(pm) + ". Nenhum grupo resolve isso.</p>");
+    else if (b.k === D.MAX_COTAS && pm / numero >= D.MAX_COTAS + 1)
+      L.push("<p>O Bolão Caixa vai até " + D.MAX_COTAS + " cotas, e esse é o teto da conta: a cota ainda fica acima do seu número.</p>");
+    else if (b.k > 1)
+      L.push("<p>Com <b>" + b.k + " pessoas</b>, cada uma pondo " + din(gasto) + ", a chance de cada pessoa fica <b>" + nf(b.k) + " vezes maior</b> do que apostando sozinha, e a cota ainda chega ao seu número. Uma pessoa a mais levaria a cota para baixo dele.</p>");
+    else
+      L.push("<p>O prêmio esperado mal passa do seu número. Dividir já tiraria a cota do alvo.</p>");
+    L.push("<p>Mesmo assim, 1 em " + nf(b.um_em) + " significa, na média, " + nf(b.um_em) + " concursos iguais a este para acertar uma vez. Pelo modelo do estudo, a perda esperada de cada pessoa é de " + din(gasto * (1 - vb)) + ".</p>");
+    if (vb >= 1) L.push("<p>Com esses números, o bilhete devolve mais que o preço. Confira os dados: isso quase nunca aconteceu.</p>");
+    if (estado.tarifa) L.push("<p>A tarifa de 35% compra " + nf((1 - 1 / (1 + D.TARIFA)) * 100) + "% menos apostas pelo mesmo dinheiro.</p>");
+    $("leitura").innerHTML = L.join("");
+
+    const ks = [...new Set([1, b.k, 10, 25, 50, 100])].sort((x, y) => x - y);
+    $("tab").innerHTML = "<tr><th>Pessoas</th><th>Apostas do grupo</th><th>Chance de cada pessoa</th><th>Cota</th></tr>" + ks.map(k => {
+      const g = M.grupo(k, gasto, pm, estado.tarifa, D.PRECO);
+      const c = k === b.k ? ' class="alvo"' : "";
+      return `<tr${c}><td>${k === 1 ? "Sozinho" : k}</td><td>${nf(g.apostas)}</td><td>1 em ${nf(g.um_em)}</td><td${g.cota < numero && k !== b.k ? ' class="nao"' : ""}>${din(g.cota)}</td></tr>`;
+    }).join("");
+
+    $("hist").innerHTML = `<tr><th>Virada</th><th>Ganhadores</th><th>Por ganhador</th><th>Cota de ${b.k === 1 ? "quem joga sozinho" : b.k + " pessoas"}</th><th>Chega ao seu número?</th></tr>` + D.VIRADAS.map(v => {
+      const c = v.p6_real / b.k;
+      return `<tr><td>${v.ano}</td><td>${v.gan}</td><td>${din(v.p6_real)}</td><td>${din(c)}</td><td${c >= numero ? "" : ' class="nao"'}>${c >= numero ? "Sim" : "Não"}</td></tr>`;
+    }).join("");
+  }
+
+  sugestao();
+  aplica(0);
+})();
+</script>
+<script>
+// Beacon de funil. Nenhum PII sai daqui (§4.4): só a página e os UTM.
+var live=/drheliobarros\.com\.br$/.test(location.hostname);
+var API="https://webhook.drheliobarros.com.br/api/funnel/events";
+var qs=new URLSearchParams(location.search);
+// UTM sobrevive a navegacao interna e a redirect de formulario. Sem isto o evento de
+// conversao nasce sem fonte e todo lead parece trafego direto. So utm_*, zero PII (4.4).
+function u(k){
+  var v=qs.get(k)||"";
+  try{ if(v){sessionStorage.setItem("u_"+k,v);} else {v=sessionStorage.getItem("u_"+k)||"";} }catch(e){}
+  return v;
+}
+function ev(nome){
+  if(!live) return;
+  var payload=JSON.stringify({
+    event:nome, page:"bolao",
+    utm_source:u("utm_source"), utm_medium:u("utm_medium"),
+    utm_campaign:u("utm_campaign"), utm_content:u("utm_content"), lp:u("lp"),
+    ts:new Date().toISOString()
+  });
+  if(navigator.sendBeacon){navigator.sendBeacon(API,new Blob([payload],{type:"application/json"}));}
+  else{fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:payload,keepalive:true});}
+}
+ev("view");
+
+// Conta a primeira interação com qualquer controle do simulador.
+var jaSimulou=false;
+function marcarSimulou(e){
+  if(jaSimulou||!e.target.closest("#painel input,#painel button")) return;
+  jaSimulou=true; ev("simulou");
+}
+["input","click"].forEach(function(t){document.addEventListener(t,marcarSimulou,{passive:true});});
+</script>
+
+<script src="../muro.js" data-estudo="bolao"></script>
+</body></html>
