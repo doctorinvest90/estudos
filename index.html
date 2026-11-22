@@ -22,10 +22,13 @@ main{padding:26px 24px 10px}
 .lista{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:700px){.lista{grid-template-columns:1fr}h1{font-size:33px}}
 .porta{display:block;background:#fff;border:1px solid var(--linha);border-top:3px solid var(--conf);padding:22px 24px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
-.porta:hover,.porta:focus-visible{border-color:var(--ouro);border-top-color:var(--ouro);transform:translateY(-2px)}
+a.porta:hover,a.porta:focus-visible{border-color:var(--ouro);border-top-color:var(--ouro);transform:translateY(-2px)}
 .porta .q{font-size:11px;letter-spacing:.16em;color:#9A7F32;font-weight:700;text-transform:uppercase}
 .porta h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:25px;color:var(--azul);margin:8px 0 7px;font-weight:600;line-height:1.15}
 .porta p{margin:0;font-size:14px;color:var(--cinza2)}
+.breve{background:transparent;border-style:dashed;border-top:1px dashed #CFC9BA}
+.breve .q{color:var(--cinza2)}
+.breve h2{color:var(--cinza2)}
 .vazio{color:var(--cinza2)}
 footer{color:#5A616B;font-size:11.2px;line-height:1.5;padding:26px 24px 34px}
 footer .in{border-top:1px solid var(--linha);padding-top:18px}
@@ -56,7 +59,7 @@ Hélio Cardoso de Barros, CGA · <a href="https://www.instagram.com/drheliobarro
 
 <script>
 // A lista vem de estudos.json. Estudo novo = uma entrada lá (slug, tipo, titulo, descricao,
-// lancamento AAAA-MM-DD). Só aparece a partir da data de lançamento, no fuso de São Paulo.
+// lancamento AAAA-MM-DD). Antes da data de lançamento (fuso de São Paulo) aparece como "Em breve".
 // ?hoje=AAAA-MM-DD simula outra data, para conferir um lançamento antes do dia.
 var qs=new URLSearchParams(location.search);
 var hoje=qs.get("hoje")||new Date().toLocaleDateString("sv-SE",{timeZone:"America/Sao_Paulo"});
@@ -67,19 +70,24 @@ fetch("estudos.json",{cache:"no-cache"}).then(function(r){
   if(!r.ok) throw new Error("estudos.json "+r.status);
   return r.json();
 }).then(function(estudos){
-  estudos.filter(function(e){return e.lancamento<=hoje;})
-    .sort(function(a,b){return a.lancamento<b.lancamento?1:-1;})
-    .forEach(function(e){
-      var a=document.createElement("a");
-      a.className="porta";
-      a.href=e.slug+"/"+(resto?"?"+resto:"");
-      [["div","q",e.tipo],["h2","",e.titulo],["p","",e.descricao]].forEach(function(t){
-        if(!t[2]) return;
-        var el=document.createElement(t[0]); if(t[1]) el.className=t[1];
-        el.textContent=t[2]; a.appendChild(el);
-      });
-      lista.appendChild(a);
+  // Lançado: cartão com link, do mais novo ao mais antigo. Ainda não lançado: cartão
+  // "Em breve" com a data, sem link; no dia do lançamento vira cartão normal sozinho.
+  var abertos=estudos.filter(function(e){return e.lancamento<=hoje;})
+    .sort(function(a,b){return a.lancamento<b.lancamento?1:-1;});
+  var breve=estudos.filter(function(e){return e.lancamento>hoje;})
+    .sort(function(a,b){return a.lancamento>b.lancamento?1:-1;});
+  abertos.concat(breve).forEach(function(e){
+    var aberto=e.lancamento<=hoje, c=document.createElement(aberto?"a":"div");
+    c.className=aberto?"porta":"porta breve";
+    if(aberto) c.href=e.slug+"/"+(resto?"?"+resto:"");
+    var d=e.lancamento.split("-");
+    [["div","q",aberto?e.tipo:"Em breve · "+d[2]+"/"+d[1]],["h2","",e.titulo],["p","",e.descricao]].forEach(function(t){
+      if(!t[2]) return;
+      var el=document.createElement(t[0]); if(t[1]) el.className=t[1];
+      el.textContent=t[2]; c.appendChild(el);
     });
+    lista.appendChild(c);
+  });
 }).catch(function(err){
   lista.outerHTML='<p class="vazio">Não foi possível carregar a lista de estudos. Recarregue a página.</p>';
   console.error(err);
