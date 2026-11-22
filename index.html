@@ -1,1 +1,89 @@
-<!doctype html><meta charset=utf-8><title>Estudos · Doctor Invest</title><p>Em breve.
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudos e simuladores · Doctor Invest</title>
+<meta name="description" content="Estudos e simuladores da Doctor Invest para as decisões financeiras do médico. Escolha um e refaça a conta com os seus números.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#0D1B2A;--ouro:#C9A84C;--conf:#1B3A5C;--marfim:#F7F5F0;--cinza2:#5A6478;--linha:#E8E4DA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--marfim);color:#22303F;font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.55}
+.in{max-width:1000px;margin:0 auto}
+header{background:var(--azul);color:var(--marfim);padding:34px 24px 30px}
+.marca{font-size:11px;letter-spacing:.34em;color:var(--ouro);font-weight:700}
+.fio{width:96px;height:2px;background:var(--ouro);margin:14px 0 18px}
+h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:40px;margin:0 0 10px;line-height:1.1}
+header p{margin:0;color:#AFBACB;max-width:640px}
+main{padding:26px 24px 10px}
+.lista{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:700px){.lista{grid-template-columns:1fr}h1{font-size:33px}}
+.porta{display:block;background:#fff;border:1px solid var(--linha);border-top:3px solid var(--conf);padding:22px 24px;text-decoration:none;color:inherit;transition:border-color .12s,transform .12s}
+.porta:hover,.porta:focus-visible{border-color:var(--ouro);border-top-color:var(--ouro);transform:translateY(-2px)}
+.porta .q{font-size:11px;letter-spacing:.16em;color:#9A7F32;font-weight:700;text-transform:uppercase}
+.porta h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:25px;color:var(--azul);margin:8px 0 7px;font-weight:600;line-height:1.15}
+.porta p{margin:0;font-size:14px;color:var(--cinza2)}
+.vazio{color:var(--cinza2)}
+footer{color:#5A616B;font-size:11.2px;line-height:1.5;padding:26px 24px 34px}
+footer .in{border-top:1px solid var(--linha);padding-top:18px}
+footer b{color:var(--conf)}
+footer a{color:inherit}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <div class="marca">DOCTOR INVEST · ESTUDOS</div>
+  <div class="fio"></div>
+  <h1>Estudos e simuladores</h1>
+  <p>As contas por trás das decisões financeiras do médico, com as premissas abertas. Escolha um estudo e refaça a conta com os seus números.</p>
+</div></header>
+
+<main><div class="in">
+  <div class="lista" id="lista"></div>
+  <noscript><p class="vazio">Ative o JavaScript para ver a lista de estudos.</p></noscript>
+</div></main>
+
+<footer><div class="in">
+<b>Aviso importante.</b> Os estudos e simuladores desta página têm caráter exclusivamente informativo e educacional e não
+constituem recomendação de investimento nem consultoria de valores mobiliários individualizada. Rentabilidade passada
+não constitui garantia de rentabilidade futura.<br><br>
+<b>Doctor Invest</b> · Gestão de investimentos e consultoria financeira para médicos ·
+Hélio Cardoso de Barros, CGA · <a href="https://www.instagram.com/drheliobarros/">@drheliobarros</a>
+</div></footer>
+
+<script>
+// A lista vem de estudos.json. Estudo novo = uma entrada lá (slug, tipo, titulo, descricao,
+// lancamento AAAA-MM-DD). Só aparece a partir da data de lançamento, no fuso de São Paulo.
+// ?hoje=AAAA-MM-DD simula outra data, para conferir um lançamento antes do dia.
+var qs=new URLSearchParams(location.search);
+var hoje=qs.get("hoje")||new Date().toLocaleDateString("sv-SE",{timeZone:"America/Sao_Paulo"});
+qs.delete("hoje");
+var resto=qs.toString(); // UTM e afins seguem para o estudo: sem isso a atribuição morre aqui
+var lista=document.getElementById("lista");
+fetch("estudos.json",{cache:"no-cache"}).then(function(r){
+  if(!r.ok) throw new Error("estudos.json "+r.status);
+  return r.json();
+}).then(function(estudos){
+  estudos.filter(function(e){return e.lancamento<=hoje;})
+    .sort(function(a,b){return a.lancamento<b.lancamento?1:-1;})
+    .forEach(function(e){
+      var a=document.createElement("a");
+      a.className="porta";
+      a.href=e.slug+"/"+(resto?"?"+resto:"");
+      [["div","q",e.tipo],["h2","",e.titulo],["p","",e.descricao]].forEach(function(t){
+        if(!t[2]) return;
+        var el=document.createElement(t[0]); if(t[1]) el.className=t[1];
+        el.textContent=t[2]; a.appendChild(el);
+      });
+      lista.appendChild(a);
+    });
+}).catch(function(err){
+  lista.outerHTML='<p class="vazio">Não foi possível carregar a lista de estudos. Recarregue a página.</p>';
+  console.error(err);
+});
+</script>
+</body>
+</html>
